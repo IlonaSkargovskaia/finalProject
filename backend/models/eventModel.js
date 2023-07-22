@@ -1,4 +1,4 @@
-import db from './config/db.js';
+import db from '../config/db.js';
 
 
 export const getAllEvents = async () => {
@@ -7,10 +7,22 @@ export const getAllEvents = async () => {
         return events;
     } catch (error) {
         console.log('error: ', error);
-        throw new Error('Error fetching events from the database.');
+        throw new Error('Error fetching events from the database');
     }
 }
 
 export const addEvent = async (eventInfo) => {
-    
+    try {
+
+        const newEvent = await 
+            db('events')
+                .insert(eventInfo)
+                .returning('id', 'date', 'image_url', 'location', 'description', 'places');
+
+        return newEvent[0];
+
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error adding event to the database');
+    }
 }
