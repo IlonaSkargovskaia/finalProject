@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import {db} from './config/db.js';
 
 
 const app = express();
@@ -12,34 +11,30 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 
 
-// Test API route
-app.get('/', (req, res) => {
-    res.send('Event Management System API is running!');
-});
+
+// POST API for adding a new event and check in postman
+app.post('/api/events', async (req, res) => {
+    const { date, image_url, location, description, places } = req.body;
+  
+    try {
+      const newEvent = await db('events').insert({
+        date,
+        image_url,
+        location,
+        description,
+        places,
+      });
+  
+      //if all good - 201 respond
+      res.status(201).json(newEvent);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ msg: 'Internal server error' });
+    }
+  });
+
 
 
 app.listen(process.env.PORT || 3001, () => {
     console.log(`listen on ${process.env.PORT || 3001}`);
 })
-
-
-// //check connection to db
-// import {db} from './config/db.js';
-
-//in eleph
-// create table products (
-// 	id serial primary key,
-// 	name varchar(255) not null,
-// 	price integer not null
-// )
-
-// insert into products (name,price)
-// values('iPhone', 800),
-// ('iPad', 700),
-// ('iWatch', 600)
-
-// db('products')
-// .select('*')
-// .then(rows => {
-//     console.log(rows);
-// })
