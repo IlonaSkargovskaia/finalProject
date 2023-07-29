@@ -11,13 +11,26 @@ export const getAllEvents = async () => {
     }
 }
 
+export const getEventByID = async (eventId) => {
+    try {
+        const event = await db.select('*').from('events').where({eventId}).first();
+        if (!event) {
+            return null;
+        }
+        return event;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error detching one event from database')
+    }
+}
+
 export const addEvent = async (eventInfo) => {
     try {
 
         const newEvent = await 
             db('events')
                 .insert(eventInfo)
-                .returning('id', 'date', 'image_url', 'location', 'description', 'places');
+                .returning('*');
 
         return newEvent[0];
 
