@@ -11,9 +11,9 @@ export const getAllEvents = async () => {
     }
 }
 
-export const getEventByID = async (eventId) => {
+export const getEventByID = async (id) => {
     try {
-        const event = await db.select('*').from('events').where({eventId}).first();
+        const event = await db.select('*').from('events').where({id}).first();
         if (!event) {
             return null;
         }

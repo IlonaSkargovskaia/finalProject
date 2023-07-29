@@ -12,9 +12,9 @@ export const getAllTicketsController = async (req, res) => {
 }
 
 export const getTicketByIdController = async (req, res) => {
-    const {ticketId} = req.params;
+    const {id} = req.params;
     try {
-        const ticket = await getTicketById(ticketId);
+        const ticket = await getTicketById(id);
         if (!ticket) {
             res.status(404).json({msg: 'Ticket not found'})
         }
@@ -26,14 +26,14 @@ export const getTicketByIdController = async (req, res) => {
 }
 
 export const addNewTicketController = async (req, res) => {
-    const {userID, eventID, quantity, totalPrice} = req.body;
+    const {userid, eventid, quantity, totalprice} = req.body;
 
     try {
         const newTicket = await addNewTicket({
-            userID, 
-            eventID, 
+            userid, 
+            eventid, 
             quantity, 
-            totalPrice
+            totalprice
         })
         res.status(201).json(newTicket);
     } catch (error) {

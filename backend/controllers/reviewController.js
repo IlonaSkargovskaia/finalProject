@@ -11,9 +11,9 @@ export const getAllReviewsController = async (req, res) => {
 }
 
 export const getReviewByIdController = async (req,res) => {
-    const {reviewId} = req.params;
+    const {id} = req.params;
     try {
-        const review = await getReviewById(reviewId);
+        const review = await getReviewById(id);
         if (!review){
             res.status(404).json({msg: 'Review not found'})
         }
@@ -25,17 +25,19 @@ export const getReviewByIdController = async (req,res) => {
 }
 
 export const addNewReviewController = async (req, res) => {
-    const {eventID, userID, rating, comment} = req.body;
+    const { eventid, userid, rating, comment } = req.body;
 
     try {
         const newReview = await addNewReview({
-            eventID, 
-            userID, 
-            rating, 
+            eventid,
+            userid,
+            rating,
             comment
-        })
+        });
+        console.log(newReview);
+        res.status(201).json(newReview);
     } catch (error) {
         console.log(error);
-        res.status(500).json({msg: 'Internal server error'})
+        res.status(500).json({ msg: 'Internal server error' });
     }
 }

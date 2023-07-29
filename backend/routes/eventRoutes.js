@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/api/events', getAllEventsController);
 router.post('/api/events', addEventController);
-router.get('/api/events/:eventId', getEventByIDController);
+router.get('/api/events/:id', getEventByIDController);
 
 export default router;

@@ -10,12 +10,12 @@ export const getAllReviews = async () => {
     }
 }
 
-export const getReviewById = async (reviewId) => {
+export const getReviewById = async (id) => {
     try {
         const review = await
         db.select('*')
             .from('reviews')
-            .where({reviewId})
+            .where({id})
             .first();
 
         if (!review) {
@@ -32,8 +32,7 @@ export const getReviewById = async (reviewId) => {
 
 export const addNewReview = async (reviewInfo) => {
     try {
-        const newReview = await
-        db('reviews')
+        const newReview = await db('reviews')
             .insert(reviewInfo)
             .returning('*');
 

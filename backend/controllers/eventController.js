@@ -11,9 +11,9 @@ export const getAllEventsController = async (req, res) => {
 }
 
 export const getEventByIDController = async (req, res) => {
-    const { eventId } = req.params;
+    const { id } = req.params;
     try {
-        const event = await getEventByID(eventId);
+        const event = await getEventByID(id);
         if (!event) {
             res.status(404).json({msg: 'Event not found'});
         }
@@ -26,7 +26,7 @@ export const getEventByIDController = async (req, res) => {
 
 export const addEventController = async (req, res) => {
     console.log(req.body);
-    const {title, description, date, time, location, image, createdAt, updatedAt} = req.body;
+    const {title, description, date, time, location, image} = req.body;
 
 
     try {

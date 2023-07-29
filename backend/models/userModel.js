@@ -10,12 +10,12 @@ export const getAllUsers = async () => {
     }
 }
 
-export const getUserById = async (userId) => {
+export const getUserById = async (id) => {
     try {
         const user = await
             db.select('*')
                 .from('users')
-                .where({userId})
+                .where({id})
                 .first();
 
         if (!user) {

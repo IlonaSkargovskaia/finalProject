@@ -11,9 +11,9 @@ export const getAllUsersController = async (req, res) => {
 }
 
 export const getUserByIdController = async (req, res) => {
-    const {userId} = req.params;
+    const {id} = req.params;
     try {
-        const user = await getUserById(userId);
+        const user = await getUserById(id);
         if (!user) {
             res.status(404).json({msg: 'User not found'})
         }

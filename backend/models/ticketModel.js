@@ -11,12 +11,12 @@ export const getAllTickets = async () => {
     }
 }
 
-export const getTicketById = async (ticketId) => {
+export const getTicketById = async (id) => {
     try {
         const ticket = await
         db.select('*')
             .from('tickets')
-            .where({ticketId})
+            .where({id})
             .first();
 
         if (!ticket) {
