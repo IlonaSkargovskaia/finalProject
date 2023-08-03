@@ -1,4 +1,4 @@
-import { getAllEvents, addEvent, getEventByID } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
@@ -26,7 +26,7 @@ export const getEventByIDController = async (req, res) => {
 
 export const addEventController = async (req, res) => {
     console.log(req.body);
-    const {title, description, date, time, location, image} = req.body;
+    const {title, description, date, time, location, image, category_id, price} = req.body;
 
 
     try {
@@ -37,6 +37,8 @@ export const addEventController = async (req, res) => {
             time,
             location,
             image,
+            category_id,
+            price
         });
 
         //if all okay - 201
@@ -47,3 +49,33 @@ export const addEventController = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+export const updateEventController = async (req, res) => {
+    const { id } = req.body;
+    const eventData = req.body;
+
+    try {
+        const updatedEvent = await updateEvent(id, eventData);
+        res.status(200).json(updatedEvent);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+export const deleteEventController = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const deletedEvent = await deleteEvent(id);
+      if (!deletedEvent) {
+        res.status(404).json({ msg: 'Event not found' });
+      }
+      res.status(200).json(deletedEvent);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};
+  

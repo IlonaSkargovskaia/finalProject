@@ -44,3 +44,23 @@ export const addNewUser = async (userInfo) => {
         throw new Error({error: 'Error adding new User to the database'})
     }
 }
+
+export const updateUser = async (id, userData) => {
+    try {
+        const updatedUser = await db('users').where({id}).update(userData).returning('*');
+        return updatedUser[0]; //{[...]}
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error updating event in the database');
+    }
+}
+
+export const deleteUser = async (id) => {
+    try {
+      const deletedUser = await db('users').where({ id }).del().returning('*');
+      return deletedUser[0];
+    } catch (error) {
+      console.log('error: ', error);
+      throw new Error('Error deleting event from the database');
+    }
+}

@@ -1,4 +1,4 @@
-import { getAllTickets, getTicketById, addNewTicket } from "../models/ticketModel.js";
+import { getAllTickets, getTicketById, addNewTicket, updateTicket, deleteTicket } from "../models/ticketModel.js";
 
 
 export const getAllTicketsController = async (req, res) => {
@@ -41,3 +41,32 @@ export const addNewTicketController = async (req, res) => {
         res.status(500).json({msg: 'Internal server error'})
     }
 }
+
+export const updateTicketController = async (req, res) => {
+    const { id } = req.body;
+    const ticketData = req.body;
+
+    try {
+        const updatedTicket = await updateTicket(id, ticketData);
+        res.status(200).json(updatedTicket);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+export const deleteTicketController = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const deletedTicket = await deleteTicket(id);
+      if (!deletedTicket) {
+        res.status(404).json({ msg: 'Ticket not found' });
+      }
+      res.status(200).json(deletedTicket);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};

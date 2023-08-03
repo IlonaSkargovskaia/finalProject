@@ -43,3 +43,23 @@ export const addNewReview = async (reviewInfo) => {
         throw new Error({ error: 'Error adding review from the database'})
     }
 }
+
+export const updateReview = async (id, reviewData) => {
+    try {
+        const updatedReview = await db('reviews').where({id}).update(reviewData).returning('*');
+        return updatedReview[0]; //{[...]}
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error updating event in the database');
+    }
+}
+
+export const deleteReview = async (id) => {
+    try {
+      const deletedReview = await db('reviews').where({ id }).del().returning('*');
+      return deletedReview[0];
+    } catch (error) {
+      console.log('error: ', error);
+      throw new Error('Error deleting event from the database');
+    }
+}

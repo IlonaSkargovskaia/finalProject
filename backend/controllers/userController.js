@@ -1,4 +1,4 @@
-import { getAllUsers, addNewUser, getUserById } from "../models/userModel.js";
+import { getAllUsers, addNewUser, getUserById, updateUser, deleteUser } from "../models/userModel.js";
 
 export const getAllUsersController = async (req, res) => {
     try {
@@ -43,3 +43,32 @@ export const addNewUserController = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' })
     }
 }
+
+export const updateUserController = async (req, res) => {
+    const { id } = req.body;
+    const userData = req.body;
+
+    try {
+        const updatedUser = await updateUser(id, userData);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+export const deleteUserController = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const deletedUser = await deleteUser(id);
+      if (!deletedUser) {
+        res.status(404).json({ msg: 'User not found' });
+      }
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};

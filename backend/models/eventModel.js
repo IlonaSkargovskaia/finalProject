@@ -20,7 +20,7 @@ export const getEventByID = async (id) => {
         return event;
     } catch (error) {
         console.log(error);
-        throw new Error('Error detching one event from database')
+        throw new Error('Error fetching one event from database')
     }
 }
 
@@ -37,5 +37,25 @@ export const addEvent = async (eventInfo) => {
     } catch (error) {
         console.log('error: ', error);
         throw new Error('Error adding event to the database');
+    }
+}
+
+export const updateEvent = async (id, eventData) => {
+    try {
+        const updatedEvent = await db('events').where({id}).update(eventData).returning('*');
+        return updatedEvent[0]; //{[...]}
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error updating event in the database');
+    }
+}
+
+export const deleteEvent = async (id) => {
+    try {
+      const deletedEvent = await db('events').where({ id }).del().returning('*');
+      return deletedEvent[0];
+    } catch (error) {
+      console.log('error: ', error);
+      throw new Error('Error deleting event from the database');
     }
 }

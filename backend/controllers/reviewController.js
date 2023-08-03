@@ -1,4 +1,4 @@
-import { getAllReviews, addNewReview, getReviewById} from "../models/reviewsModel.js";
+import { getAllReviews, addNewReview, getReviewById, updateReview, deleteReview} from "../models/reviewsModel.js";
 
 export const getAllReviewsController = async (req, res) => {
     try {
@@ -41,3 +41,32 @@ export const addNewReviewController = async (req, res) => {
         res.status(500).json({ msg: 'Internal server error' });
     }
 }
+
+export const updateReviewController = async (req, res) => {
+    const { id } = req.body;
+    const reviewData = req.body;
+
+    try {
+        const updatedReview = await updateReview(id, reviewData);
+        res.status(200).json(updatedReview);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+export const deleteReviewController = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const deletedReview = await deleteReview(id);
+      if (!deletedReview) {
+        res.status(404).json({ msg: 'Review not found' });
+      }
+      res.status(200).json(deletedReview);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+};
