@@ -26,7 +26,7 @@ export const getEventByIDController = async (req, res) => {
 
 export const addEventController = async (req, res) => {
     console.log(req.body);
-    const {title, description, date, time, location, image, category_id, price} = req.body;
+    const {title, description, date, time, location_id, image, category_id, price} = req.body;
 
 
     try {
@@ -35,7 +35,7 @@ export const addEventController = async (req, res) => {
             description,
             date,
             time,
-            location,
+            location_id,
             image,
             category_id,
             price

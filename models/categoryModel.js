@@ -1,4 +1,4 @@
-// categoryModel.js
+
 import db from '../config/db.js';
 
 export const getAllCategories = async () => {
@@ -38,7 +38,7 @@ export const updateCategory = async (id, categoryData) => {
     return updatedCategory[0];
   } catch (error) {
       console.log('error: ', error);
-      throw new Error('Error updating event in the database');
+      throw new Error('Error updating category in the database');
   }
 }
 
@@ -48,6 +48,6 @@ export const deleteCategory= async (id) => {
     return deletedCategory[0];
   } catch (error) {
     console.log('error: ', error);
-    throw new Error('Error deleting event from the database');
+    throw new Error('Error deleting category from the database');
   }
 }

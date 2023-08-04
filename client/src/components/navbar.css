@@ -2,3 +2,7 @@
     filter: brightness(0) invert(1);
     max-width: 200px;
 }
+
+.nav__categories{
+    border: none !important;
+}
