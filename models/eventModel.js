@@ -24,6 +24,16 @@ export const getEventByID = async (id) => {
     }
 }
 
+export const getEventsByCategory = async (categoryId) => {
+    try {
+        const events = await db.select('*').from('events').where({ category_id: categoryId });
+        return events;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error fetching events by category from the database');
+    }
+};
+
 export const addEvent = async (eventInfo) => {
     try {
 
