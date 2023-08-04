@@ -1,18 +1,20 @@
 import Home from './pages/home/Home';
-import Navbar from './components/Navbar';
+import Navigation from './components/Nav';
 import EventListPageCat from './pages/events/EventListPageCat';
 import {Routes, Route} from 'react-router-dom';
-import './App.css';
 
 const App = () => {
   return (
     <div>
       <header>
-        <Navbar />
+      
+        <Navigation />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/category/:categoryId" element={<EventListPageCat />} />
         </Routes>
+        
       </header>
     </div>
   );

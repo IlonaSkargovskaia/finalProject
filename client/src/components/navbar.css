@@ -1,8 +1,51 @@
+:root {
+    --primary-color: #7b1fa2;
+}
+
+a.nav-link, .navbar-nav a.nav-link.show {
+    text-decoration: none;
+    color: #fff;
+}
+
 .logo{
     filter: brightness(0) invert(1);
     max-width: 200px;
 }
 
-.nav__categories{
-    border: none !important;
+.nav__menu{
+    background-color: #7b1fa2;
 }
+
+.nav__categories svg{
+    color: #fff;
+}
+
+.nav__categories input{
+    border-image: none !important;
+}
+
+.nav__menu a.nav__link {
+    color: #000;
+}
+
+.nav__categories a.nav__link {
+    color: #fff;
+}
+
+.nav__menu .vr{
+    background-color: #fff;
+}
+
+.nav__menu .navbar-toggler{
+    border-color: rgba(255,255,255,0.5);
+}
+
+.nav__menu .navbar-toggler:focus{
+    box-shadow: none;
+    border-color: rgba(255,255,255,0.8);
+}
+
+.nav__menu .navbar-toggler-icon{
+    filter: invert(1);
+}
+

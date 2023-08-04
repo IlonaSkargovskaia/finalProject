@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EventsByCategory from "./EventsByCategory";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 const EventListPageCat = () => {
@@ -30,9 +31,11 @@ const EventListPageCat = () => {
 
     return (
         <div>
+            <Container >
             <h1>All avaliable events in category "{categoryName}"</h1>
             
             <EventsByCategory events={eventsByCategory} />
+            </Container>
         </div>
     );
 };

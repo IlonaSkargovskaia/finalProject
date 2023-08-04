@@ -4,35 +4,18 @@ import './index.css';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        main: purple[600],
-      },
-      secondary: {
-        main: purple[100],
-        light: '#F5EBFF',
-        contrastText: '#550599',
-      },
-    }
-    
-})
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   //<React.StrictMode>
-    <ThemeProvider theme={theme}>
+    
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ThemeProvider>
+    
   //</React.StrictMode>
 );
 
