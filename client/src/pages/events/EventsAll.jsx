@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Col, Row, Card } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import CardEvent from "../../components/CardEvent";
 
 const EventsAll = () => {
@@ -20,8 +20,6 @@ const EventsAll = () => {
 
         fetchEvents();
     }, []);
-
-    console.log(events);
 
     return (
         <div>

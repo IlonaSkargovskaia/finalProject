@@ -1,4 +1,4 @@
-import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
@@ -29,6 +29,17 @@ export const getEventsByCategoryController = async (req, res) => {
     const { categoryId } = req.params;
     try {
         const events = await getEventsByCategory(categoryId);
+        res.status(200).json(events);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getEventsByLocationController = async (req, res) => {
+    const { locationId } = req.params;
+    try {
+        const events = await getEventsByLocation(locationId);
         res.status(200).json(events);
     } catch (error) {
         console.log(error);
