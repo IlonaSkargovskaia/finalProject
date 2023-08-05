@@ -7,6 +7,8 @@ import { Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 
+const BASE_URL = 'http://localhost:3005'
+
 const CardEvent = ({ event }) => {
     
     const {
@@ -32,7 +34,7 @@ const CardEvent = ({ event }) => {
         const fetchCategoryName = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3005/api/categories/${category_id}`
+                    `${BASE_URL}/api/categories/${category_id}`
                 );
                 setCategoryName(response.data.name);
             } catch (error) {
@@ -43,7 +45,7 @@ const CardEvent = ({ event }) => {
         const fetchLocationName = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3005/api/locations/${location_id}`
+                    `${BASE_URL}/api/locations/${location_id}`
                 );
                 setLocationName(response.data.city);
             } catch (error) {

@@ -4,6 +4,9 @@ import { Col, Row } from "react-bootstrap";
 import CardEvent from "../../components/CardEvent";
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
+
+const BASE_URL = 'http://localhost:3005'
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -35,7 +38,7 @@ const EventsAll = () => {
         const fetchEvents = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3005/api/events/`
+                    `${BASE_URL}/api/events/`
                 );
                 setEvents(response.data);
             } catch (error) {

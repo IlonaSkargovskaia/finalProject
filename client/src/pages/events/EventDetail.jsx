@@ -6,6 +6,8 @@ import { format, parseISO } from "date-fns";
 import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
 import {PiTicketThin} from "react-icons/pi"
 
+const BASE_URL = 'http://localhost:3005'
+
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const params = useParams();
@@ -26,7 +28,7 @@ const EventDetail = () => {
         const getEventById = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:3005/api/events/${params.id}`
+                    `${BASE_URL}/api/events/${params.id}`
                 );
                 setEvent(res.data);
             } catch (error) {

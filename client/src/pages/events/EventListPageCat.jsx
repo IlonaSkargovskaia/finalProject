@@ -4,6 +4,8 @@ import EventsByCategory from "./EventsByCategory";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
+const BASE_URL = 'http://localhost:3005'
+
 const EventListPageCat = () => {
     const { categoryId } = useParams();
     const [eventsByCategory, setEventsByCategory] = useState([]);
@@ -16,12 +18,12 @@ const EventListPageCat = () => {
     const fetchCategoryAndEvents = async (categoryId) => {
         try {
             const categoryResponse = await axios.get(
-                `http://localhost:3005/api/categories/${categoryId}`
+                `${BASE_URL}/api/categories/${categoryId}`
             );
             setCategoryName(categoryResponse.data.name);
 
             const eventsResponse = await axios.get(
-                `http://localhost:3005/api/events/category/${categoryId}`
+                `${BASE_URL}/api/events/category/${categoryId}`
             );
             setEventsByCategory(eventsResponse.data);
         } catch (error) {

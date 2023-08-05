@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
+
+const BASE_URL = 'http://localhost:3005'
 
 const NewEventForm = (props) => {
     const { locations, categories } = props;
@@ -27,9 +29,7 @@ const NewEventForm = (props) => {
 
         try {
             const res = await axios.post(
-                "http://localhost:3005/api/events",
-                newEvent
-            );
+                `${BASE_URL}/api/events`,newEvent);
             console.log("New event added successfully", res.data);
 
             // Clear the form fields after successful submission

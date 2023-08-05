@@ -3,14 +3,14 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import routes from './routes/index.js';
 
-
+// ------------ for AWS
 // import multer from 'multer';
 // import multerS3 from 'multer-s3';
 // import AWS from 'aws-sdk';
 
 // import { S3Client } from '@aws-sdk/client-s3'; 
 
-
+// -------------
 
 const app = express();
 dotenv.config();
@@ -58,12 +58,15 @@ app.use(routes);
 //   res.json('Successfully uploaded');
 // });
 
+// --------------- end AWS
 
 
 app.listen(process.env.PORT || 3002, () => {
   console.log(`listen on ${process.env.PORT || 3002}`);
 });
 
+
+//------DEPLOY
 
 // // Have Node serve the files for our built React app
 // // app.use(express.static(path.resolve(__dirname, "./client/build")));

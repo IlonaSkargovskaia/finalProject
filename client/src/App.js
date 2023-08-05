@@ -11,6 +11,8 @@ import AddNewEvent from "./pages/events/AddNewEvent";
 import SearchResults from "./components/SearchResults";
 import { Spinner } from "react-bootstrap";
 
+const BASE_URL = 'http://localhost:3005'
+
 const App = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
@@ -19,13 +21,13 @@ const App = () => {
         const fetchEvents = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3005/api/events/`
+                    `${BASE_URL}/api/events/`
                 );
                 setEvents(response.data);
                 setLoading(false); // Set loading to false once the data is fetched
             } catch (error) {
                 console.error("Error fetching events:", error);
-                setLoading(false); // Set loading to false once the data is fetched
+                setLoading(false); 
             }
         };
 
@@ -33,7 +35,7 @@ const App = () => {
     }, []);
 
     if (loading) {
-      // Render the loading indicator if loading is true
+      // Render the loading spinner if loading is true
       return (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <Spinner animation="border" variant="primary" />
