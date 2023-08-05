@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { TbPigMoney } from "react-icons/tb";
-import { IoCalendarOutline, IoPricetagOutline } from "react-icons/io5";
+import { IoCalendarOutline } from "react-icons/io5";
 import { Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 
 const CardEvent = ({ event }) => {
+    
     const {
         title,
         description,
@@ -61,7 +62,7 @@ const CardEvent = ({ event }) => {
                     <IoCalendarOutline /> {newDateFormat} | {formattedTime}
                 </Card.Text>
                 <Card.Text>
-                    <CiLocationOn /> {locationName}
+                    <CiLocationOn /> {locationName} 
                 </Card.Text>
                 <hr />
                 <Row className="justify-content-between align-items-center">

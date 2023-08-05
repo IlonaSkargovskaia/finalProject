@@ -1,22 +1,17 @@
-import React from 'react'
+import React from "react";
+import CardEvent from "../../components/CardEvent";
 
 const EventsByLocation = (props) => {
-  const {events} = props;
-return (
-  <div>
-      {
-          events.map((item) => {
-              return (
-              <div key={item.id}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  
-              </div>  
-              )
-          })
-      }
-  </div>
-)
-}
+    const { events } = props;
+    return (
+        <div>
+            {events && events.length > 0 ? (
+                events.map((item) => <CardEvent key={item.id} event={item} />)
+            ) : (
+                <p>No events found.</p>
+            )}
+        </div>
+    );
+};
 
-export default EventsByLocation
+export default EventsByLocation;
