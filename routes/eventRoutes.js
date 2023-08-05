@@ -8,6 +8,7 @@ router.get('/api/events', getAllEventsController);
 router.post('/api/events', addEventController);
 
 router.get('/api/events/:id', getEventByIDController);
+
 router.get('/api/events/category/:categoryId', getEventsByCategoryController);
 router.get('/api/events/location/:locationId', getEventsByLocationController);
 router.put('/api/events/:id', updateEventController);

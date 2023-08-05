@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
     Navbar,
@@ -16,9 +16,12 @@ import {
 import logo from "../assets/logo.png";
 import "./navbar.css";
 
-const Navigation = () => {
+const Navigation = ({ events }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const navigate = useNavigate(); 
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
@@ -28,6 +31,17 @@ const Navigation = () => {
         
         setSelectedLocation(event.target.value);
     };
+
+    const handleSearchInput = (event) => {
+        setSearchQuery(event.target.value);
+    }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        // Redirect to the search results page with the search query as URL param
+        navigate(`/search?q=${searchQuery}`);
+    }
+     
 
     return (
         <Navbar expand="lg" className="nav__menu">
@@ -139,15 +153,17 @@ const Navigation = () => {
                         <Nav.Link href="/create-event">Add event</Nav.Link>
                     </Nav>
 
-                    <Form className="d-flex">
-                        <InputGroup>
+                    <Form className="d-flex" onSubmit={handleSearchSubmit}>
+                        <InputGroup className="search__top">
                             <InputGroup.Text className="bg-white">
                                 <CiSearch />
                             </InputGroup.Text>
                             <FormControl
                                 type="search"
                                 className="me-2"
-                                placeholder="Search"
+                                placeholder="Search events.."
+                                value={searchQuery}
+                                onChange={handleSearchInput}
                             />
                         </InputGroup>
                     </Form>

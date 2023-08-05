@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { CiLocationOn } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { CiLocationOn, CiShoppingCart } from "react-icons/ci";
 import { TbPigMoney } from "react-icons/tb";
 import { IoCalendarOutline } from "react-icons/io5";
 import { Button, Card, Row, Col } from "react-bootstrap";
@@ -9,6 +10,7 @@ import { format, parseISO } from "date-fns";
 const CardEvent = ({ event }) => {
     
     const {
+        id,
         title,
         description,
         date,
@@ -17,9 +19,11 @@ const CardEvent = ({ event }) => {
         price,
         category_id,
         location_id,
+        address
     } = event;
+    // console.log(id);
     const parsedDate = parseISO(date); //  date -> Date object
-    const newDateFormat = format(parsedDate, "dd-MM-yyyy");
+    const newDateFormat = format(parsedDate, "d MMMM yyyy");
     const formattedTime = time.substring(0, 5);
     const [categoryName, setCategoryName] = useState("");
     const [locationName, setLocationName] = useState("");
@@ -52,28 +56,30 @@ const CardEvent = ({ event }) => {
     }, [category_id, location_id]);
 
     return (
-        <Card className="h-100">
+        <Card className="h-100" >
             <Card.Text className="card__category"> {categoryName}</Card.Text>
-            <Card.Img variant="top" src={image} />
+            <Link to={`/events/${id}`}>
+                <Card.Img variant="top" src={image} />
+            </Link>
             <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{description}</Card.Text>
-                <Card.Text>
+                <Card.Title as={Link} to={`/events/${id}`}>{title}</Card.Title>
+                <Card.Text className="card__address">{address}</Card.Text>
+                <Card.Text className="card__date">
                     <IoCalendarOutline /> {newDateFormat} | {formattedTime}
                 </Card.Text>
                 <Card.Text>
                     <CiLocationOn /> {locationName} 
                 </Card.Text>
                 <hr />
-                <Row className="justify-content-between align-items-center">
+                <Row className="align-items-center">
                     <Col>
                         <Card.Text>
                             <TbPigMoney /> {price} ILS
                         </Card.Text>
                     </Col>
                     <Col className="card__btn-block">
-                        <Button className="purple card__button">
-                            Buy ticket
+                        <Button className="card__button purple" as={Link} to={`/events/${id}`}>
+                            <CiShoppingCart /> Buy ticket
                         </Button>
                     </Col>
                 </Row>

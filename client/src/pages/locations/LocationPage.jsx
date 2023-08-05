@@ -29,7 +29,7 @@ const EventListPageCat = () => {
         }
     };
 
-    console.log(eventsByLocation);
+    //console.log(eventsByLocation);
 
     return (
         <div>
