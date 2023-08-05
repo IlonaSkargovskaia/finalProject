@@ -29,8 +29,6 @@ const Navigation = () => {
         setSelectedLocation(event.target.value);
     };
 
-    console.log(selectedLocation);
-
     return (
         <Navbar expand="lg" className="nav__menu">
             <Container>
@@ -43,7 +41,6 @@ const Navigation = () => {
                 />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-                        {/* <Nav.Link href="/">Home</Nav.Link> */}
 
                         <NavDropdown
                             title="Categories"
@@ -138,6 +135,8 @@ const Navigation = () => {
                             </NavDropdown.Item>
                             
                         </NavDropdown>
+
+                        <Nav.Link href="/create-event">Add event</Nav.Link>
                     </Nav>
 
                     <Form className="d-flex">

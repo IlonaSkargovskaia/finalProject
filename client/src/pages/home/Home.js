@@ -2,15 +2,12 @@ import { Container } from "react-bootstrap";
 import EventsAll from "../events/EventsAll";
 
 const Home = () => {
-   
     return (
-        <div>
-          <Container>
-            <h1 >Top Selling on TicketPRO</h1>
+        <div className="home__page">
+            <Container>
+                <h1>Top Selling on TicketPRO</h1>
 
-            {/* event carousel */}
-            <EventsAll />
-            
+                <EventsAll />
             </Container>
         </div>
     );

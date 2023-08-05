@@ -4,6 +4,7 @@ import EventListPageCat from './pages/events/EventListPageCat';
 import {Routes, Route} from 'react-router-dom';
 import LocationPage from './pages/locations/LocationPage';
 import Footer from './components/Footer';
+import AddNewEvent from './pages/events/AddNewEvent';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/location/:locationId" element={<LocationPage />} />
           <Route path="/category/:categoryId" element={<EventListPageCat />} />
+          <Route path="/create-event" element={<AddNewEvent />} />
         </Routes>
         
       </main>
