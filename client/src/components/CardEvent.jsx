@@ -52,9 +52,9 @@ const CardEvent = ({ event }) => {
     }, [category_id, location_id]);
 
     return (
-        <Card>
+        <Card className="h-100">
             <Card.Text className="card__category"> {categoryName}</Card.Text>
-            <Card.Img variant="top" src="holder.js/100px180" />
+            <Card.Img variant="top" src={image} />
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
                 <Card.Text>{description}</Card.Text>

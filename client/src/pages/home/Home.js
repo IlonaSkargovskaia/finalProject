@@ -1,6 +1,5 @@
 import { Container } from "react-bootstrap";
 import EventsAll from "../events/EventsAll";
-import LocationPage from "../locations/LocationPage";
 
 const Home = () => {
    
@@ -11,7 +10,6 @@ const Home = () => {
 
             {/* event carousel */}
             <EventsAll />
-           
             
             </Container>
         </div>
