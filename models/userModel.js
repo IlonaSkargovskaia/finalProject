@@ -51,7 +51,7 @@ export const updateUser = async (id, userData) => {
         return updatedUser[0]; //{[...]}
     } catch (error) {
         console.log('error: ', error);
-        throw new Error('Error updating event in the database');
+        throw new Error('Error updating users in the database');
     }
 }
 
@@ -61,6 +61,6 @@ export const deleteUser = async (id) => {
       return deletedUser[0];
     } catch (error) {
       console.log('error: ', error);
-      throw new Error('Error deleting event from the database');
+      throw new Error('Error deleting user from the database');
     }
 }

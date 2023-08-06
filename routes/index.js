@@ -6,6 +6,7 @@ import userRoutes from './userRoutes.js';
 import categoryRoutes from './categoryRoutes.js';
 import locationRoutes from './locationRoutes.js';
 
+
 // import upload from '../helpers/upload.helper.js';
 // import {uploadSingle, uploadMultiple, uploadSingleV2} from '../controllers/upload.controller.js';
 
@@ -27,5 +28,6 @@ router.use('/', ticketRoutes);
 router.use('/', userRoutes);
 router.use('/', categoryRoutes);
 router.use('/', locationRoutes);
+
 
 export default router;

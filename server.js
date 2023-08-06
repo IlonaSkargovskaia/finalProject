@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import routes from './routes/index.js';
+import jwtAuth from './routes/jwtAuth.js';
+import dashboard from './routes/dashboard.js'
 
 // ------------ for AWS
 // import multer from 'multer';
@@ -20,6 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(routes);
+
+//login-register-authorization
+app.use('/auth', jwtAuth);
+
+//dashboard router
+app.use('/dashboard', dashboard);
 
 
 // ------------ old
