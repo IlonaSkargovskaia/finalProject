@@ -31,11 +31,13 @@ a.purple, button.purple{
     background-color: #7b1fa2 !important;
     border-color: #7b1fa2 !important;
     transition: all .3s ease-in-out;
+    color: #fff;
 }
 
 a.purple:hover, button.purple:hover{
     background-color: #4a148c !important;
     border-color: #4a148c !important;
+    color: #fff;
 }
 
 a.card-title{
