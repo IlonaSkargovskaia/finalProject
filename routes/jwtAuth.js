@@ -23,7 +23,7 @@ router.post("/register", validInfo, async (req, res) => {
         if (user.length !== 0) {
             return res
                 .status(401)
-                .json({ error: "User with this email already exists" });
+                .json({ error: "User already exists" });
         }
 
         // 3. if not exist - Bcrypt password
