@@ -26,6 +26,27 @@ const App = () => {
         setIsAuthenticated(boolean)
     }
 
+    const isAuth = async() => {
+        try {
+            const res = await fetch(`${BASE_URL}/auth/is-verify`, {
+                method: 'GET',
+                headers: {token: localStorage.token}
+            });
+
+            const data = await res.json();
+            //console.log(data);
+
+            data === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        isAuth();
+    }, [])
+
     useEffect(() => {
         const fetchEvents = async () => {
             try {

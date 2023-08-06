@@ -171,7 +171,7 @@ const Navigation = ({ events }) => {
                     <Stack direction="horizontal" gap={3}>
                         <Button variant="light">Log in</Button>
                         <div className="vr" />
-                        <Button variant="outline-light">Sign in</Button>
+                        <Button variant="outline-light">Sign up</Button>
                     </Stack>
                 </Navbar.Collapse>
             </Container>
