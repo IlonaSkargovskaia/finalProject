@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import {Link} from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
 const BASE_URL = "http://localhost:3005";
 
-const Register = () => {
+const Register = ({setAuth}) => {
 
     const [inputs, setInputs] = useState({
       email: '',
@@ -15,7 +16,7 @@ const Register = () => {
 
     const onChange = (e) => {
       //копируем текущее состояние, обновляем поля при этом достаем имя поля и присваиваем значение введенное пользователем name : value
-      setInputs({...inputs, [e.target.name] : [e.target.value]})
+      setInputs({...inputs, [e.target.name] : e.target.value})
     }
 
     //
@@ -36,8 +37,13 @@ const Register = () => {
 
         const data = await res.json();
         //if all okay  - we get token
-        console.log(data);
-        
+        //console.log(data); //data = {token: "kedjrgejrbgselhb"}
+
+        //now we need to save token to localstorage
+        localStorage.setItem("token", data.token)
+
+        setAuth(true);
+
       } catch (error) {
         console.log(error);
       }
@@ -45,7 +51,7 @@ const Register = () => {
 
     return (
         <Container>
-            <h1 className="text-center my-5">Register</h1>
+            <h1 className="text-center">Register</h1>
             <form onSubmit={onSubmitForm}>
                 <input
                     type="text"
@@ -71,7 +77,8 @@ const Register = () => {
                     value={password}
                     onChange={(e) => onChange(e)}
                 />
-                <button className="btn purple">Submit</button>
+                <button className="btn purple">Submit</button><br/>
+                <Link to='/login'>Login</Link>
             </form>
         </Container>
     );
