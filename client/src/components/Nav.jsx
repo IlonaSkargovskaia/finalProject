@@ -16,32 +16,39 @@ import {
 import logo from "../assets/logo.png";
 import "./navbar.css";
 
-const Navigation = ({ events }) => {
+const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
     };
 
     const handleLocationChange = (event) => {
-        
         setSelectedLocation(event.target.value);
     };
 
     const handleSearchInput = (event) => {
         setSearchQuery(event.target.value);
-    }
+    };
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         // Redirect to the search results page with the search query as URL param
         navigate(`/search?q=${searchQuery}`);
-    }
-     
+    };
+
+    const handleLogout = () => {
+        // Clear the token from local storage
+        localStorage.removeItem("token");
+        // Set isAuthenticated to false
+        setIsAuthenticated(false);
+        // Redirect to the login page
+        navigate("/login");
+    };
 
     return (
         <Navbar expand="lg" className="nav__menu">
@@ -55,7 +62,6 @@ const Navigation = ({ events }) => {
                 />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-
                         <NavDropdown
                             title="Categories"
                             id="navbarScrollingDropdown"
@@ -147,7 +153,6 @@ const Navigation = ({ events }) => {
                                 {" "}
                                 Center
                             </NavDropdown.Item>
-                            
                         </NavDropdown>
 
                         <Nav.Link href="/create-event">Add event</Nav.Link>
@@ -169,9 +174,32 @@ const Navigation = ({ events }) => {
                     </Form>
 
                     <Stack direction="horizontal" gap={3}>
-                        <Button variant="light">Log in</Button>
-                        <div className="vr" />
-                        <Button variant="outline-light">Sign up</Button>
+                        {isAuthenticated ? (
+                            <>
+                                
+                                <div className="vr" />
+                                <Button
+                                    variant="outline-light"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button variant="light" as={Link} to="/login">
+                                    Login
+                                </Button>
+                                <div className="vr" />
+                                <Button
+                                    variant="outline-light"
+                                    as={Link}
+                                    to="/register"
+                                >
+                                    Sign up
+                                </Button>
+                            </>
+                        )}
                     </Stack>
                 </Navbar.Collapse>
             </Container>

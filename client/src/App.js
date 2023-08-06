@@ -14,39 +14,52 @@ import UserDashboard from "./pages/dashboards/UserDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
 
-
 const BASE_URL = "http://localhost:3005";
 
 const App = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
-
+    const [username, setUsername] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const setAuth = (boolean) => {
-        setIsAuthenticated(boolean)
-    }
+        setIsAuthenticated(boolean);
+    };
 
-    const isAuth = async() => {
+    const isAuth = async () => {
         try {
             const res = await fetch(`${BASE_URL}/auth/is-verify`, {
-                method: 'GET',
-                headers: {token: localStorage.token}
+                method: "GET",
+                headers: { token: localStorage.token },
             });
 
             const data = await res.json();
             //console.log(data);
 
-            data === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+            if (data === true) {
+                setIsAuthenticated(true);
 
+                // Fetch the user data including the username
+                const userRes = await fetch(`${BASE_URL}/dashboard`, {
+                    method: "GET",
+                    headers: { token: localStorage.token },
+                });
+
+                const userData = await userRes.json();
+                console.log(userData.username);
+                setUsername(userData.username); // This is the username
+
+            } else {
+                setIsAuthenticated(false);
+            }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     useEffect(() => {
         isAuth();
-    }, [])
+    }, []);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -75,7 +88,7 @@ const App = () => {
     return (
         <div className="wrapper">
             <header>
-                <Navigation events={events} />
+                <Navigation events={events} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}/>
             </header>
 
             <main className="main">
@@ -103,7 +116,7 @@ const App = () => {
                         path="/login"
                         element={
                             !isAuthenticated ? (
-                                <Login setAuth={setAuth}/>
+                                <Login setAuth={setAuth} />
                             ) : (
                                 <Navigate to="/userdashboard" />
                             )
@@ -113,7 +126,7 @@ const App = () => {
                         path="/register"
                         element={
                             !isAuthenticated ? (
-                                <Register setAuth={setAuth}/>
+                                <Register setAuth={setAuth} />
                             ) : (
                                 <Navigate to="/login" />
                             )
@@ -123,7 +136,7 @@ const App = () => {
                         path="/userdashboard"
                         element={
                             isAuthenticated ? (
-                                <UserDashboard setAuth={setAuth}/>
+                                <UserDashboard setAuth={setAuth} />
                             ) : (
                                 <Navigate to="/login" />
                             )
