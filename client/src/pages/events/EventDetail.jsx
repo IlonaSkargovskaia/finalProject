@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { Container, Card, Button, Row, Col } from "react-bootstrap";
+import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
 import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
 import { PiTicketThin } from "react-icons/pi";
 
-
 const EventDetail = () => {
     const [event, setEvent] = useState({});
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
     const params = useParams();
-
 
     const {
         title,
@@ -22,14 +21,14 @@ const EventDetail = () => {
         time,
         category_id,
         address,
+        quantity_available,
+        max_price,
     } = event;
 
     useEffect(() => {
         const getEventById = async () => {
             try {
-                const res = await axios.get(
-                    `/api/events/${params.id}`
-                );
+                const res = await axios.get(`/api/events/${params.id}`);
                 setEvent(res.data);
             } catch (error) {
                 console.log(error);
@@ -37,6 +36,8 @@ const EventDetail = () => {
         };
         getEventById();
     }, []);
+
+    //console.log(event);
 
     const hasDateTime = date && time;
 
@@ -47,7 +48,10 @@ const EventDetail = () => {
 
     const formattedTime = hasDateTime ? time.slice(0, 5) : "";
 
-   
+    const handleQuantityChange = (event) => {
+        const { value } = event.target;
+        setSelectedQuantity(parseInt(value));
+    };
 
     return (
         <div>
@@ -69,14 +73,47 @@ const EventDetail = () => {
                                 </Card.Text>
                                 <Card.Text>{description} </Card.Text>
                                 <Card.Text>
-                                    <PiTicketThin /> Price: {price} ILS
+                                    <PiTicketThin /> Price: {price} -{" "}
+                                    {max_price} ILS
                                 </Card.Text>
-                                <Button
-                                    className="purple"
-                                    
-                                >
-                                    <CiShoppingCart /> Buy ticket
-                                </Button>
+                                <Card.Text>
+                                    <b>Tickets available:</b>{" "}
+                                    {quantity_available === 0
+                                        ? "SOLD OUT"
+                                        : quantity_available}
+                                </Card.Text>
+                                {quantity_available > 0 ? (
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Label>
+                                                Select Quantity:
+                                            </Form.Label>
+                                            <Form.Select
+                                                value={selectedQuantity}
+                                                onChange={handleQuantityChange}
+                                            >
+                                                {Array.from({
+                                                        length: quantity_available,
+                                                    },
+                                                    (_, index) => (
+                                                        <option key={index} value={index + 1}>
+                                                            {index + 1}
+                                                        </option>
+                                                    )
+                                                )}
+                                            </Form.Select>
+                                        </Form.Group>
+                                        <Button
+                                            className="purple"
+                                            // Add onClick event handler for buying tickets
+                                        >
+                                            <CiShoppingCart /> Buy ticket
+                                        </Button>
+                                    </Form>
+                                ) : (
+                                    <p>No tickets available, choose another event</p>
+                                )}
+
                             </Card.Body>
                         </Card>
                     </Col>
@@ -92,8 +129,6 @@ const EventDetail = () => {
                     </Col>
                 </Row>
             </Container>
-
-            
         </div>
     );
 };

@@ -1,11 +1,9 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
     Button,
     Col,
     Container,
-    FormControl,
-    InputGroup,
     Row,
 } from "react-bootstrap";
 import { FaFacebookF, FaGithub, FaLinkedin } from "react-icons/fa";
@@ -76,9 +74,9 @@ const Footer = () => {
                 </Col>
             </Row>
 
-            <Row className="my-5">
+            <Row xs={1} md={2} lg={2} gap={4} className="my-3">
                 <Col>
-                    Sign up now and we'll keep you up to date!
+                    <span style={{color: '#7b1ea2'}}>Sign up now and we'll keep you up to date!</span>
                     <form className="d-flex gap-4 align-items-center">
                         <input
                             type="email"
@@ -111,6 +109,7 @@ const Footer = () => {
                         </a>
                     </div>
                 </Col>
+                
             </Row>
         </Container>
     );

@@ -5,6 +5,11 @@ const Breadcrumbs = () => {
   const location = useLocation();
   const segments = location.pathname.split('/').filter(segment => segment !== '');
 
+  if (segments.length === 0) {
+    // Don't render breadcrumbs on the home page
+    return null;
+  }
+
   let currentLink = '';
 
   const breadcrumbs = segments.map((segment, index) => {

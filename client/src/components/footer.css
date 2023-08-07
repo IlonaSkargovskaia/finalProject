@@ -3,6 +3,10 @@
     padding: 2rem 0;
 }
 
+.footer a{
+    color: #878787;
+}
+
 .footer h4{
     margin-bottom: 35px;
 }
