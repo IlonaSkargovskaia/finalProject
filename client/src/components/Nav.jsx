@@ -15,6 +15,7 @@ import {
 } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import "./navbar.css";
+import Breadcrumbs from "./Breadcrumbs";
 
 const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -51,6 +52,7 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
     };
 
     return (
+        <>
         <Navbar expand="lg" className="nav__menu">
             <Container>
                 <Navbar.Brand as={Link} to="/">
@@ -202,8 +204,16 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                         )}
                     </Stack>
                 </Navbar.Collapse>
+
+                
             </Container>
         </Navbar>
+        
+        <Container>
+            <Breadcrumbs />
+        </Container>
+        
+        </>
     );
 };
 

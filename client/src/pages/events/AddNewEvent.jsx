@@ -3,7 +3,6 @@ import NewEventForm from "../../components/NewEventForm";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 
-const BASE_URL = 'http://localhost:3005'
 
 const AddNewEvent = () => {
     const [locations, setLocations] = useState(null);
@@ -13,12 +12,12 @@ const AddNewEvent = () => {
         const fetchLocationsAndCategories = async () => {
             try {
                 const resLocations = await axios.get(
-                    `${BASE_URL}/api/locations`
+                    `/api/locations`
                 );
                 setLocations(resLocations.data);
 
                 const resCategories = await axios.get(
-                    `${BASE_URL}/api/categories`
+                    `/api/categories`
                 );
                 setCategories(resCategories.data);
             } catch (error) {

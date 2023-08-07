@@ -4,7 +4,6 @@ import EventsByCategory from "./EventsByCategory";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-const BASE_URL = 'http://localhost:3005'
 
 const EventListPageCat = () => {
     const { categoryId } = useParams();
@@ -18,12 +17,12 @@ const EventListPageCat = () => {
     const fetchCategoryAndEvents = async (categoryId) => {
         try {
             const categoryResponse = await axios.get(
-                `${BASE_URL}/api/categories/${categoryId}`
+                `/api/categories/${categoryId}`
             );
             setCategoryName(categoryResponse.data.name);
 
             const eventsResponse = await axios.get(
-                `${BASE_URL}/api/events/category/${categoryId}`
+                `/api/events/category/${categoryId}`
             );
             setEventsByCategory(eventsResponse.data);
         } catch (error) {
@@ -34,7 +33,8 @@ const EventListPageCat = () => {
     return (
         <div>
             <Container >
-            <h1>All avaliable events in category "{categoryName}"</h1>
+                
+            <h1>Avaliable events in category "{categoryName}"</h1>
             
             <EventsByCategory events={eventsByCategory} />
             </Container>

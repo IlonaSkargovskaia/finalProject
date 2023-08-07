@@ -5,7 +5,6 @@ import CardEvent from "../../components/CardEvent";
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 
-const BASE_URL = 'http://localhost:3005'
 
 const responsive = {
   superLargeDesktop: {
@@ -38,7 +37,7 @@ const EventsAll = () => {
         const fetchEvents = async () => {
             try {
                 const response = await axios.get(
-                    `${BASE_URL}/api/events/`
+                    `/api/events/`
                 );
                 setEvents(response.data);
             } catch (error) {

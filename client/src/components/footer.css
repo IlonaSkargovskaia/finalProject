@@ -3,6 +3,44 @@
     padding: 2rem 0;
 }
 
+.footer h4{
+    margin-bottom: 35px;
+}
+
 img.footer__logo{
     max-width: 200px;
+}
+
+/* Social */
+
+.contact__socials {
+    display: flex;
+    column-gap: 16px;
+    
+}
+
+.contact__social-link{
+    background-color: #f0f0f2 ;
+    color: #7a7a7a;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 38px;
+    transition: all .3s ease;
+}
+
+.contact__social-link:hover{
+    background-color: #7b1fa2;
+    color: #fff;
+}
+
+h4.socials__title{
+    margin-bottom: 0;
+    color: #a7a7a7;
+    font-weight: 100;
+}
+
+.footer__list-about{
+    margin-top: 2rem;
 }

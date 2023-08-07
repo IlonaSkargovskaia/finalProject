@@ -4,13 +4,13 @@ import { Link, useParams } from "react-router-dom";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
 import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
-import {PiTicketThin} from "react-icons/pi"
+import { PiTicketThin } from "react-icons/pi";
 
-const BASE_URL = 'http://localhost:3005'
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const params = useParams();
+
 
     const {
         title,
@@ -21,14 +21,14 @@ const EventDetail = () => {
         price,
         time,
         category_id,
-        address
+        address,
     } = event;
 
     useEffect(() => {
         const getEventById = async () => {
             try {
                 const res = await axios.get(
-                    `${BASE_URL}/api/events/${params.id}`
+                    `/api/events/${params.id}`
                 );
                 setEvent(res.data);
             } catch (error) {
@@ -47,6 +47,8 @@ const EventDetail = () => {
 
     const formattedTime = hasDateTime ? time.slice(0, 5) : "";
 
+   
+
     return (
         <div>
             <Container>
@@ -58,28 +60,40 @@ const EventDetail = () => {
                             </Card.Header>
                             <Card.Body>
                                 <Card.Title>{title}</Card.Title>
-                                <Card.Text> <CiCalendarDate /> 
+                                <Card.Text>
+                                    {" "}
+                                    <CiCalendarDate />
                                     {hasDateTime
                                         ? ` ${formattedDate} | ${formattedTime}`
                                         : "Loading..."}
                                 </Card.Text>
                                 <Card.Text>{description} </Card.Text>
-                                <Card.Text><PiTicketThin /> Price: {price} ILS</Card.Text>
-                                <Button className="purple"><CiShoppingCart /> Buy ticket</Button>
+                                <Card.Text>
+                                    <PiTicketThin /> Price: {price} ILS
+                                </Card.Text>
+                                <Button
+                                    className="purple"
+                                    
+                                >
+                                    <CiShoppingCart /> Buy ticket
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>
                     <Col md={4} sm={12}>
                         <Card className="card__right">
-                            <Card.Text> <CiLocationOn /> <b>Location:</b></Card.Text>
-                            <Card.Text >{address}</Card.Text>
+                            <Card.Text>
+                                {" "}
+                                <CiLocationOn /> <b>Location:</b>
+                            </Card.Text>
+                            <Card.Text>{address}</Card.Text>
                             <Card.Text>Israel</Card.Text>
                         </Card>
-                        
-                        
                     </Col>
                 </Row>
             </Container>
+
+            
         </div>
     );
 };

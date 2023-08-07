@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BASE_URL = "http://localhost:3005";
+
 
 const Login = ({ setAuth }) => {
     const [inputs, setInputs] = useState({
@@ -24,7 +24,7 @@ const Login = ({ setAuth }) => {
         const body = { email, password };
 
         try {
-            const res = await fetch(`${BASE_URL}/auth/login`, {
+            const res = await fetch(`/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -38,7 +38,6 @@ const Login = ({ setAuth }) => {
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 setAuth(true);
-                
             } else {
                 setAuth(false);
                 toast(data.message);
@@ -64,28 +63,31 @@ const Login = ({ setAuth }) => {
                     theme="dark"
                 />
                 <h1 className="text-center">Login</h1>
-                <form onSubmit={onSubmitForm}>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="email"
-                        className="form-control my-3"
-                        value={email}
-                        onChange={(e) => onChange(e)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="password"
-                        className="form-control my-3"
-                        value={password}
-                        onChange={(e) => onChange(e)}
-                        required
-                    />
-                    <button className="btn purple">Submit</button>
-                </form>
-                <Link to="/register">Register</Link>
+                <Row className="justify-content-center text-center">
+                    <form onSubmit={onSubmitForm} className="w-50">
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="email"
+                            className="form-control my-3"
+                            value={email}
+                            onChange={(e) => onChange(e)}
+                            required
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="password"
+                            className="form-control my-3"
+                            value={password}
+                            onChange={(e) => onChange(e)}
+                            required
+                        />
+                        <button className="btn purple">Submit</button>
+                    </form>
+                    <span >Don't have an account yet?</span>
+                    <Link to="/register" >Register</Link>
+                </Row>
             </Container>
         </div>
     );

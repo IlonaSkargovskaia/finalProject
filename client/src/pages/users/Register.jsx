@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BASE_URL = "http://localhost:3005";
 
 const Register = ({ setAuth }) => {
     const [inputs, setInputs] = useState({
@@ -28,7 +27,7 @@ const Register = ({ setAuth }) => {
             //from the state
             const body = { username, email, password };
 
-            const res = await fetch(`${BASE_URL}/auth/register`, {
+            const res = await fetch(`/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -70,7 +69,8 @@ const Register = ({ setAuth }) => {
                     theme="dark"
                 />
             <h1 className="text-center">Register</h1>
-            <form onSubmit={onSubmitForm}>
+            <Row className="justify-content-center text-center">
+            <form onSubmit={onSubmitForm} className="w-50">
                 <input
                     type="text"
                     name="username"
@@ -99,9 +99,11 @@ const Register = ({ setAuth }) => {
                     required
                 />
                 <button className="btn purple">Submit</button>
-                <br />
+                </form>
+                <span>Do you already have account?</span>
                 <Link to="/login">Login</Link>
-            </form>
+            
+            </Row>
         </Container>
     );
 };

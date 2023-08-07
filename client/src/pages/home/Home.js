@@ -6,6 +6,7 @@ const Home = () => {
     return (
         <div className="home__page">
             <Container>
+            
                 <h1><LiaHotjar />Top selling on "TicketPRO"</h1>
 
                 <EventsAll />

@@ -13,8 +13,8 @@ import { Spinner } from "react-bootstrap";
 import UserDashboard from "./pages/dashboards/UserDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-const BASE_URL = "http://localhost:3005";
 
 const App = () => {
     const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ const App = () => {
 
     const isAuth = async () => {
         try {
-            const res = await fetch(`${BASE_URL}/auth/is-verify`, {
+            const res = await fetch(`/auth/is-verify`, {
                 method: "GET",
                 headers: { token: localStorage.token },
             });
@@ -40,7 +40,7 @@ const App = () => {
                 setIsAuthenticated(true);
 
                 // Fetch the user data including the username
-                const userRes = await fetch(`${BASE_URL}/dashboard`, {
+                const userRes = await fetch(`/dashboard`, {
                     method: "GET",
                     headers: { token: localStorage.token },
                 });
@@ -64,7 +64,7 @@ const App = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/api/events/`);
+                const response = await axios.get(`/api/events/`);
                 setEvents(response.data);
                 setLoading(false); // Set loading to false once the data is fetched
             } catch (error) {

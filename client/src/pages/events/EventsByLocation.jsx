@@ -6,7 +6,7 @@ const EventsByLocation = (props) => {
     const { events } = props;
     return (
         <div>
-            <Row xs={1} md={2} lg={5} className="g-4">
+            <Row xs={1} md={2} lg={4} className="g-4">
                 {events && events.length > 0 ? (
                     events.map((item, index) => (
                         <Col key={index}><CardEvent key={item.id} event={item} /></Col>
