@@ -1,4 +1,4 @@
-import { getAllTickets, getTicketById, addNewTicket, updateTicket, deleteTicket } from "../models/ticketModel.js";
+import { getAllTickets, getTicketById, addNewTicket, updateTicket, deleteTicket, createTicket } from "../models/ticketModel.js";
 
 
 export const getAllTicketsController = async (req, res) => {
@@ -24,6 +24,27 @@ export const getTicketByIdController = async (req, res) => {
         res.status(500).json({msg: 'Internal server error'})
     }
 }
+
+export const purchaseTickets = async (req, res) => {
+    try {
+        
+        const { eventid } = req.params;
+        const { userid } = req.user; //from auth
+        const { quantity } = req.body;
+
+
+        const event = await db("events").where("id", eventid).first();
+        const total_price = event.price * quantity;
+
+
+        await createTicket(eventid, userid, quantity, total_price);
+
+        res.status(201).json({ message: "Tickets purchased successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error purchasing tickets" });
+    }
+};
 
 export const addNewTicketController = async (req, res) => {
     const {userid, eventid, quantity, totalprice} = req.body;

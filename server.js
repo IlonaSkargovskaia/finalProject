@@ -23,8 +23,16 @@ app.use(express.json());
 
 app.use(routes);
 
+
+
 //login-register-authorization
 app.use('/auth', jwtAuth);
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 //dashboard router
 app.use('/dashboard', dashboard);

@@ -85,6 +85,7 @@ router.post("/login", validInfo, async (req, res) => {
 
 router.get("/is-verify", authorization, async (req, res) => {
     try {
+        console.log('User verified');
         res.json(true);
     } catch (error) {
         console.log(error);

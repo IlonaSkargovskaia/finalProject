@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
 import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
@@ -53,6 +53,28 @@ const EventDetail = () => {
         setSelectedQuantity(parseInt(value));
     };
 
+    const handlePurchase = async () => {
+        try {
+            // const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNywiaWF0IjoxNjkxNDgxNDMyLCJleHAiOjE2OTE0ODUwMzJ9.b_kxF4CrfLisW_Bn9izkvPXxRxJGBrAeSrgSFzBgbHU';
+
+            const response = await axios.post(
+                `/api/tickets/${params.id}/purchase`,
+                {
+                    quantity: selectedQuantity,
+                },
+                // {
+                //     headers: {
+                //         Authorization: `Bearer ${jwtToken}`,
+                //     },
+                // }
+            );
+
+            console.log("Purchase success:", response.data);
+        } catch (error) {
+            console.error("Purchase error:", error);
+        }
+    };
+
     return (
         <div>
             <Container>
@@ -91,12 +113,17 @@ const EventDetail = () => {
                                             <Form.Select
                                                 value={selectedQuantity}
                                                 onChange={handleQuantityChange}
+                                                style={{display: 'inline-block', width: '20%'}}
                                             >
-                                                {Array.from({
+                                                {Array.from(
+                                                    {
                                                         length: quantity_available,
                                                     },
                                                     (_, index) => (
-                                                        <option key={index} value={index + 1}>
+                                                        <option
+                                                            key={index}
+                                                            value={index + 1}
+                                                        >
                                                             {index + 1}
                                                         </option>
                                                     )
@@ -105,15 +132,17 @@ const EventDetail = () => {
                                         </Form.Group>
                                         <Button
                                             className="purple"
-                                            // Add onClick event handler for buying tickets
+                                            onClick={handlePurchase}
                                         >
                                             <CiShoppingCart /> Buy ticket
                                         </Button>
                                     </Form>
                                 ) : (
-                                    <p>No tickets available, choose another event</p>
+                                    <p>
+                                        No tickets available, choose another
+                                        event
+                                    </p>
                                 )}
-
                             </Card.Body>
                         </Card>
                     </Col>

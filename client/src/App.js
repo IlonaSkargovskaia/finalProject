@@ -13,7 +13,6 @@ import { Spinner } from "react-bootstrap";
 import UserDashboard from "./pages/dashboards/UserDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 
 const App = () => {
@@ -46,8 +45,8 @@ const App = () => {
                 });
 
                 const userData = await userRes.json();
-                console.log(userData.username);
-                setUsername(userData.username); // This is the username
+                //console.log(userData.username);
+                setUsername(userData.username); 
 
             } else {
                 setIsAuthenticated(false);
