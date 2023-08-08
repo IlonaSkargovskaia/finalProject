@@ -6,7 +6,7 @@ export const validInfo = (req, res, next) => {
     }
 
     if (req.path === "/register") {
-        //console.log(!email.length);
+        
         if (![email, username, password].every(Boolean)) {
             return res.status(401).json("Missing Credentials"); //unauthenticated
         } else if (!validEmail(email)) {
@@ -16,7 +16,7 @@ export const validInfo = (req, res, next) => {
     
     else if (req.path === "/login") {
         if (![email, password].every(Boolean)) {
-            return res.status(401).json("Missing Credentials"); //unauthenticated
+            return res.status(401).json("Missing Credentials"); 
         } else if (!validEmail(email)) {
             return res.status(401).json("Invalid Email");
         }

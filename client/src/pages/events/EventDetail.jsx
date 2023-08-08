@@ -77,7 +77,12 @@ const EventDetail = () => {
 
             console.log("Purchase success:", response.data);
         } catch (error) {
-            console.error("Purchase error:", error);
+            if (error.response.status === 400) {
+                console.error("Not enough tickets available");
+            } else {
+                console.error("Purchase error:", error);
+            }
+            
         }
     };
 
