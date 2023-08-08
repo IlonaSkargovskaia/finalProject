@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
@@ -14,7 +14,8 @@ const Login = ({ setAuth }) => {
 
     const { email, password } = inputs;
 
-    const { setToken } = useContext(AppContext);
+    const { setToken, setUserRole } = useContext(AppContext);
+    const navigate = useNavigate(); 
 
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -35,12 +36,23 @@ const Login = ({ setAuth }) => {
             });
 
             const data = await res.json();
-            //console.log(data);
+            console.log(data);
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
+                localStorage.setItem('userRole', data.role);
+                
                 setToken(data.token);
+                setUserRole(data.role);
                 setAuth(true);
+
+                
+                if (data.role === "organizer") {
+                    navigate("/organizerdashboard");
+                } else {
+                    navigate("/userdashboard");
+                }
+
             } else {
                 setAuth(false);
                 toast(data.message);
@@ -49,6 +61,7 @@ const Login = ({ setAuth }) => {
             console.log(error);
         }
     };
+
 
     return (
         <div>

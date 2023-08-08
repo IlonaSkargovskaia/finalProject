@@ -11,6 +11,7 @@ import AddNewEvent from "./pages/events/AddNewEvent";
 import SearchResults from "./components/SearchResults";
 import { Spinner } from "react-bootstrap";
 import UserDashboard from "./pages/dashboards/UserDashboard";
+import OrganizerDashboard from "./pages/dashboards/OrganizerDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
 
@@ -19,25 +20,28 @@ export const AppContext = createContext();
 const App = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
-    const [username, setUsername] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [token, setToken] = useState(null);
-
-    
+    const [username, setUsername] = useState("");
+    const [isAuthenticated, setIsAuthenticated] = useState(
+        localStorage.getItem("isAuthenticated") === "true" // Read from localStorage
+    );
+    const [token, setToken] = useState(localStorage.getItem("token"));
+    const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
 
     const setAuth = (boolean) => {
         setIsAuthenticated(boolean);
+        localStorage.setItem("isAuthenticated", boolean); // Store in localStorage
     };
 
+
     const isAuth = async () => {
-        
-        const storageToken = localStorage.getItem('token');
+        const storageToken = localStorage.getItem("token");
+        const storageUserRole = localStorage.getItem("userRole");
 
         try {
             const res = await fetch(`/auth/is-verify`, {
                 method: "GET",
                 headers: {
-                    Authorization: token || storageToken,
+                    Authorization: storageToken,
                 },
             });
 
@@ -57,8 +61,9 @@ const App = () => {
 
                 const userData = await userRes.json();
                 //console.log(userData.username);
-                setUsername(userData.username); 
 
+                setUsername(userData.username);
+                setUserRole(storageUserRole);
             } else {
                 setIsAuthenticated(false);
             }
@@ -66,6 +71,8 @@ const App = () => {
             console.log(error);
         }
     };
+
+    //console.log('User role:', userRole)
 
     useEffect(() => {
         isAuth();
@@ -96,70 +103,86 @@ const App = () => {
     }
 
     return (
-        <AppContext.Provider value={{token, setToken}}>
-        <div className="wrapper">
-            <header>
-                <Navigation events={events} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}/>
-            </header>
+        <AppContext.Provider value={{ token, setToken, setUserRole }}>
+            <div className="wrapper">
+                <header>
+                    <Navigation
+                        events={events}
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                        username={username}
+                    />
+                </header>
 
-            <main className="main">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route
-                        path="/location/:locationId"
-                        element={<LocationPage />}
-                    />
+                <main className="main">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/location/:locationId"
+                            element={<LocationPage />}
+                        />
+                        <Route
+                            path="/category/:categoryId"
+                            element={<EventListPageCat />}
+                        />
+                        <Route path="/events/:id" element={<EventDetail />} />
 
-                    <Route
-                        path="/category/:categoryId"
-                        element={<EventListPageCat />}
-                    />
+                        <Route path="/create-event" element={<AddNewEvent />} />
 
-                    <Route path="/events/:id" element={<EventDetail />} />
-                    <Route path="/create-event" element={<AddNewEvent />} />
+                        <Route
+                            path="/search"
+                            element={<SearchResults events={events} />}
+                        />
+                        <Route
+                            path="/login"
+                            element={
+                                !isAuthenticated ? (
+                                    <Login setAuth={setAuth} />
+                                ) : (
+                                    <Navigate to="/userdashboard" />
+                                )
+                            }
+                        />
 
-                    <Route
-                        path="/search"
-                        element={<SearchResults events={events} />}
-                    />
+                        <Route
+                            path="/register"
+                            element={
+                                !isAuthenticated ? (
+                                    <Register setAuth={setAuth} />
+                                ) : (
+                                    <Navigate to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/userdashboard"
+                            element={
+                                isAuthenticated ? (
+                                    <UserDashboard setAuth={setAuth} />
+                                ) : (
+                                    <Navigate to="/login" />
+                                )
+                            }
+                        />
 
-                    <Route
-                        path="/login"
-                        element={
-                            !isAuthenticated ? (
-                                <Login setAuth={setAuth} />
-                            ) : (
-                                <Navigate to="/userdashboard" />
-                            )
-                        }
-                    />
-                    <Route
-                        path="/register"
-                        element={
-                            !isAuthenticated ? (
-                                <Register setAuth={setAuth} />
-                            ) : (
-                                <Navigate to="/login" />
-                            )
-                        }
-                    />
-                    <Route
-                        path="/userdashboard"
-                        element={
-                            isAuthenticated ? (
-                                <UserDashboard setAuth={setAuth} />
-                            ) : (
-                                <Navigate to="/login" />
-                            )
-                        }
-                    />
-                </Routes>
-            </main>
-            <footer className="footer">
-                <Footer />
-            </footer>
-        </div>
+                        <Route
+                            path="/organizerdashboard"
+                            element={
+                                isAuthenticated && userRole === "organizer" ? (
+                                    <OrganizerDashboard />
+                                ) : (
+                                    <Navigate to="/login" />
+                                )
+                            }
+                        />
+                    </Routes>
+                </main>
+                <footer className="footer">
+                    <Footer />
+                </footer>
+            </div>
         </AppContext.Provider>
-)};
+    );
+};
 
 export default App;
