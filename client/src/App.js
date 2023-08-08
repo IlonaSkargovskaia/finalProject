@@ -169,7 +169,7 @@ const App = () => {
                             path="/organizerdashboard"
                             element={
                                 isAuthenticated && userRole === "organizer" ? (
-                                    <OrganizerDashboard />
+                                    <OrganizerDashboard setAuth={setAuth}/>
                                 ) : (
                                     <Navigate to="/login" />
                                 )

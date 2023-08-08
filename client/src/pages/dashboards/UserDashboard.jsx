@@ -45,6 +45,8 @@ const UserDashboard = ({setAuth}) => {
 
         toast.success('Logged out successfully');
         localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isAuthenticated');
         setAuth(false);
         
     }
