@@ -159,6 +159,12 @@ p.card__date{
     background: rgba(0,0,0,1);
 }
 
+.purchase__form{
+    padding: 1rem 1rem 0.1rem 1rem;
+    background-color: #e0e4e8;
+    border-radius: 5px;
+}
+
 
 /* media */
 

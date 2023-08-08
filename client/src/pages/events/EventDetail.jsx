@@ -124,12 +124,12 @@ const EventDetail = () => {
                             <Card.Body>
                                 <Card.Title>{title}</Card.Title>
                                 <Card.Text>
-                                    {" "}
                                     <CiCalendarDate />
                                     {hasDateTime
                                         ? ` ${formattedDate} | ${formattedTime}`
                                         : "Loading..."}
                                 </Card.Text>
+                                <hr />
                                 <Card.Text>{description} </Card.Text>
                                 <Card.Text>
                                     <PiTicketThin /> Price: {price} -{" "}
@@ -142,12 +142,12 @@ const EventDetail = () => {
                                         : quantity_available}
                                 </Card.Text>
                                 {quantity_available > 0 ? (
-                                    <Form>
+                                    <Form className="purchase__form">
                                         <Form.Group>
                                             <Row className="align-items-center">
                                                 <Col>
                                                     <Form.Label>
-                                                        Select Quantity:
+                                                        Number of tickets:
                                                     </Form.Label>
                                                 </Col>
                                                 <Col xs={8} sm={8} md={8} lg={9}>
