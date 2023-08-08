@@ -34,6 +34,9 @@ const NewEventForm = (props) => {
         try {
             const res = await axios.post(`/api/events`, newEvent);
             console.log("New event added successfully", res.data);
+            alert("New event added successfully", res.data);
+
+            
 
             // Clear the form fields after successful submission
             setTitle("");
@@ -165,7 +168,7 @@ const NewEventForm = (props) => {
 
                 <Form.Group as={Row} className="mb-3">
                     <Form.Label column sm="4">
-                        Min price:
+                        Min price (ILS):
                     </Form.Label>
                     <Col sm="8">
                         <Form.Control
@@ -179,7 +182,7 @@ const NewEventForm = (props) => {
 
                 <Form.Group as={Row} className="mb-3">
                     <Form.Label column sm="4">
-                        Max price:
+                        Max price (ILS):
                     </Form.Label>
                     <Col sm="8">
                         <Form.Control

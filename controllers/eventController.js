@@ -49,7 +49,7 @@ export const getEventsByLocationController = async (req, res) => {
 
 export const addEventController = async (req, res) => {
     console.log(req.body);
-    const {title, description, date, time, location_id, image, category_id, price} = req.body;
+    const {title, description, date, time, location_id, image, category_id, price, address, quantity_available, max_price} = req.body;
 
 
     try {
@@ -61,7 +61,11 @@ export const addEventController = async (req, res) => {
             location_id,
             image,
             category_id,
-            price
+            price,
+            address,
+            quantity_available,
+            max_price
+
         });
 
         //if all okay - 201
