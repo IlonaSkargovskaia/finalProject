@@ -8,8 +8,8 @@ export const authorization = async(req, res, next) => {
     try {
 
         //1. get token from fetch request and destructure it
-        const jwtToken = req.header('Token');
-
+        const jwtToken = req.headers['authorization'];
+        console.log('jwtToken:', req.headers);
         //2. check if token exist
         if (!jwtToken) {
             return res.status(403).json('Token not exist');

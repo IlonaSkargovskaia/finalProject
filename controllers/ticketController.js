@@ -1,4 +1,5 @@
 import { getAllTickets, getTicketById, addNewTicket, updateTicket, deleteTicket, createTicket } from "../models/ticketModel.js";
+import db from "../config/db.js";
 
 
 export const getAllTicketsController = async (req, res) => {
@@ -28,16 +29,19 @@ export const getTicketByIdController = async (req, res) => {
 export const purchaseTickets = async (req, res) => {
     try {
         
-        const { eventid } = req.params;
-        const { userid } = req.user; //from auth
+        const { id } = req.params;
+        const  userid  = req.user; //from auth
         const { quantity } = req.body;
 
+        console.log('Params: ', req.params);
+        console.log('User id: ', req.user);
+        console.log('Quantity: ', req.body);
 
-        const event = await db("events").where("id", eventid).first();
+        const event = await db("events").where("id", id).first();
         const total_price = event.price * quantity;
 
 
-        await createTicket(eventid, userid, quantity, total_price);
+        await createTicket(id, userid, quantity, total_price);
 
         res.status(201).json({ message: "Tickets purchased successfully" });
     } catch (error) {

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { AppContext } from "../../App";
 
 
 const Login = ({ setAuth }) => {
@@ -13,6 +13,8 @@ const Login = ({ setAuth }) => {
     });
 
     const { email, password } = inputs;
+
+    const { setToken } = useContext(AppContext);
 
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -37,6 +39,7 @@ const Login = ({ setAuth }) => {
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
+                setToken(data.token);
                 setAuth(true);
             } else {
                 setAuth(false);

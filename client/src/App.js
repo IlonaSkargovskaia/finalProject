@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import axios from "axios";
 import Home from "./pages/home/Home";
 import Navigation from "./components/Nav";
@@ -14,22 +14,31 @@ import UserDashboard from "./pages/dashboards/UserDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
 
+export const AppContext = createContext();
 
 const App = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [username, setUsername] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [token, setToken] = useState(null);
+
+    
 
     const setAuth = (boolean) => {
         setIsAuthenticated(boolean);
     };
 
     const isAuth = async () => {
+        
+        const storageToken = localStorage.getItem('token');
+
         try {
             const res = await fetch(`/auth/is-verify`, {
                 method: "GET",
-                headers: { token: localStorage.token },
+                headers: {
+                    Authorization: token || storageToken,
+                },
             });
 
             const data = await res.json();
@@ -85,6 +94,7 @@ const App = () => {
     }
 
     return (
+        <AppContext.Provider value={{token, setToken}}>
         <div className="wrapper">
             <header>
                 <Navigation events={events} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} username={username}/>
@@ -147,7 +157,7 @@ const App = () => {
                 <Footer />
             </footer>
         </div>
-    );
-};
+        </AppContext.Provider>
+)};
 
 export default App;

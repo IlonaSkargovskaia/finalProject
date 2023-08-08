@@ -1,22 +1,26 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Container } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AppContext } from "../../App";
 
-const BASE_URL = "http://localhost:3005";
 
 const UserDashboard = ({setAuth}) => {
 
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
+    const {token} = useContext(AppContext);
 
     const getName = async() => {
+
+        const storageToken = localStorage.getItem('token');
+
         try {
-            const res = await fetch(`${BASE_URL}/dashboard/`, {
+            const res = await fetch(`/dashboard/`, {
                 method: "GET",
                 headers: {
-                    token: localStorage.token
-                }
+                    Authorization: token || storageToken,
+                },
             })
 
             const data = await res.json();

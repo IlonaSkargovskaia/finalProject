@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
 import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
 import { PiTicketThin } from "react-icons/pi";
+import { AppContext } from "../../App";
+
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const params = useParams();
+    const { token } = useContext(AppContext);
+  
 
     const {
         title,
@@ -54,19 +58,21 @@ const EventDetail = () => {
     };
 
     const handlePurchase = async () => {
-        try {
-            // const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNywiaWF0IjoxNjkxNDgxNDMyLCJleHAiOjE2OTE0ODUwMzJ9.b_kxF4CrfLisW_Bn9izkvPXxRxJGBrAeSrgSFzBgbHU';
 
+      const storageToken = localStorage.getItem('token');
+
+        try {
+            
             const response = await axios.post(
                 `/api/tickets/${params.id}/purchase`,
                 {
                     quantity: selectedQuantity,
                 },
-                // {
-                //     headers: {
-                //         Authorization: `Bearer ${jwtToken}`,
-                //     },
-                // }
+                {
+                    headers: {
+                        Authorization: token || storageToken,
+                    },
+                }
             );
 
             console.log("Purchase success:", response.data);

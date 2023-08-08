@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-//id - name of column with primaty key in users
+//id - name of column with primary key in users
 const jwtGenerator = (id) => {
     const payload = {
         user: id
