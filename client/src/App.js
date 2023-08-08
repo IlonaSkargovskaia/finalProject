@@ -50,7 +50,9 @@ const App = () => {
                 // Fetch the user data including the username
                 const userRes = await fetch(`/dashboard`, {
                     method: "GET",
-                    headers: { token: localStorage.token },
+                    headers: {
+                        Authorization: token || storageToken,
+                    },
                 });
 
                 const userData = await userRes.json();

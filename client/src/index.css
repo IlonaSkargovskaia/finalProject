@@ -149,8 +149,15 @@ p.card__date{
 }
 
 
+.sold_out{
+    color: #fff;
+    background-color: #7b1fa2;
+    text-align: center;
+}
 
-
+.home__page .react-multiple-carousel__arrow{
+    background: rgba(0,0,0,1);
+}
 
 
 /* media */

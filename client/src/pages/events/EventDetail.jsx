@@ -7,13 +7,16 @@ import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
 import { PiTicketThin } from "react-icons/pi";
 import { AppContext } from "../../App";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
+    const [total, setTotal] = useState(0);
     const params = useParams();
     const { token } = useContext(AppContext);
-  
 
     const {
         title,
@@ -34,12 +37,15 @@ const EventDetail = () => {
             try {
                 const res = await axios.get(`/api/events/${params.id}`);
                 setEvent(res.data);
+
+                // Once event data is fetched, update the total based on the fetched price
+                setTotal(res.data.price * selectedQuantity);
             } catch (error) {
                 console.log(error);
             }
         };
         getEventById();
-    }, []);
+    }, [params.id, selectedQuantity]);
 
     //console.log(event);
 
@@ -55,14 +61,22 @@ const EventDetail = () => {
     const handleQuantityChange = (event) => {
         const { value } = event.target;
         setSelectedQuantity(parseInt(value));
+
+        setTotal(event.price * parseInt(value));
     };
 
     const handlePurchase = async () => {
+        const storageToken = localStorage.getItem("token");
 
-      const storageToken = localStorage.getItem('token');
+        const totalPrice = price * selectedQuantity;
+
+        if (!token && !storageToken) {
+          // if User is not authorized
+          toast.error("You must be authorized to purchase tickets");
+          return;
+        }
 
         try {
-            
             const response = await axios.post(
                 `/api/tickets/${params.id}/purchase`,
                 {
@@ -74,7 +88,9 @@ const EventDetail = () => {
                     },
                 }
             );
-
+            toast.success(response.data.message); 
+            //alert(response.data.message);
+            setTotal(totalPrice);
             console.log("Purchase success:", response.data);
         } catch (error) {
             if (error.response.status === 400) {
@@ -82,13 +98,24 @@ const EventDetail = () => {
             } else {
                 console.error("Purchase error:", error);
             }
-            
         }
     };
 
     return (
         <div>
             <Container>
+            <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
                 <Row>
                     <Col md={8} sm={12}>
                         <Card className="event__detail">
@@ -110,7 +137,7 @@ const EventDetail = () => {
                                     {max_price} ILS
                                 </Card.Text>
                                 <Card.Text>
-                                    <b>Tickets available:</b>{" "}
+                                    <b>Tickets left:</b>{" "}
                                     {quantity_available === 0
                                         ? "SOLD OUT"
                                         : quantity_available}
@@ -124,7 +151,7 @@ const EventDetail = () => {
                                             <Form.Select
                                                 value={selectedQuantity}
                                                 onChange={handleQuantityChange}
-                                                style={{display: 'inline-block', width: '20%'}}
+            
                                             >
                                                 {Array.from(
                                                     {
@@ -140,20 +167,24 @@ const EventDetail = () => {
                                                     )
                                                 )}
                                             </Form.Select>
-                                        </Form.Group>
-                                        <Button
+                                            <Button
                                             className="purple"
                                             onClick={handlePurchase}
                                         >
                                             <CiShoppingCart /> Buy ticket
                                         </Button>
+                                       
+                                        </Form.Group>
+                                        
                                     </Form>
                                 ) : (
-                                    <p>
+                                    <p className="sold_out">
                                         No tickets available, choose another
                                         event
                                     </p>
                                 )}
+
+                                <Card.Text>Amount: {total} ILS</Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>

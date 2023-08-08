@@ -59,7 +59,7 @@ export const purchaseTickets = async (req, res) => {
 
         await db("events").where('id', id).decrement('quantity_available', quantity)
 
-        res.status(201).json({ message: "Tickets purchased successfully" });
+        res.status(201).json({ message: "Congratulations! Tickets purchased successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error purchasing tickets" });
