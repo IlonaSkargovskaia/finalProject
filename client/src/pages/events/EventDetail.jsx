@@ -10,7 +10,6 @@ import { AppContext } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -71,9 +70,9 @@ const EventDetail = () => {
         const totalPrice = price * selectedQuantity;
 
         if (!token && !storageToken) {
-          // if User is not authorized
-          toast.error("You must be authorized to purchase tickets");
-          return;
+            // if User is not authorized
+            toast.error("You must be authorized to purchase tickets");
+            return;
         }
 
         try {
@@ -88,7 +87,7 @@ const EventDetail = () => {
                     },
                 }
             );
-            toast.success(response.data.message); 
+            toast.success(response.data.message);
             //alert(response.data.message);
             setTotal(totalPrice);
             console.log("Purchase success:", response.data);
@@ -104,7 +103,7 @@ const EventDetail = () => {
     return (
         <div>
             <Container>
-            <ToastContainer
+                <ToastContainer
                     position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -145,37 +144,57 @@ const EventDetail = () => {
                                 {quantity_available > 0 ? (
                                     <Form>
                                         <Form.Group>
-                                            <Form.Label>
-                                                Select Quantity:
-                                            </Form.Label>
-                                            <Form.Select
-                                                value={selectedQuantity}
-                                                onChange={handleQuantityChange}
-            
-                                            >
-                                                {Array.from(
-                                                    {
-                                                        length: quantity_available,
-                                                    },
-                                                    (_, index) => (
-                                                        <option
-                                                            key={index}
-                                                            value={index + 1}
-                                                        >
-                                                            {index + 1}
-                                                        </option>
-                                                    )
-                                                )}
-                                            </Form.Select>
-                                            <Button
-                                            className="purple"
-                                            onClick={handlePurchase}
-                                        >
-                                            <CiShoppingCart /> Buy ticket
-                                        </Button>
-                                       
+                                            <Row className="align-items-center">
+                                                <Col>
+                                                    <Form.Label>
+                                                        Select Quantity:
+                                                    </Form.Label>
+                                                </Col>
+                                                <Col xs={8} sm={8} md={8} lg={9}>
+                                                    <Form.Select
+                                                        value={selectedQuantity}
+                                                        onChange={
+                                                            handleQuantityChange
+                                                        }
+                                                        style={{width: '100px'}}
+                                                    >
+                                                        {Array.from(
+                                                            {
+                                                                length: quantity_available,
+                                                            },
+                                                            (_, index) => (
+                                                                <option
+                                                                    key={index}
+                                                                    value={
+                                                                        index +
+                                                                        1
+                                                                    }
+                                                                >
+                                                                    {index + 1}
+                                                                </option>
+                                                            )
+                                                        )}
+                                                    </Form.Select>
+                                                </Col>
+                                            </Row>
+
+                                            <Row className="align-items-center my-4">
+                                                <Col>
+                                                  <Card.Text>
+                                                          Amount: <br /> <b>{total} ILS</b>
+                                                  </Card.Text>
+                                                </Col>
+                                                <Col xs={8} sm={8} md={8} lg={9}>
+                                                    <Button
+                                                        className="purple"
+                                                        onClick={handlePurchase}
+                                                    >
+                                                        <CiShoppingCart /> Buy
+                                                        ticket
+                                                    </Button>
+                                                </Col>
+                                            </Row>
                                         </Form.Group>
-                                        
                                     </Form>
                                 ) : (
                                     <p className="sold_out">
@@ -183,8 +202,6 @@ const EventDetail = () => {
                                         event
                                     </p>
                                 )}
-
-                                <Card.Text>Amount: {total} ILS</Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
