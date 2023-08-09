@@ -1,4 +1,4 @@
-import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
@@ -25,6 +25,23 @@ export const getEventByIDController = async (req, res) => {
     }
 }
 
+export const getEventsByDateController = async (req, res) => {
+    const { date } = req.query;
+  
+    if (!date) {
+      return res.status(400).json({ message: 'Date parameter is required' });
+    }
+  
+    try {
+      const events = await getEventsByDate(date);
+      
+      res.status(200).json(events);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
 export const getEventsByCategoryController = async (req, res) => {
     const { categoryId } = req.params;
     try {
@@ -47,8 +64,14 @@ export const getEventsByLocationController = async (req, res) => {
     }
 };
 
-export const addEventController = async (req, res) => {
-    console.log(req.body);
+
+
+export const addEventController = async (req, res) => {  
+
+    const user_id = req.user;
+    console.log('UserId controller: ', req.user);
+
+    console.log('Req.body: ', req.body);
     const {title, description, date, time, location_id, image, category_id, price, address, quantity_available, max_price} = req.body;
 
 
@@ -64,9 +87,11 @@ export const addEventController = async (req, res) => {
             price,
             address,
             quantity_available,
-            max_price
+            max_price,
+            
+        }, user_id);
 
-        });
+        console.log('newEvent from Controller: ', newEvent);
 
         //if all okay - 201
         res.status(201).json(newEvent);

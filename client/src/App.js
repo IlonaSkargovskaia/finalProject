@@ -53,6 +53,7 @@ const App = () => {
                     const { role } = decodedToken;
 
                     setUserRole(role);
+                    
                 }
             }
         } catch (error) {
@@ -60,7 +61,7 @@ const App = () => {
         }
     };
 
-    //console.log('User role:', userRole)
+    
 
     useEffect(() => {
         isAuth();
@@ -122,10 +123,30 @@ const App = () => {
                             element={<SearchResults events={events} />}
                         />
                         <Route
+                            path="/organizerdashboard"
+                            element={
+                                token && userRole === "organizer" ? (
+                                    <OrganizerDashboard setAuth={setAuth} />
+                                ) : (
+                                    <Navigate to="/login" />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/userdashboard"
+                            element={
+                                token ? (
+                                    <OrganizerDashboard setAuth={setAuth} />
+                                ) : (
+                                    <Navigate to="/login" />
+                                )
+                            }
+                        />
+                        <Route
                             path="/login"
                             element={
                                 !token ? (
-                                    <Login setAuth={setAuth} />
+                                    <Login setAuth={setAuth}/>
                                 ) : (
                                     <Navigate to="/userdashboard" />
                                 )
@@ -141,26 +162,8 @@ const App = () => {
                                 )
                             }
                         />
-                        <Route
-                            path="/userdashboard"
-                            element={
-                                token ? (
-                                    <UserDashboard setAuth={setAuth} />
-                                ) : (
-                                    <Navigate to="/login" />
-                                )
-                            }
-                        />
-                        <Route
-                            path="/organizerdashboard"
-                            element={
-                                token && userRole === "organizer" ? (
-                                    <OrganizerDashboard setAuth={setAuth} />
-                                ) : (
-                                    <Navigate to="/login" />
-                                )
-                            }
-                        />
+                        
+                        
                         <Route path="/update-event" element={<UpdateEvent />} />
                     </Routes>
                 </main>

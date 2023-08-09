@@ -22,7 +22,7 @@ const OrganizerDashboard = ({ setAuth }) => {
             });
 
             const data = await res.json();
-
+            console.log(data);
             setUsername(data.username);
             setRole(data.role);
             
@@ -46,8 +46,6 @@ const OrganizerDashboard = ({ setAuth }) => {
 
         toast.success("Logged out successfully");
         localStorage.removeItem("token");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("toastShown");
         setAuth(false);
     };

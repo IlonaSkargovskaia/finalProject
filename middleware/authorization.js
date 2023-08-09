@@ -7,7 +7,7 @@ dotenv.config();
 export const authorization = async(req, res, next) => {
     try {
 
-        //1. get token from fetch request and destructure it
+        //1. get token from request and destructure it
         const jwtToken = req.headers['authorization'];
         //console.log('jwtToken:', req.headers);
         //2. check if token exist
@@ -19,7 +19,7 @@ export const authorization = async(req, res, next) => {
         const payload = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET)
         req.user = payload.user; //from jwtGenerator object user: id
 
-        //console.log('User id:', req.user); //get id
+        console.log('User id:', req.user); //get id
 
         next();
         

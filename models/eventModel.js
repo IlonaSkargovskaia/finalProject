@@ -44,18 +44,26 @@ export const getEventsByLocation = async (locationId) => {
     }
 };
 
-export const addEvent = async (eventInfo) => {
+export const getEventsByDate = async (date) => {
     try {
+        const events = await db.select('*').from('events').where({ date });
+        return events;
+      } catch (error) {
+        throw new Error('Error fetching events by date from the database');
+      }
+}
 
-        const newEvent = await 
-            db('events')
-                .insert(eventInfo)
-                .returning('*');
+export const addEvent = async (eventInfo, userId) => {
+    try {
+        const newEvent = await db('events')
+            .insert({ ...eventInfo, user_id: userId })  
+            .returning('*');
+
+            console.log('New Event from the model: ', newEvent);
 
         return newEvent[0];
-
     } catch (error) {
-        console.log('error: ', error);
+        console.log('Error adding event:', error);
         throw new Error('Error adding event to the database');
     }
 }

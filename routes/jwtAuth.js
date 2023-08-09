@@ -41,7 +41,7 @@ router.post("/register", validInfo, async (req, res) => {
 
         //5. generating jwt token
 
-        const token = jwtGenerator(newUser[0].id);
+        const token = jwtGenerator(newUser[0]);
         res.json({ token });
     } catch (error) {
         console.log(error);
@@ -75,9 +75,9 @@ router.post("/login", validInfo, async (req, res) => {
         }
 
         //4. give them jwt token
-        const token = jwtGenerator(user[0].id);
-        //get role
-        res.json({ token, role: user[0].role });
+        const token = jwtGenerator(user[0]);
+        console.log("Token: ", token);
+        res.json({ token });
     } catch (error) {
         console.log(error);
         res.status(500).json("Server error");

@@ -39,21 +39,24 @@ const Login = ({ setAuth }) => {
             });
 
             const data = await res.json();
-            //console.log(data); {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyM…jQ2fQ.ai397JkXptF4HEKNCChzvPpHQrTb2nmbJg3guSPVZHc', role: 'organizer'}
+           
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
     
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(data.token);
-                console.log(decodedToken);
+                
+                console.log('Decoded token:',decodedToken);
                 
                 if (decodedToken) {
-                    const { email, role } = decodedToken;
+                    const { role } = decodedToken;
     
                     setToken(data.token);
-                    setUserRole(role);
                     setAuth(true);
+                    setUserRole(role);
+                    
+                    console.log('Role', role)
     
                     if (role === "organizer") {
                         navigate("/organizerdashboard");

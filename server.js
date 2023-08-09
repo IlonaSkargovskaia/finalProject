@@ -5,14 +5,6 @@ import routes from './routes/index.js';
 import jwtAuth from './routes/jwtAuth.js';
 import dashboard from './routes/dashboard.js'
 
-// ------------ for AWS
-// import multer from 'multer';
-// import multerS3 from 'multer-s3';
-// import AWS from 'aws-sdk';
-
-// import { S3Client } from '@aws-sdk/client-s3'; 
-
-// -------------
 
 const app = express();
 dotenv.config();
@@ -28,53 +20,10 @@ app.use(routes);
 //login-register-authorization
 app.use('/auth', jwtAuth);
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
-
 //dashboard router
 app.use('/dashboard', dashboard);
 
 
-// ------------ old
-// AWS.config.update({
-//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-// });
-
-// const s3 = new AWS.S3();
-
-// ------------------ new
-// const s3 = new S3Client({
-//     region: process.env.AWS_REGION,
-//     credentials: {
-//       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//     },
-//   }); 
-
-// const myBucket = process.env.AWS_BUCKET;
-
-// const upload = multer({
-//   storage: multerS3({
-//     s3: s3,
-//     bucket: myBucket,
-//     acl: "public-read",
-//     contentType: multerS3.AUTO_CONTENT_TYPE,
-//     key: function (req, file, cb) {
-//       cb(null, file.originalname);
-//     }
-//   })
-// });
-
-// app.post('/upload', upload.single('pic'), (req, res) => {
-//   console.log(req.file);
-//   res.json('Successfully uploaded');
-// });
-
-// --------------- end AWS
 
 
 app.listen(process.env.PORT || 3002, () => {

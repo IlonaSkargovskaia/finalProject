@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { AppContext } from "../App";
+import jwt from "jsonwebtoken";
 
 const NewEventForm = (props) => {
     const { locations, categories } = props;
+    const { token } = useContext(AppContext);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -18,6 +21,9 @@ const NewEventForm = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const storageToken = localStorage.getItem("token");
+
         const newEvent = {
             title,
             description,
@@ -32,23 +38,34 @@ const NewEventForm = (props) => {
         };
 
         try {
-            const res = await axios.post(`/api/events`, newEvent);
-            console.log("New event added successfully", res.data);
-            alert("New event added successfully", res.data);
+            const decodedToken = jwt.decode(token || storageToken);
+            console.log(decodedToken);
 
-            
+            if (decodedToken) {
+                const userId = decodedToken.user;
+                newEvent.user_id = userId;
 
-            // Clear the form fields after successful submission
-            setTitle("");
-            setDescription("");
-            setDate("");
-            setTime("");
-            setSelectedLocation("");
-            setSelectedCategory("");
-            setPrice("");
-            setAddress("");
-            setQuantityAvailable("");
-            setMaxPrice("");
+                const res = await axios.post(`/api/events`, newEvent, {
+                    headers: {
+                        Authorization: token || storageToken,
+                    },
+                });
+                console.log("Token:", token);
+                console.log("Local token", storageToken);
+                alert("New event added successfully", res.data);
+
+                // Clear the form fields after successful submission
+                setTitle("");
+                setDescription("");
+                setDate("");
+                setTime("");
+                setSelectedLocation("");
+                setSelectedCategory("");
+                setPrice("");
+                setAddress("");
+                setQuantityAvailable("");
+                setMaxPrice("");
+            }
         } catch (error) {
             console.error("Error adding event:", error);
         }
@@ -194,8 +211,6 @@ const NewEventForm = (props) => {
                     </Col>
                 </Form.Group>
 
-                
-
                 <Form.Group as={Row} className="mb-3">
                     <Form.Label column sm="4">
                         Number of tickets (available):
@@ -211,8 +226,6 @@ const NewEventForm = (props) => {
                         />
                     </Col>
                 </Form.Group>
-
-                
 
                 <Button type="submit">Add Event</Button>
             </Form>

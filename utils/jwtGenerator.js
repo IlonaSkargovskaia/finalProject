@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 //id - name of column with primary key in users
-const jwtGenerator = (id) => {
+const jwtGenerator = ({id, email, role}) => {
     const payload = {
-        user: id
+        user: id,
+        email,
+        role
     }
 
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1hr'})
