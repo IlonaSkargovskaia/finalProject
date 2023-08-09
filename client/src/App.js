@@ -4,7 +4,7 @@ import Home from "./pages/home/Home";
 import Navigation from "./components/Nav";
 import EventListPageCat from "./pages/events/EventListPageCat";
 import EventDetail from "./pages/events/EventDetail";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LocationPage from "./pages/locations/LocationPage";
 import Footer from "./components/Footer";
 import AddNewEvent from "./pages/events/AddNewEvent";
@@ -26,13 +26,15 @@ const App = () => {
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [userRole, setUserRole] = useState(""); 
 
+    const navigate = useNavigate(); 
+
     const setAuth = (boolean) => {
         setToken(boolean ? localStorage.getItem("token") : ""); // Clear token on logout
     };
 
     const isAuth = async () => {
         const storageToken = localStorage.getItem("token");
-
+    
         try {
             const res = await fetch(`/auth/is-verify`, {
                 method: "GET",
@@ -40,27 +42,32 @@ const App = () => {
                     Authorization: token || storageToken,
                 },
             });
-
+    
             const data = await res.json();
-            //console.log(data);
-
+            console.log(data); //true from verify
+    
             if (data === true) {
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(storageToken);
-                //console.log(decodedToken);
-
+    
                 if (decodedToken) {
                     const { role } = decodedToken;
-
+    
                     setUserRole(role);
-                    
+
+                    console.log('Role from App: ', role)
+    
+                    if (role === "organizer") {
+                        navigate("/organizerdashboard");
+                    } else {
+                        navigate("/userdashboard");
+                    }
                 }
             }
         } catch (error) {
             console.log(error);
         }
     };
-
     
 
     useEffect(() => {
@@ -90,6 +97,8 @@ const App = () => {
             </div>
         );
     }
+
+    
 
     return (
         <AppContext.Provider value={{ token, setToken, setUserRole }}>
@@ -136,7 +145,7 @@ const App = () => {
                             path="/userdashboard"
                             element={
                                 token ? (
-                                    <OrganizerDashboard setAuth={setAuth} />
+                                    <UserDashboard setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/login" />
                                 )

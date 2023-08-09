@@ -47,7 +47,7 @@ const Login = ({ setAuth }) => {
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(data.token);
                 
-                console.log('Decoded token:',decodedToken);
+                console.log('Decoded token in Login:',decodedToken);
                 
                 if (decodedToken) {
                     const { role } = decodedToken;
@@ -56,13 +56,8 @@ const Login = ({ setAuth }) => {
                     setAuth(true);
                     setUserRole(role);
                     
-                    console.log('Role', role)
+                    console.log('Role in Login: ', role)
     
-                    if (role === "organizer") {
-                        navigate("/organizerdashboard");
-                    } else {
-                        navigate("/userdashboard");
-                    }
                 }
             } else {
                 setAuth(false);
@@ -77,7 +72,7 @@ const Login = ({ setAuth }) => {
     return (
         <div>
             <Container>
-                <ToastContainer
+                {/* <ToastContainer
                     position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -88,7 +83,7 @@ const Login = ({ setAuth }) => {
                     draggable
                     pauseOnHover
                     theme="dark"
-                />
+                /> */}
                 <h1 className="text-center">Login</h1>
                 <Row className="justify-content-center text-center">
                     <form onSubmit={onSubmitForm} className="w-50">
