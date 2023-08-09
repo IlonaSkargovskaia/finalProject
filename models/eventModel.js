@@ -55,7 +55,7 @@ export const getEventsByDate = async (date) => {
 
 export const getEventsByUserId = async (userId) => {
     try {
-        const events = await db.select('*').from('events').where({ user_id: userId });
+        const events = await db.select('*').from('events').where({ user_id: userId }).orderBy('id', 'desc');;
         return events;
     } catch (error) {
         console.log(error);

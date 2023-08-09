@@ -95,37 +95,31 @@ const OrganizerDashboard = ({ setAuth }) => {
                 pauseOnHover
                 theme="dark"
             />
-            <h3>Hello, {username}</h3>
-            <p>You authorized as "{role}"</p>
+            <h1 className="org-title">Organizer Dashboard</h1>
 
             <Row className="org__block">
                 <Col>
-                    <Link to="/create-event">
-                        <div className="card bg-success text-white mb-4">
-                            Add event
+                    <h3>Hello, {username}</h3>
+                    <p>"{role}"</p>
+                </Col>
+                <Col>
+                    <Link to="#">
+                        <div className="card bg-dark text-white">
+                           Update your profile
                         </div>
                     </Link>
                 </Col>
-
-                <Col>
-                    <Link to="/update-event">
-                        <div className="card bg-warning text-white mb-4">
-                            Update event
-                        </div>
-                    </Link>
-                </Col>
-
                 <Col>
                     <Link to="/create-event">
-                        <div className="card bg-danger text-white mb-4">
-                            Delete event
+                        <div className="card bg-success text-white">
+                            Add new event
                         </div>
                     </Link>
                 </Col>
             </Row>
 
             <h3>Your events:</h3>
-            <Table striped bordered hover>
+            <Table striped bordered hover className="org-table">
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -133,6 +127,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                         <th>Time</th>
                         <th>Prices (ILS)</th>
                         <th>Address</th>
+                        <th>Tickets</th>
                         <th>Update</th>
                         <th>Delete</th>
                     </tr>
@@ -147,16 +142,17 @@ const OrganizerDashboard = ({ setAuth }) => {
                                 {event.price} - {event.max_price}
                             </td>
                             <td>{event.address}</td>
+                            <td>{event.quantity_available}</td>
                             <td>
-                                <Link to="/update-event">
-                                    <div className="card bg-warning">
+                                <Link to={`/update-event/${event.id}`}>
+                                    <div className="card bg-warning update-btn">
                                         Update event
                                     </div>
                                 </Link>
                             </td>
                             <td>
                                 <Link to="/update-event">
-                                    <div className="card bg-danger text-white">
+                                    <div className="card bg-danger text-white danger-btn">
                                         Delete event
                                     </div>
                                 </Link>
@@ -166,9 +162,11 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </tbody>
             </Table>
 
-            <button className="btn purple" onClick={(e) => logout(e)}>
-                Logout
-            </button>
+            <div className="org-logout">
+                <button className="btn purple" onClick={(e) => logout(e)}>
+                    Logout
+                </button>
+            </div>
         </Container>
     );
 };

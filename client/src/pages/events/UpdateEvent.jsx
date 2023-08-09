@@ -1,20 +1,77 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
-const UpdateEvent = ({ eventId }) => {
-    const [eventData, setEventData] = useState({});
+const UpdateEvent = () => {
+    const { eventId } = useParams();
+    //console.log("EventID from UpdEv: ", eventId);
+    const [eventData, setEventData] = useState({
+        title: "",
+        description: "",
+        address: "",
+        category_id: "",
+        date: "",
+        location_id: "",
+        max_price: "",
+        price: "",
+        quantity_available: "",
+        time: "",
+    });
+
+    const {
+        title,
+        description,
+        address,
+        category_id,
+        date,
+        location_id,
+        max_price,
+        price,
+        quantity_available,
+        time,
+    } = eventData;
+
+    const [locations, setLocations] = useState([]); // State to store locations
+    const [selectedLocation, setSelectedLocation] = useState(""); // State for selected location
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     useEffect(() => {
         const fetchEvent = async () => {
             try {
                 const response = await axios.get(`/api/events/${eventId}`);
-                setEventData(response.data);
+                const eventDataFromServer = response.data;
+
+                // Parse the date and format it as "yyyy-MM-dd"
+                const parsedDate = new Date(eventDataFromServer.date);
+                const formattedDate = parsedDate.toISOString().split("T")[0];
+
+                // Update the state with formatted date
+                setEventData({ ...eventDataFromServer, date: formattedDate });
+
+                // Set the default selected category and location
+                setSelectedCategory(eventDataFromServer.category_id);
+                setSelectedLocation(eventDataFromServer.location_id);
+
+                console.log("Data in fetch Update Event:", response.data);
             } catch (error) {
                 console.error("Error fetching event:", error);
             }
         };
 
+        const fetchLocationsAndCategories = async () => {
+            try {
+                const resLocations = await axios.get(`/api/locations`);
+                setLocations(resLocations.data);
+
+                const resCategories = await axios.get(`/api/categories`);
+                setCategories(resCategories.data);
+            } catch (error) {
+                console.log("Error fetching locations and categories", error);
+            }
+        };
+        fetchLocationsAndCategories();
         fetchEvent();
     }, [eventId]);
 
@@ -35,13 +92,171 @@ const UpdateEvent = ({ eventId }) => {
         <div>
             <Container>
                 <h2>Update Event</h2>
-                <input
-                    type="text"
-                    name="title"
-                    value={eventData.title}
-                    onChange={handleInputChange}
-                />
-                <button onClick={handleUpdateEvent} className="btn 0purple">Update Event</button>
+
+                <Form className="add__form">
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Title:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="text"
+                                name="title"
+                                value={title}
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Description:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                as="textarea"
+                                name="description"
+                                value={description}
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Date:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="date"
+                                name="date"
+                                value={date}
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Time:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="time"
+                                name="time"
+                                value={time}
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Location:
+                        </Form.Label>
+                        <Col sm="8">
+                            {locations.map((item, index) => (
+                                <Form.Check
+                                    key={index}
+                                    type="radio"
+                                    label={item.city}
+                                    name="locationRadio"
+                                    value={item.id}
+                                    checked={selectedLocation === item.id}
+                                    onChange={(e) =>
+                                        setSelectedLocation(e.target.value)
+                                    }
+                                />
+                            ))}
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Address:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="text"
+                                name="address"
+                                value={address}
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Category:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                as="select"
+                                name="category"
+                                value={selectedCategory}
+                                onChange={(e) =>
+                                    setSelectedCategory(e.target.value)
+                                }
+                            >
+                                <option value="">select category...</option>
+                                {categories.map((item, index) => (
+                                    <option value={item.id} key={index}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Min price (ILS):
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="number"
+                                name="price"
+                                value={price}
+                                onChange={handleInputChange}
+                                placeholder="0"
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Max price (ILS):
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="number"
+                                name="max_price"
+                                value={max_price}
+                                onChange={handleInputChange}
+                                placeholder="0"
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Number of tickets (available):
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="number"
+                                name="quantity_available"
+                                value={quantity_available}
+                                onChange={handleInputChange}
+                                placeholder="0"
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <button onClick={handleUpdateEvent} className="btn purple">
+                        Update Event
+                    </button>
+                </Form>
             </Container>
         </div>
     );

@@ -19,7 +19,7 @@ export const authorization = async(req, res, next) => {
         const payload = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET)
         req.user = payload.user; //from jwtGenerator object user: id
 
-        console.log('User id:', req.user); //get id
+        //console.log('User id from AuthMiddle:', req.user); //get id
 
         next();
         

@@ -173,7 +173,7 @@ const App = () => {
                         />
                         
                         
-                        <Route path="/update-event" element={<UpdateEvent />} />
+                        <Route path="/update-event/:eventId" element={<UpdateEvent />} />
                     </Routes>
                 </main>
                 <footer className="footer">

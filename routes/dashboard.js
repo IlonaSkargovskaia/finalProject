@@ -15,7 +15,7 @@ router.get('/', authorization, async(req, res) => {
         //get data from user: select * from users where in column id there is req.user
         //and if all good - we get all info in {} about user
         const user = await db('users').where('id', req.user);
-        console.log('User from dashboard: ', user);
+        //console.log('User from dashboard: ', user);
         res.json(user[0]);
 
     } catch (error) {

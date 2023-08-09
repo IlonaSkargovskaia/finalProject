@@ -189,6 +189,48 @@ p.card__date{
     color: #fff;
 }
 
+.update-btn, .danger-btn{
+    text-align: center;
+    padding: 0.5rem 0.3rem;
+    display: block;
+    max-width: 130px;
+    margin: 0 auto;
+    font-size: 13px;
+}
+
+.org-title{
+    text-align: center;
+}
+
+.org__block{
+    padding: 1rem;
+    background-color: #e0e4e8;
+    border-radius: 5px;
+    margin: 35px auto !important;
+    align-items: center;
+    max-width: 55%;
+}
+
+.org__block p{
+    margin-bottom: 0 ;
+}
+
+.org__block .col a{
+    display: inline-block;
+}
+
+.org__block .col{
+    text-align: center;
+}
+
+table.org-table>tbody, table.org-table>thead {
+    vertical-align: middle;
+}
+
+table.org-table>thead{
+    text-align: center;
+}
+
 
 /* media */
 
@@ -203,5 +245,9 @@ p.card__date{
 
     .search__top{
         margin: 2rem 0;
+    }
+
+    .org__block{
+        max-width: 100%;
     }
 }
