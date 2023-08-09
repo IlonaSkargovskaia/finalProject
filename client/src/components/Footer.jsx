@@ -34,7 +34,7 @@ const Footer = () => {
                     <h4>Organizers</h4>
                     <ul>
                         <li>
-                            <Link>Organizers dashboard</Link>
+                            <Link to='/organizerdashboard'>Organizers dashboard</Link>
                         </li>
                         <li>
                             <Link>How to add new event?</Link>

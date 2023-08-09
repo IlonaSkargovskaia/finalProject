@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
+import jwt from 'jsonwebtoken';
 
 
 const Login = ({ setAuth }) => {
@@ -14,8 +15,10 @@ const Login = ({ setAuth }) => {
 
     const { email, password } = inputs;
 
-    const { setToken, setUserRole } = useContext(AppContext);
+    const { setToken } = useContext(AppContext);
     const navigate = useNavigate(); 
+
+    const [userRole, setUserRole] = useState(""); 
 
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -36,23 +39,28 @@ const Login = ({ setAuth }) => {
             });
 
             const data = await res.json();
-            console.log(data);
+            //console.log(data); {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyM…jQ2fQ.ai397JkXptF4HEKNCChzvPpHQrTb2nmbJg3guSPVZHc', role: 'organizer'}
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem('userRole', data.role);
+    
+                // Decode the token to get user information
+                const decodedToken = jwt.decode(data.token);
+                console.log(decodedToken);
                 
-                setToken(data.token);
-                setUserRole(data.role);
-                setAuth(true);
-
-                
-                if (data.role === "organizer") {
-                    navigate("/organizerdashboard");
-                } else {
-                    navigate("/userdashboard");
+                if (decodedToken) {
+                    const { email, role } = decodedToken;
+    
+                    setToken(data.token);
+                    setUserRole(role);
+                    setAuth(true);
+    
+                    if (role === "organizer") {
+                        navigate("/organizerdashboard");
+                    } else {
+                        navigate("/userdashboard");
+                    }
                 }
-
             } else {
                 setAuth(false);
                 toast(data.message);

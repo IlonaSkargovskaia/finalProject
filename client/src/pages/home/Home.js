@@ -1,5 +1,6 @@
 import { Container } from "react-bootstrap";
 import EventsAll from "../events/EventsAll";
+import React from 'react';
 import { LiaHotjar } from "react-icons/lia";
 
 const Home = () => {
@@ -8,9 +9,7 @@ const Home = () => {
             <Container>
             
                 <h1><LiaHotjar />Top selling on "TicketPRO"</h1>
-
                 <EventsAll />
-
                 
             </Container>
         </div>

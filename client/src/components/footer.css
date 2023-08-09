@@ -7,6 +7,10 @@
     color: #878787;
 }
 
+.footer a:hover{
+    color: #7b1fa2;
+}
+
 .footer h4{
     margin-bottom: 35px;
 }

@@ -157,7 +157,7 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                             </NavDropdown.Item>
                         </NavDropdown>
 
-                        <Nav.Link href="/create-event">Add event</Nav.Link>
+                        
                     </Nav>
 
                     <Form className="d-flex" onSubmit={handleSearchSubmit}>

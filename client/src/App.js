@@ -14,6 +14,8 @@ import UserDashboard from "./pages/dashboards/UserDashboard";
 import OrganizerDashboard from "./pages/dashboards/OrganizerDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
+import UpdateEvent from "./pages/events/UpdateEvent";
+import jwt from "jsonwebtoken"; // Import jwt
 
 export const AppContext = createContext();
 
@@ -21,27 +23,21 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [username, setUsername] = useState("");
-    const [isAuthenticated, setIsAuthenticated] = useState(
-        localStorage.getItem("isAuthenticated") === "true" // Read from localStorage
-    );
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
+    const [userRole, setUserRole] = useState(""); 
 
     const setAuth = (boolean) => {
-        setIsAuthenticated(boolean);
-        localStorage.setItem("isAuthenticated", boolean); // Store in localStorage
+        setToken(boolean ? localStorage.getItem("token") : ""); // Clear token on logout
     };
-
 
     const isAuth = async () => {
         const storageToken = localStorage.getItem("token");
-        const storageUserRole = localStorage.getItem("userRole");
 
         try {
             const res = await fetch(`/auth/is-verify`, {
                 method: "GET",
                 headers: {
-                    Authorization: storageToken,
+                    Authorization: token || storageToken,
                 },
             });
 
@@ -49,23 +45,15 @@ const App = () => {
             //console.log(data);
 
             if (data === true) {
-                setIsAuthenticated(true);
+                // Decode the token to get user information
+                const decodedToken = jwt.decode(storageToken);
+                //console.log(decodedToken);
 
-                // Fetch the user data including the username
-                const userRes = await fetch(`/dashboard`, {
-                    method: "GET",
-                    headers: {
-                        Authorization: token || storageToken,
-                    },
-                });
+                if (decodedToken) {
+                    const { role } = decodedToken;
 
-                const userData = await userRes.json();
-                //console.log(userData.username);
-
-                setUsername(userData.username);
-                setUserRole(storageUserRole);
-            } else {
-                setIsAuthenticated(false);
+                    setUserRole(role);
+                }
             }
         } catch (error) {
             console.log(error);
@@ -108,8 +96,8 @@ const App = () => {
                 <header>
                     <Navigation
                         events={events}
-                        isAuthenticated={isAuthenticated}
-                        setIsAuthenticated={setIsAuthenticated}
+                        isAuthenticated={token} 
+                        setIsAuthenticated={setAuth}
                         username={username}
                     />
                 </header>
@@ -136,18 +124,17 @@ const App = () => {
                         <Route
                             path="/login"
                             element={
-                                !isAuthenticated ? (
+                                !token ? (
                                     <Login setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/userdashboard" />
                                 )
                             }
                         />
-
                         <Route
                             path="/register"
                             element={
-                                !isAuthenticated ? (
+                                !token ? (
                                     <Register setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/login" />
@@ -157,24 +144,24 @@ const App = () => {
                         <Route
                             path="/userdashboard"
                             element={
-                                isAuthenticated ? (
+                                token ? (
                                     <UserDashboard setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/login" />
                                 )
                             }
                         />
-
                         <Route
                             path="/organizerdashboard"
                             element={
-                                isAuthenticated && userRole === "organizer" ? (
-                                    <OrganizerDashboard setAuth={setAuth}/>
+                                token && userRole === "organizer" ? (
+                                    <OrganizerDashboard setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/login" />
                                 )
                             }
                         />
+                        <Route path="/update-event" element={<UpdateEvent />} />
                     </Routes>
                 </main>
                 <footer className="footer">
