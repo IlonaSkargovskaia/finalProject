@@ -13,8 +13,8 @@ a.nav-link, .navbar-nav a.nav-link.show {
 }
 
 .nav__menu{
-    background-color: #7b1fa2;
-    
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, rgba(123,30,162,1) 0%, rgba(224,2,255,1) 100%);
 }
 
 .nav__categories svg{
