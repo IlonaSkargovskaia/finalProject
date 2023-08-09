@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
 import Table from "react-bootstrap/Table";
+import axios from "axios";
 
 const OrganizerDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
@@ -72,6 +73,27 @@ const OrganizerDashboard = ({ setAuth }) => {
         getName();
     }, []);
 
+    const deleteEvent = async (eventId) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this event?");
+        if (!isConfirmed) {
+            return;
+        }
+        try {
+            const response = await axios.delete(`/api/events/${eventId}`);
+            if (response.status === 200) {
+                // Remove the deleted event from the userEvents state
+                const updatedEvents = userEvents.filter(
+                    (event) => event.id !== eventId
+                );
+                setUserEvents(updatedEvents);
+                toast.success("Event deleted successfully");
+            }
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            toast.error("Error deleting event");
+        }
+    };
+
     const logout = (e) => {
         e.preventDefault();
 
@@ -105,7 +127,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 <Col>
                     <Link to="#">
                         <div className="card bg-dark text-white">
-                           Update your profile
+                            Update your profile
                         </div>
                     </Link>
                 </Col>
@@ -151,11 +173,12 @@ const OrganizerDashboard = ({ setAuth }) => {
                                 </Link>
                             </td>
                             <td>
-                                <Link to="/update-event">
-                                    <div className="card bg-danger text-white danger-btn">
-                                        Delete event
-                                    </div>
-                                </Link>
+                                <Button
+                                    className="card bg-danger text-white danger-btn"
+                                    onClick={() => deleteEvent(event.id)}
+                                >
+                                    Delete event
+                                </Button>
                             </td>
                         </tr>
                     ))}
