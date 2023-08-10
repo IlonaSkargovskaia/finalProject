@@ -19,39 +19,57 @@ const NewEventForm = (props) => {
     const [quantityAvailable, setQuantityAvailable] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [totalPlaces, setTotalPlaces] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const storageToken = localStorage.getItem("token");
 
-        const newEvent = {
-            title,
-            description,
-            date,
-            time,
-            location_id: selectedLocation,
-            category_id: selectedCategory,
-            price,
-            address,
-            quantity_available: quantityAvailable,
-            max_price: maxPrice,
-            total_places: totalPlaces
-        };
+        const formData = new FormData();
+        formData.append("file", selectedFile);
 
         try {
+            const uploadResponse = await axios.post(`/upload`, formData, {
+                headers: {
+                    Authorization: token || storageToken,
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+    
+            const imageUrl = uploadResponse.data.result.url;
+
+            const newEvent = {
+                title,
+                description,
+                date,
+                time,
+                location_id: selectedLocation,
+                category_id: selectedCategory,
+                price,
+                address,
+                quantity_available: quantityAvailable,
+                max_price: maxPrice,
+                total_places: totalPlaces,
+                image: imageUrl, // Add the image URL to the newEvent object
+            };
+
+        
             const decodedToken = jwt.decode(token || storageToken);
-            console.log(decodedToken);
+            //console.log(decodedToken);
 
             if (decodedToken) {
                 const userId = decodedToken.user;
                 newEvent.user_id = userId;
+                
 
                 const res = await axios.post(`/api/events`, newEvent, {
                     headers: {
                         Authorization: token || storageToken,
                     },
                 });
+
+        
                 console.log("Token:", token);
                 console.log("Local token", storageToken);
                 alert("New event added successfully", res.data);
@@ -68,16 +86,26 @@ const NewEventForm = (props) => {
                 setQuantityAvailable("");
                 setMaxPrice("");
                 setTotalPlaces("");
+                setSelectedFile(null);
             }
         } catch (error) {
             console.error("Error adding event:", error);
         }
     };
 
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setSelectedFile(selectedFile);
+    };
+
     return (
         <>
             <h3>Create new event: </h3>
-            <Form onSubmit={handleSubmit} className="add__form">
+            <Form
+                onSubmit={handleSubmit}
+                className="add__form"
+                encType="multipart/form-data"
+            >
                 <Form.Group as={Row} className="mb-3">
                     <Form.Label column sm="4">
                         Title:
@@ -100,6 +128,19 @@ const NewEventForm = (props) => {
                             as="textarea"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm="4">
+                        Upload File:
+                    </Form.Label>
+                    <Col sm="8">
+                        <Form.Control
+                            type="file"
+                            accept=".jpg,.jpeg,.png" // Add accepted file types here
+                            onChange={(e) => handleFileChange(e)}
                         />
                     </Col>
                 </Form.Group>
@@ -222,9 +263,7 @@ const NewEventForm = (props) => {
                         <Form.Control
                             type="number"
                             value={totalPlaces}
-                            onChange={(e) =>
-                                setTotalPlaces(e.target.value)
-                            }
+                            onChange={(e) => setTotalPlaces(e.target.value)}
                             placeholder="0"
                         />
                     </Col>

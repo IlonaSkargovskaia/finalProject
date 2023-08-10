@@ -17,43 +17,9 @@ app.use(express.json());
 
 app.use(routes);
 
-// ------ Uploading files with multer LOCALY-----
-// ------single uploading files
-// const upload = multer({dest: "uploads/"});
-// app.post('/upload', upload.single("file"), (req, res) => {
-//   res.json({status: 'Success uploading'})
-// });
 
-//-------multiple uploading files
-// const upload = multer({dest: "uploads/"});
-// app.post('/upload', upload.array("file"), (req, res) => {
-//   res.json({status: 'Success uploading'})
-// });
 
-//------multiple fields upload
-// const upload = multer({ dest: "uploads/" });
-// const multiUpload = upload.fields([
-//     { name: "avatar", maxCount: 1 },
-//     { name: "resume", maxCount: 1 },
-// ]);
-// app.post("/upload", multiUpload, (req, res) => {
-
-//     console.log(req.files); //object with mimetype, original name etc
-//     res.json({ status: "Success uploading" });
-// });
-
-//------custom file name
-// => uuid-originalName
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, "uploads");
-//     },
-//     filename: (req, file, cb) => {
-//         const { originalname } = file;
-//         cb(null, `${uuidv4()}-${originalname}`);
-//     },
-// });
-
+//---- UPLOAD TO AWS
 const storage = multer.memoryStorage();
 
 //ограничиваем типы файлов
