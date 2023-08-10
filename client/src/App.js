@@ -18,6 +18,7 @@ import UpdateEvent from "./pages/events/UpdateEvent";
 import jwt from "jsonwebtoken";
 import EventsList from "./pages/events/EventsList";
 
+
 export const AppContext = createContext();
 
 const App = () => {
@@ -111,6 +112,8 @@ const App = () => {
                         setIsAuthenticated={setAuth}
                         username={username}
                     />
+
+                    
                 </header>
 
                 <main className="main">

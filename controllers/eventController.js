@@ -1,8 +1,18 @@
-import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId, getLastEvents } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
         const events = await getAllEvents();
+        res.status(200).json(events);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export const getlastEventsController = async (req, res) => {
+    try {
+        const events = await getLastEvents();
         res.status(200).json(events);
     } catch (error) {
         console.log(error);
@@ -34,8 +44,12 @@ export const getEventsByDateController = async (req, res) => {
   
     try {
       const events = await getEventsByDate(date);
+
+      // Sort events by date from earlier to later
+      const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
       
-      res.status(200).json(events);
+      
+      res.status(200).json(sortedEvents);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Server error' });

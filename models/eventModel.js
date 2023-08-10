@@ -11,6 +11,16 @@ export const getAllEvents = async () => {
     }
 }
 
+export const getLastEvents = async () => {
+    try {
+        const events = await db.select('*').from('events').orderBy('id', 'desc');;
+        return events;
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error fetching events from the database');
+    }
+}
+
 export const getEventByID = async (id) => {
     try {
         const event = await db.select('*').from('events').where({id}).first();

@@ -1,17 +1,63 @@
-import { Container } from "react-bootstrap";
-import EventsAll from "../events/EventsAll";
-import React from 'react';
-import { LiaHotjar } from "react-icons/lia";
+import React, { useState } from "react";
+import EventsNewest from "../events/EventsNewest";
+import { Link } from "react-router-dom";
+import EventsByDate from "../events/EventsByDate";
+import { Col, Container, Row } from "react-bootstrap";
+import { CiLocationOn } from "react-icons/ci";
+import Header from "../../components/Header";
 
 const Home = () => {
+    const [selectedLocation, setSelectedLocation] = useState("");
     return (
         <div className="home__page">
-            <Container>
-            
-                <h1><LiaHotjar />Top selling on "TicketPRO"</h1>
-                <EventsAll />
-                
-            </Container>
+            <Header />
+
+            <EventsByDate />
+
+            <section className="home__locations">
+                <Container>
+
+                    <div className="choose-location-section">
+                        <Row className="location-links">
+                            <Col>
+                                <h3> <CiLocationOn /> Choose location: </h3>
+                            </Col>
+                            
+                            <Col>
+                                <Link
+                                    to="/location/1"
+                                    onClick={() => setSelectedLocation(1)}
+                                    className="location__north"
+                                >
+                                    North
+                                </Link>
+                            </Col>
+                            <Col>
+                                <Link
+                                    to="/location/3"
+                                    onClick={() => setSelectedLocation(3)}
+                                    className="location__center"
+                                >
+                                    Center
+                                </Link>
+                            </Col>
+                            <Col>
+                                <Link
+                                    to="/location/2"
+                                    onClick={() => setSelectedLocation(2)}
+                                    className="location__south"
+                                >
+                                    South
+                                </Link>
+                            </Col>
+                        </Row>
+                    </div>
+                </Container>
+            </section>
+
+            <EventsNewest />
+
+
         </div>
     );
 };
