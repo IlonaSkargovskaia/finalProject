@@ -194,6 +194,26 @@ p.card__date{
     cursor: pointer;
 }
 
+.card__interactive-total{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card__interactive-total p{
+    margin-bottom: 0;
+    font-size: 20px;
+}
+
+.interactive h4{
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, rgba(123,30,162,1) 0%, rgba(224,2,255,1) 100%);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+
 
 /* ORGANIZER */
 
@@ -377,17 +397,28 @@ table.org-table>thead{
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
 }
 
+.location-links a:hover{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 7px 3px, rgba(0, 0, 0, 0.14) 0px 0px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+}
+
 .location-links .location__north{
-    background-color: #6a1b9a;
+    color: #fff;
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, rgba(123,30,162,1) 0%, #b232e8 100%);
 }
 
 .location-links .location__center{
-    background-color: #ab47bc;
+    color: #fff;
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, #b232e8 0%, #b514d8 100%);
 }
 
 .location-links .location__south{
-    background-color: #ce44e3;
+    color: #fff;
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, #b514d8 0%, #de03fe 100%);
 }
+
 
 .detail__date{
     color: #898a8c;

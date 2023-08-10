@@ -14,8 +14,6 @@ import { AppContext } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -37,6 +35,7 @@ const EventDetail = () => {
         address,
         quantity_available,
         max_price,
+        total_places,
     } = event;
 
     useEffect(() => {
@@ -123,9 +122,10 @@ const EventDetail = () => {
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
-                    const seatIndexWithinAvailableSeats = rowIndex * 10 + seatIndex;
+                    const seatIndexWithinAvailableSeats =
+                        rowIndex * 10 + seatIndex;
                     const seat = availableSeats[seatIndexWithinAvailableSeats];
-    
+
                     if (!seat) {
                         return (
                             <div
@@ -134,12 +134,12 @@ const EventDetail = () => {
                             />
                         );
                     }
-    
+
                     const seatKey = `seat-${seat.id}`;
                     const isSelected = selectedSeats.some(
                         (selectedSeat) => selectedSeat.id === seat.id
                     );
-    
+
                     return (
                         <div
                             key={seatKey}
@@ -154,10 +154,9 @@ const EventDetail = () => {
                 })}
             </div>
         ));
-    
+
         return seatsArray;
     };
-    
 
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
@@ -193,11 +192,7 @@ const EventDetail = () => {
                 }
             }
         }
-
-        
     };
-
-    
 
     return (
         <div>
@@ -215,7 +210,7 @@ const EventDetail = () => {
                     theme="light"
                 />
                 <Row>
-                    <Col md={8} sm={12}>
+                    <Col lg={8} md={12} sm={12} className="mb-4">
                         <Card className="event__detail">
                             <Card.Header>
                                 <Card.Img variant="left" src={image} />
@@ -314,7 +309,7 @@ const EventDetail = () => {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={4} sm={12}>
+                    <Col lg={4} md={12} sm={12} className="mb-4">
                         <Card className="card__right">
                             <Card.Text>
                                 {" "}
@@ -326,9 +321,15 @@ const EventDetail = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={8} sm={12}>
-                        <Card className="card__right">
-                            <h4 style={{textAlign: 'center'}}>interactive hall - choose places:</h4>
+                    <Col lg={8} md={12} sm={12}>
+                        <Card className="card__right interactive">
+                            <h4 style={{ textAlign: "center" }}>
+                                Interactive hall
+                            </h4>
+                            <div className="card__interactive-total">
+                                <h3>choose available places:</h3>
+                                <p>{total_places} places in total</p>
+                            </div>
                             <div className="hall">{renderSeats()}</div>
                         </Card>
                     </Col>

@@ -1,10 +1,11 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import routes from './routes/index.js';
-import jwtAuth from './routes/jwtAuth.js';
-import dashboard from './routes/dashboard.js'
-
+import express from "express";
+import dotenv from "dotenv";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
+import routes from "./routes/index.js";
+import jwtAuth from "./routes/jwtAuth.js";
+import dashboard from "./routes/dashboard.js";
 
 const app = express();
 dotenv.config();
@@ -15,21 +16,99 @@ app.use(express.json());
 
 app.use(routes);
 
+// ------ Uploading files with multer LOCALY-----
+// ------single uploading files
+// const upload = multer({dest: "uploads/"});
+// app.post('/upload', upload.single("file"), (req, res) => {
+//   res.json({status: 'Success uploading'})
+// });
+
+//-------multiple uploading files
+// const upload = multer({dest: "uploads/"});
+// app.post('/upload', upload.array("file"), (req, res) => {
+//   res.json({status: 'Success uploading'})
+// });
+
+//------multiple fields upload
+// const upload = multer({ dest: "uploads/" });
+// const multiUpload = upload.fields([
+//     { name: "avatar", maxCount: 1 },
+//     { name: "resume", maxCount: 1 },
+// ]);
+// app.post("/upload", multiUpload, (req, res) => {
+
+//     console.log(req.files); //object with mimetype, original name etc
+//     res.json({ status: "Success uploading" });
+// });
+
+//------custom file name
+// => uuid-originalName
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads");
+    },
+    filename: (req, file, cb) => {
+        const { originalname } = file;
+        cb(null, `${uuidv4()}-${originalname}`);
+    },
+});
+
+//ограничиваем типы файлов
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.split("/")[0] === "image") {
+        cb(null, true);
+    } else {
+        cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
+    }
+};
+//test in postman: in formdata http://localhost:3005/upload
+// 1000000 - 1mB
+// files: 1 - only 1 file can upload
+const upload = multer({
+    storage,
+    fileFilter,
+    limits: { fileSize: 3000000, files: 1 },
+});
+app.post("/upload", upload.array("file"), (req, res) => {
+    res.json({ status: "Success uploading" });
+});
+
+//different errors for user response
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        message: 'File is too large',
+      });
+    }
+
+    if (error.code === 'LIMIT_FILE_COUNT') {
+      return res.status(400).json({
+        message: 'File limit reached'
+      })
+    }
+
+    if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({
+        message: 'File must be an image'
+      })
+    }
+  }
+})
+
+
+
 
 
 //login-register-authorization
-app.use('/auth', jwtAuth);
+app.use("/auth", jwtAuth);
 
 //dashboard router
-app.use('/dashboard', dashboard);
-
-
-
+app.use("/dashboard", dashboard);
 
 app.listen(process.env.PORT || 3002, () => {
-  console.log(`listen on ${process.env.PORT || 3002}`);
+    console.log(`listen on ${process.env.PORT || 3002}`);
 });
-
 
 //------DEPLOY
 
