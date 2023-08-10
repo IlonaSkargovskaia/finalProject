@@ -3,17 +3,25 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
-import { CiLocationOn, CiCalendarDate, CiShoppingCart } from "react-icons/ci";
-import { PiTicketThin } from "react-icons/pi";
+import {
+    CiLocationOn,
+    CiCalendarDate,
+    CiShoppingCart,
+    CiWallet,
+} from "react-icons/ci";
 import { AppContext } from "../../App";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [total, setTotal] = useState(0);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [availableSeats, setAvailableSeats] = useState([]);
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -64,6 +72,93 @@ const EventDetail = () => {
         setTotal(event.price * parseInt(value));
     };
 
+    useEffect(() => {
+        // For this example, let's assume availableSeats is an array of seat objects
+        const generateSeats = () => {
+            const rows = Math.ceil(quantity_available / 10); // Assuming 10 seats per row
+            const seats = [];
+            let seatId = 1;
+
+            for (let row = 1; row <= rows; row++) {
+                for (let seatNumber = 1; seatNumber <= 10; seatNumber++) {
+                    if (seatId <= quantity_available) {
+                        seats.push({
+                            id: seatId,
+                            row,
+                            seatNumber,
+                        });
+                        seatId++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            return seats;
+        };
+
+        setAvailableSeats(generateSeats());
+    }, [quantity_available]);
+
+    useEffect(() => {
+        setSelectedQuantity(selectedSeats.length);
+    }, [selectedSeats]);
+
+    const handleSeatClick = (seat) => {
+        // Check if the selected seat is available
+        if (
+            availableSeats.some((availableSeat) => availableSeat.id === seat.id)
+        ) {
+            // Toggle seat selection
+            setSelectedSeats((prevSelectedSeats) =>
+                prevSelectedSeats.includes(seat)
+                    ? prevSelectedSeats.filter((s) => s.id !== seat.id)
+                    : [...prevSelectedSeats, seat]
+            );
+        }
+    };
+
+    const renderSeats = () => {
+        const rows = Math.ceil(availableSeats.length / 10); // Assuming 10 seats per row
+        const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
+            <div key={rowIndex} className="row seat-row">
+                {Array.from({ length: 10 }, (_, seatIndex) => {
+                    const seatIndexWithinAvailableSeats = rowIndex * 10 + seatIndex;
+                    const seat = availableSeats[seatIndexWithinAvailableSeats];
+    
+                    if (!seat) {
+                        return (
+                            <div
+                                key={`empty-${rowIndex}-${seatIndex}`}
+                                className="col seat empty"
+                            />
+                        );
+                    }
+    
+                    const seatKey = `seat-${seat.id}`;
+                    const isSelected = selectedSeats.some(
+                        (selectedSeat) => selectedSeat.id === seat.id
+                    );
+    
+                    return (
+                        <div
+                            key={seatKey}
+                            className={`seat ${
+                                isSelected ? "selected" : "available"
+                            } col`}
+                            onClick={() => handleSeatClick(seat)}
+                        >
+                            {isSelected ? "" : seat.seatNumber}
+                        </div>
+                    );
+                })}
+            </div>
+        ));
+    
+        return seatsArray;
+    };
+    
+
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
 
@@ -73,32 +168,36 @@ const EventDetail = () => {
             // if User is not authorized
             toast.error("You must be authorized to purchase tickets");
             return;
-        }
-
-        try {
-            const response = await axios.post(
-                `/api/tickets/${params.id}/purchase`,
-                {
-                    quantity: selectedQuantity,
-                },
-                {
-                    headers: {
-                        Authorization: token || storageToken,
+        } else {
+            try {
+                const response = await axios.post(
+                    `/api/tickets/${params.id}/purchase`,
+                    {
+                        quantity: selectedQuantity,
                     },
+                    {
+                        headers: {
+                            Authorization: token || storageToken,
+                        },
+                    }
+                );
+                toast.success(response.data.message);
+                setTotal(totalPrice);
+                console.log("Purchase success:", response.data);
+            } catch (error) {
+                if (error.response.status === 400) {
+                    console.error("Not enough tickets available");
+                } else {
+                    toast.error("You must be authorized to purchase tickets");
+                    console.error("Purchase error:", error);
                 }
-            );
-            toast.success(response.data.message);
-            //alert(response.data.message);
-            setTotal(totalPrice);
-            console.log("Purchase success:", response.data);
-        } catch (error) {
-            if (error.response.status === 400) {
-                console.error("Not enough tickets available");
-            } else {
-                console.error("Purchase error:", error);
             }
         }
+
+        
     };
+
+    
 
     return (
         <div>
@@ -123,7 +222,7 @@ const EventDetail = () => {
                             </Card.Header>
                             <Card.Body>
                                 <Card.Title>{title}</Card.Title>
-                                <Card.Text>
+                                <Card.Text className="detail__date">
                                     <CiCalendarDate />
                                     {hasDateTime
                                         ? ` ${formattedDate} | ${formattedTime}`
@@ -131,32 +230,23 @@ const EventDetail = () => {
                                 </Card.Text>
                                 <hr />
                                 <Card.Text>{description} </Card.Text>
-                                <Card.Text>
-                                    <PiTicketThin /> Price: {price} -{" "}
-                                    {max_price} ILS
-                                </Card.Text>
-                                <Card.Text>
-                                    <b>Tickets left:</b>{" "}
-                                    {quantity_available === 0
-                                        ? "SOLD OUT"
-                                        : quantity_available}
-                                </Card.Text>
+
+                                <h3>Buy tickets:</h3>
                                 {quantity_available > 0 ? (
                                     <Form className="purchase__form">
                                         <Form.Group>
                                             <Row className="align-items-center">
                                                 <Col>
                                                     <Form.Label>
-                                                        Number of tickets:
+                                                        Quantity:
                                                     </Form.Label>
                                                 </Col>
-                                                <Col xs={8} sm={8} md={8} lg={9}>
+                                                <Col>
                                                     <Form.Select
                                                         value={selectedQuantity}
                                                         onChange={
                                                             handleQuantityChange
                                                         }
-                                                        style={{width: '100px'}}
                                                     >
                                                         {Array.from(
                                                             {
@@ -176,15 +266,34 @@ const EventDetail = () => {
                                                         )}
                                                     </Form.Select>
                                                 </Col>
+
+                                                <Col>
+                                                    <Card.Text>
+                                                        <b>Tickets left:</b>{" "}
+                                                        {quantity_available ===
+                                                        0
+                                                            ? "SOLD OUT"
+                                                            : quantity_available}
+                                                    </Card.Text>
+                                                </Col>
                                             </Row>
+
+                                            <hr />
 
                                             <Row className="align-items-center my-4">
                                                 <Col>
-                                                  <Card.Text>
-                                                          Amount: <br /> <b>{total} ILS</b>
-                                                  </Card.Text>
+                                                    <Card.Text className="detail__price">
+                                                        <CiWallet /> {price} -{" "}
+                                                        {max_price} ILS
+                                                    </Card.Text>
                                                 </Col>
-                                                <Col xs={8} sm={8} md={8} lg={9}>
+                                                <Col>
+                                                    <Card.Text>
+                                                        Amount: <br />{" "}
+                                                        <b>{total} ILS</b>
+                                                    </Card.Text>
+                                                </Col>
+                                                <Col>
                                                     <Button
                                                         className="purple"
                                                         onClick={handlePurchase}
@@ -213,6 +322,14 @@ const EventDetail = () => {
                             </Card.Text>
                             <Card.Text>{address}</Card.Text>
                             <Card.Text>Israel</Card.Text>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={8} sm={12}>
+                        <Card className="card__right">
+                            <h4 style={{textAlign: 'center'}}>interactive hall - choose places:</h4>
+                            <div className="hall">{renderSeats()}</div>
                         </Card>
                     </Col>
                 </Row>

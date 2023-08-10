@@ -59,11 +59,11 @@ const App = () => {
 
                     console.log('Role from App: ', role)
     
-                    // if (role === "organizer") {
-                    //     navigate("/organizerdashboard");
-                    // } else {
-                    //     navigate("/userdashboard");
-                    // }
+                    if (role === "organizer") {
+                        navigate("/organizerdashboard");
+                    } else {
+                        navigate("/userdashboard");
+                    }
                 }
             }
         } catch (error) {

@@ -14,6 +14,7 @@ const UpdateEvent = () => {
         date: "",
         location_id: "",
         max_price: "",
+        total_places: "",
         price: "",
         quantity_available: "",
         time: "",
@@ -28,6 +29,7 @@ const UpdateEvent = () => {
         location_id,
         max_price,
         price,
+        total_places,
         quantity_available,
         time,
     } = eventData;
@@ -232,6 +234,21 @@ const UpdateEvent = () => {
                                 type="number"
                                 name="max_price"
                                 value={max_price}
+                                onChange={handleInputChange}
+                                placeholder="0"
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Total count of places:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="number"
+                                name="total_places"
+                                value={total_places}
                                 onChange={handleInputChange}
                                 placeholder="0"
                             />

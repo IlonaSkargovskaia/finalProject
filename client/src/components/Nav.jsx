@@ -105,7 +105,7 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                                 onClick={handleCategoryChange}
                             >
                                 {" "}
-                                Humor
+                                Festivals
                             </NavDropdown.Item>
                             <NavDropdown.Item
                                 as={Link}
@@ -114,7 +114,7 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                                 onClick={handleCategoryChange}
                             >
                                 {" "}
-                                Sport
+                                Sports
                             </NavDropdown.Item>
                             <NavDropdown.Item
                                 as={Link}
@@ -123,7 +123,7 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                                 onClick={handleCategoryChange}
                             >
                                 {" "}
-                                Children
+                                Kids
                             </NavDropdown.Item>
                         </NavDropdown>
 

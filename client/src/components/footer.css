@@ -40,6 +40,10 @@ img.footer__logo{
 
 .contact__social-link:hover{
     background-color: #7b1fa2;
+   
+}
+
+.footer .contact__social-link:hover{
     color: #fff;
 }
 

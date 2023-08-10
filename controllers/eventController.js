@@ -98,7 +98,7 @@ export const addEventController = async (req, res) => {
     console.log('UserId controller: ', req.user);
 
     console.log('Req.body: ', req.body);
-    const {title, description, date, time, location_id, image, category_id, price, address, quantity_available, max_price} = req.body;
+    const {title, description, date, time, location_id, image, category_id, price, address, quantity_available, max_price, total_places} = req.body;
 
 
     try {
@@ -114,7 +114,7 @@ export const addEventController = async (req, res) => {
             address,
             quantity_available,
             max_price,
-            
+            total_places
         }, user_id);
 
         console.log('newEvent from Controller: ', newEvent);

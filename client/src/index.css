@@ -89,7 +89,7 @@ a.card-title{
 }
 
 .card{
-    border: 1px solid #e0e4e8 !important;
+    border: 0px solid #e0e4e8 !important;
 }
 
 .card__btn-block{
@@ -163,7 +163,37 @@ p.card__date{
     padding: 1rem 1rem 0.1rem 1rem;
     background-color: #e0e4e8;
     border-radius: 5px;
+    text-align: center;
 }
+
+.event__detail h3{
+    text-align: center;
+}
+
+.event__detail .form-select{
+    margin: 0;
+}
+
+/* INTERRACTIVE HALL */
+
+.seat-row{
+    gap: 1rem;
+    margin: 1rem 0 !important;
+    flex-wrap: nowrap !important;
+}
+
+.seat{
+    border-radius: 5px;
+    background-color: #e0e4e8;
+    padding: 1rem 0 !important;
+    text-align: center;
+}
+
+.seat:hover, .seat.selected{
+    background-color: #bcbcbc;
+    cursor: pointer;
+}
+
 
 /* ORGANIZER */
 
@@ -250,7 +280,7 @@ table.org-table>thead{
 }
 
 .events__new-home{
-    background-color: rgb(123 30 162 / 8%);
+    background-color: rgb(229 169 255 / 10%);
     padding: 3rem 0 4rem 0;
 }
 
@@ -265,25 +295,66 @@ table.org-table>thead{
     background-size: cover;
     margin-top: -26px;
     margin-bottom: 60px;
+    padding-bottom: 20px;
 }
 
 .bg__black{
     min-height: 300px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
+}
+
+.header__categories h1, .header__categories h3{
+    text-align: center;
+    color: #fff;
+    
+    text-shadow: 1px 1px black;
+    
 }
 
 .header__categories h1{
-    text-align: center;
-    color: #fff;
-    padding-top: 50px;
-    font-size: 60px;
-    text-shadow: 1px 1px black;
     font-weight: 700;
+    font-size: 60px;
+    padding-top: 50px;
 }
 
 .home__locations{
-    background: url(./assets/bg_locations.avif) center center;
+    background: url(./assets/bg_locations.png) center center;
     padding: 2rem 0;
+}
+
+.home__categories{
+    margin-top: 30px;
+}
+
+.home__categories .category-links a{
+    display: block;
+    min-width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    background: rgb(255 255 255 / 20%);
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all .4s ease-in-out;
+}
+
+.home__categories .category-links a:hover{
+    background: rgb(255 255 255 / 100%);
+    color: #000;
+}
+
+.cat__block svg{
+    display: block;
+    margin: 0 auto;
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.react-multi-carousel-track{
+    gap: 1rem
 }
 
 .location-links{
@@ -291,6 +362,7 @@ table.org-table>thead{
     gap: 4rem;
     justify-content: end;
     align-items: center;
+    
 }
 
 .location-links a{
@@ -316,6 +388,17 @@ table.org-table>thead{
 .location-links .location__south{
     background-color: #ce44e3;
 }
+
+.detail__date{
+    color: #898a8c;
+}
+
+.detail__price{
+    color: #801da7;
+    font-size: 20px;
+    font-weight: 700;
+}
+
 
 
 /* media */

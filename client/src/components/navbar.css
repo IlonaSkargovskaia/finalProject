@@ -10,6 +10,11 @@ a.nav-link, .navbar-nav a.nav-link.show {
 .logo{
     filter: brightness(0) invert(1);
     max-width: 200px;
+    transition: all .4s ease-in-out;
+}
+
+.logo:hover{
+    filter: brightness(100) invert(1);
 }
 
 .nav__menu{

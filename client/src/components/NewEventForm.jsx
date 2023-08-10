@@ -18,6 +18,7 @@ const NewEventForm = (props) => {
     const [address, setAddress] = useState("");
     const [quantityAvailable, setQuantityAvailable] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
+    const [totalPlaces, setTotalPlaces] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,6 +36,7 @@ const NewEventForm = (props) => {
             address,
             quantity_available: quantityAvailable,
             max_price: maxPrice,
+            total_places: totalPlaces
         };
 
         try {
@@ -65,6 +67,7 @@ const NewEventForm = (props) => {
                 setAddress("");
                 setQuantityAvailable("");
                 setMaxPrice("");
+                setTotalPlaces("");
             }
         } catch (error) {
             console.error("Error adding event:", error);
@@ -206,6 +209,22 @@ const NewEventForm = (props) => {
                             type="number"
                             value={maxPrice}
                             onChange={(e) => setMaxPrice(e.target.value)}
+                            placeholder="0"
+                        />
+                    </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column sm="4">
+                        Total count of places:
+                    </Form.Label>
+                    <Col sm="8">
+                        <Form.Control
+                            type="number"
+                            value={totalPlaces}
+                            onChange={(e) =>
+                                setTotalPlaces(e.target.value)
+                            }
                             placeholder="0"
                         />
                     </Col>
