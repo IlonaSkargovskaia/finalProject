@@ -15,7 +15,7 @@ import OrganizerDashboard from "./pages/dashboards/OrganizerDashboard";
 import Login from "./pages/users/Login";
 import Register from "./pages/users/Register";
 import UpdateEvent from "./pages/events/UpdateEvent";
-import jwt from "jsonwebtoken"; // Import jwt
+import jwt from "jsonwebtoken";
 import EventsList from "./pages/events/EventsList";
 
 export const AppContext = createContext();
@@ -58,11 +58,11 @@ const App = () => {
 
                     console.log('Role from App: ', role)
     
-                    if (role === "organizer") {
-                        navigate("/organizerdashboard");
-                    } else {
-                        navigate("/userdashboard");
-                    }
+                    // if (role === "organizer") {
+                    //     navigate("/organizerdashboard");
+                    // } else {
+                    //     navigate("/userdashboard");
+                    // }
                 }
             }
         } catch (error) {

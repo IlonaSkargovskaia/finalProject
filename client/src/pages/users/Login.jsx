@@ -40,6 +40,7 @@ const Login = ({ setAuth }) => {
 
             const data = await res.json();
            
+            console.log('Data in Login:', data);
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
@@ -57,6 +58,12 @@ const Login = ({ setAuth }) => {
                     setUserRole(role);
                     
                     console.log('Role in Login: ', role)
+
+                    if (role === "organizer") {
+                        navigate("/organizerdashboard");
+                    } else {
+                        navigate("/userdashboard");
+                    }
     
                 }
             } else {

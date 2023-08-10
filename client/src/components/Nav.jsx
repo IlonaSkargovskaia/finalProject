@@ -58,11 +58,14 @@ const Navigation = ({ setIsAuthenticated, isAuthenticated, username }) => {
                 <Navbar.Brand as={Link} to="/">
                     <img src={logo} className="logo" alt="ticketpro" />
                 </Navbar.Brand>
+                
                 <Navbar.Toggle
                     aria-controls="navbarScroll"
                     className="white-toggle"
                 />
+
                 <Navbar.Collapse id="navbarScroll">
+                    <Nav.Link href="/events">All events </Nav.Link>{"  "}
                     <Nav className="me-auto my-2 my-lg-0" navbarScroll>
                         <NavDropdown
                             title="Categories"

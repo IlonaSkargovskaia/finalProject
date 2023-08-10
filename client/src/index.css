@@ -231,6 +231,16 @@ table.org-table>thead{
     text-align: center;
 }
 
+.org-events__search{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.org-events__search input{
+    width: auto !important;
+}
+
 
 /* media */
 

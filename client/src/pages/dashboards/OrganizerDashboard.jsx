@@ -11,6 +11,7 @@ import axios from "axios";
 const OrganizerDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
     const [userEvents, setUserEvents] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
     const { token } = useContext(AppContext);
 
@@ -70,11 +71,41 @@ const OrganizerDashboard = ({ setAuth }) => {
     };
 
     useEffect(() => {
-        getName();
-    }, []);
+        const storageToken = localStorage.getItem("token");
+        const decodedToken = jwt.decode(token || storageToken);
+
+        if (decodedToken) {
+            getName(); // Call the getName function
+
+            // Fetch events with search query
+            const fetchUserEvents = async () => {
+                try {
+                    const userEventsResponse = await fetch(
+                        `/api/events/user/${decodedToken.user}`,
+                        {
+                            method: "GET",
+                            headers: {
+                                Authorization: token || storageToken,
+                            },
+                        }
+                    );
+
+                    const userEventsData = await userEventsResponse.json();
+                    
+                    setUserEvents(userEventsData);
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+
+            fetchUserEvents(); // Call the function
+        }
+    }, [token]);
 
     const deleteEvent = async (eventId) => {
-        const isConfirmed = window.confirm("Are you sure you want to delete this event?");
+        const isConfirmed = window.confirm(
+            "Are you sure you want to delete this event?"
+        );
         if (!isConfirmed) {
             return;
         }
@@ -140,7 +171,17 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </Col>
             </Row>
 
-            <h3>Your events:</h3>
+            <div className="org-events__search">
+                <h3>Your events:</h3>
+                <input
+                    type="text"
+                    placeholder="Search by title..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="me-2 form-control"
+                />
+            </div>
+
             <Table striped bordered hover className="org-table">
                 <thead>
                     <tr>
@@ -155,33 +196,44 @@ const OrganizerDashboard = ({ setAuth }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {userEvents.map((event) => (
-                        <tr key={event.id}>
-                            <td>{event.title}</td>
-                            <td>{event.date.slice(0, 10)}</td>
-                            <td>{event.time.slice(0, 5)}</td>
-                            <td>
-                                {event.price} - {event.max_price}
-                            </td>
-                            <td>{event.address}</td>
-                            <td>{event.quantity_available}</td>
-                            <td>
-                                <Link to={`/update-event/${event.id}`}>
-                                    <div className="card bg-warning update-btn">
-                                        Update event
-                                    </div>
-                                </Link>
-                            </td>
-                            <td>
-                                <Button
-                                    className="card bg-danger text-white danger-btn"
-                                    onClick={() => deleteEvent(event.id)}
-                                >
-                                    Delete event
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
+                    {userEvents.map((event) => {
+                        if (
+                            event.title
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                        ) {
+                            return (
+                                <tr key={event.id}>
+                                    <td>{event.title}</td>
+                                    <td>{event.date.slice(0, 10)}</td>
+                                    <td>{event.time.slice(0, 5)}</td>
+                                    <td>
+                                        {event.price} - {event.max_price}
+                                    </td>
+                                    <td>{event.address}</td>
+                                    <td>{event.quantity_available}</td>
+                                    <td>
+                                        <Link to={`/update-event/${event.id}`}>
+                                            <div className="card bg-warning update-btn">
+                                                Update event
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Button
+                                            className="card bg-danger text-white danger-btn"
+                                            onClick={() =>
+                                                deleteEvent(event.id)
+                                            }
+                                        >
+                                            Delete event
+                                        </Button>
+                                    </td>
+                                </tr>
+                            );
+                        }
+                        return null;
+                    })}
                 </tbody>
             </Table>
 
