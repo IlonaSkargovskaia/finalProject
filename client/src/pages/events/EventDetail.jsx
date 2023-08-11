@@ -8,9 +8,10 @@ import {
     CiCalendarDate,
     CiShoppingCart,
     CiWallet,
+    CiCircleRemove,
+    CiMapPin,
 } from "react-icons/ci";
 import { AppContext } from "../../App";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -110,7 +111,7 @@ const EventDetail = () => {
         const isAvailable = availableSeats.some(
             (availableSeat) => availableSeat.id === seat.id
         );
-    
+
         if (isAvailable) {
             // Toggle seat selection
             setSelectedSeats((prevSelectedSeats) =>
@@ -130,7 +131,7 @@ const EventDetail = () => {
                 {Array.from({ length: 10 }, (_, seatIndex) => {
                     const seatIndexWithinTotalPlaces =
                         rowIndex * 10 + seatIndex;
-                    
+
                     const seat = {
                         id: seatIndexWithinTotalPlaces + 1,
                         row: rowIndex + 1,
@@ -146,30 +147,55 @@ const EventDetail = () => {
                     );
 
                     const isPurchased = !isAvailable || isSelected;
-    
+
                     const seatClassName = `seat ${
-                        isPurchased ? "purchased" : "available"
+                        isPurchased
+                            ? isSelected
+                                ? "selected"
+                                : "purchased"
+                            : "available"
                     } col`;
-    
+
                     return (
                         <div
                             key={`seat-${seat.id}`}
                             className={seatClassName}
                             onClick={() => handleSeatClick(seat)}
                         >
-                            {isPurchased ? "" : seat.seatNumber}
+                            {isPurchased ? (
+                                <div className="seat-indicator">
+                                    {isSelected ? (
+                                        // `You selected: Row ${seat.row}, Seat ${seat.seatNumber}`
+                                        <span>
+                                            <CiMapPin style={{fontSize: '25px'}}/> 
+                                            <br />
+                                            Row: {seat.row}<br />
+                                            Seat: {seat.seatNumber}
+                                        </span>
+                                    ) : (
+                                        <span>
+                                            <CiCircleRemove style={{fontSize: '25px'}}/> 
+                                            <br />
+                                            Row: {seat.row}<br />
+                                            Seat: {seat.seatNumber}
+                                        </span>
+                                    )}
+                                </div>
+                            ) : (
+                                seat.seatNumber
+                            )}
                         </div>
                     );
                 })}
             </div>
         ));
-    
+
         return seatsArray;
     };
 
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
-    
+
         if (!token && !storageToken) {
             // if User is not authorized
             toast.error("You must be authorized to purchase tickets");
@@ -180,7 +206,7 @@ const EventDetail = () => {
                     `/api/tickets/${params.id}/purchase`,
                     {
                         quantity: selectedQuantity,
-                        selectedSeats: selectedSeats, 
+                        selectedSeats: selectedSeats,
                     },
                     {
                         headers: {
@@ -189,11 +215,10 @@ const EventDetail = () => {
                     }
                 );
 
-                console.log('Purchase API Response:', response.data);
+                console.log("Purchase API Response:", response.data);
 
                 const successMessage = response.data.message;
-                
-    
+
                 // Update selected seats and available seats
                 setSelectedSeats((prevSelectedSeats) =>
                     prevSelectedSeats.map((seat) => ({
@@ -210,11 +235,10 @@ const EventDetail = () => {
                             )
                     )
                 );
-    
-                console.log('Selected seats:', selectedSeats); //after bought 
+
+                console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
                 toast.success(response.data.message);
-
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
@@ -225,8 +249,6 @@ const EventDetail = () => {
             }
         }
     };
-    
-    
 
     return (
         <div>
@@ -358,7 +380,7 @@ const EventDetail = () => {
                     <Col lg={8} md={12} sm={12}>
                         <Card className="card__right interactive">
                             <h4 style={{ textAlign: "center" }}>
-                                Interactive hall
+                                 Interactive hall
                             </h4>
                             <div className="card__interactive-total">
                                 <h3>choose available places:</h3>

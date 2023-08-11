@@ -198,13 +198,26 @@ p.card__date{
 .seat{
     border-radius: 5px;
     background-color: #e0e4e8;
-    padding: 1rem 0 !important;
+    padding: 7px 0 !important;
     text-align: center;
 }
 
 .seat:hover, .seat.selected{
     background-color: #bcbcbc;
     cursor: pointer;
+}
+
+
+.selected {
+    background-color: #007bff;
+    color: white;
+    font-size: 11px;
+}
+
+.purchased {
+    background-color: #a82d2d;
+    color: white;
+    font-size: 11px;
 }
 
 .card__interactive-total{
@@ -385,6 +398,10 @@ table.org-table>thead{
     font-size: 50px;
     margin-bottom: 10px;
 }
+
+
+
+
 
 .react-multi-carousel-track{
     gap: 1rem;
