@@ -111,6 +111,7 @@ const App = () => {
                         isAuthenticated={token} 
                         setIsAuthenticated={setAuth}
                         username={username}
+                        userRole={userRole}
                     />
 
                     
