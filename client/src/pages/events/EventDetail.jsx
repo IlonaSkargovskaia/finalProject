@@ -139,45 +139,50 @@ const EventDetail = () => {
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
-                    const seatIndexWithinTotalPlaces =
-                        rowIndex * 10 + seatIndex;
-                    const seat = {
-                        id: seatIndexWithinTotalPlaces + 1,
-                        row: rowIndex + 1,
-                        seatNumber: seatIndex + 1,
-                    };
-                    const isSelected = selectedSeats.some(
-                        (selectedSeat) => selectedSeat.id === seat.id
-                    );
-                    const isAvailable = availableSeats.some(
-                        (availableSeat) => availableSeat.id === seat.id
-                    );
-                    const isPurchased = purchasedSeats.includes(seat.id);
-
-                    const seatClassName = `seat ${
-                        isPurchased
-                            ? "purchased"
-                            : isSelected
-                            ? "selected"
-                            : "available"
-                    } col`;
-                    
-
-                    return (
-                        <div
-                            key={`seat-${seat.id}`}
-                            className={seatClassName}
-                            onClick={() => handleSeatClick(seat)}
-                        >
-                            {isPurchased ? "" : seat.seatNumber}
-                        </div>
-                    );
+                    const seatIndexWithinTotalPlaces = rowIndex * 10 + seatIndex;
+                    const seatNumber = seatIndexWithinTotalPlaces + 1;
+    
+                    if (seatNumber <= total_places) {
+                        const seat = {
+                            id: seatNumber,
+                            row: rowIndex + 1,
+                            seatNumber,
+                        };
+                        const isSelected = selectedSeats.some(
+                            (selectedSeat) => selectedSeat.id === seat.id
+                        );
+                        const isAvailable = availableSeats.some(
+                            (availableSeat) => availableSeat.id === seat.id
+                        );
+                        const isPurchased = purchasedSeats.includes(seat.id);
+    
+                        const seatClassName = `seat ${
+                            isPurchased
+                                ? "purchased"
+                                : isSelected
+                                ? "selected"
+                                : "available"
+                        } col`;
+    
+                        return (
+                            <div
+                                key={`seat-${seat.id}`}
+                                className={seatClassName}
+                                onClick={() => handleSeatClick(seat)}
+                            >
+                                {isPurchased ? "" : seat.seatNumber}
+                            </div>
+                        );
+                    } else {
+                        return null; // This seat is beyond the total number of available seats
+                    }
                 })}
             </div>
         ));
-
+    
         return seatsArray;
     };
+    
 
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
