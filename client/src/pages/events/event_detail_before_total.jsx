@@ -19,10 +19,7 @@ const EventDetail = () => {
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [total, setTotal] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
-    const [purchasedSeats, setPurchasedSeats] = useState([]); // Seats purchased by the user
-    const [selectedSeatNumbers, setSelectedSeatNumbers] = useState([]);
-
+    const [availableSeats, setAvailableSeats] = useState([]);
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -46,12 +43,6 @@ const EventDetail = () => {
             try {
                 const res = await axios.get(`/api/events/${params.id}`);
                 setEvent(res.data);
-
-                // Fetch purchased seats for the event
-                const response = await axios.get(
-                    `/api/events/${params.id}/purchased-seats`
-                );
-                setPurchasedSeats(response.data.purchasedSeats);
 
                 // Once event data is fetched, update the total based on the fetched price
                 setTotal(res.data.price * selectedQuantity);
@@ -113,63 +104,51 @@ const EventDetail = () => {
     }, [selectedSeats]);
 
     const handleSeatClick = (seat) => {
-        const isPurchased = purchasedSeats.includes(seat.id);
-        const isSelected = selectedSeats.some(
-            (selectedSeat) => selectedSeat.id === seat.id
-        );
-        const isAvailable = availableSeats.some(
-            (availableSeat) => availableSeat.id === seat.id
-        );
-    
-        console.log("Clicked Seat:", seat.id);
-        console.log("Is Selected:", isSelected);
-        console.log("Is Purchased:", isPurchased);
-        console.log("Is Available:", isAvailable);
-
-        if (!isPurchased && !isSelected) {
-            setSelectedSeats((prevSelectedSeats) => [
-                ...prevSelectedSeats,
-                seat,
-            ]);
+        // Check if the selected seat is available
+        if (
+            availableSeats.some((availableSeat) => availableSeat.id === seat.id)
+        ) {
+            // Toggle seat selection
+            setSelectedSeats((prevSelectedSeats) =>
+                prevSelectedSeats.includes(seat)
+                    ? prevSelectedSeats.filter((s) => s.id !== seat.id)
+                    : [...prevSelectedSeats, seat]
+            );
         }
     };
 
     const renderSeats = () => {
-        const rows = Math.ceil(total_places / 10); // Assuming 10 seats per row
+        const rows = Math.ceil(availableSeats.length / 10); // Assuming 10 seats per row
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
-                    const seatIndexWithinTotalPlaces =
+                    const seatIndexWithinAvailableSeats =
                         rowIndex * 10 + seatIndex;
-                    const seat = {
-                        id: seatIndexWithinTotalPlaces + 1,
-                        row: rowIndex + 1,
-                        seatNumber: seatIndex + 1,
-                    };
+                    const seat = availableSeats[seatIndexWithinAvailableSeats];
+
+                    if (!seat) {
+                        return (
+                            <div
+                                key={`empty-${rowIndex}-${seatIndex}`}
+                                className="col seat empty"
+                            />
+                        );
+                    }
+
+                    const seatKey = `seat-${seat.id}`;
                     const isSelected = selectedSeats.some(
                         (selectedSeat) => selectedSeat.id === seat.id
                     );
-                    const isAvailable = availableSeats.some(
-                        (availableSeat) => availableSeat.id === seat.id
-                    );
-                    const isPurchased = purchasedSeats.includes(seat.id);
-
-                    const seatClassName = `seat ${
-                        isPurchased
-                            ? "purchased"
-                            : isSelected
-                            ? "selected"
-                            : "available"
-                    } col`;
-                    
 
                     return (
                         <div
-                            key={`seat-${seat.id}`}
-                            className={seatClassName}
+                            key={seatKey}
+                            className={`seat ${
+                                isSelected ? "selected" : "available"
+                            } col`}
                             onClick={() => handleSeatClick(seat)}
                         >
-                            {isPurchased ? "" : seat.seatNumber}
+                            {isSelected ? "" : seat.seatNumber}
                         </div>
                     );
                 })}
@@ -182,15 +161,7 @@ const EventDetail = () => {
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
 
-        // Check if any of the selected seats are already purchased
-        const someSeatsPurchased = selectedSeats.some((seat) =>
-            purchasedSeats.includes(seat.id)
-        );
-
-        if (someSeatsPurchased) {
-            toast.error("Some selected seats are already purchased.");
-            return;
-        }
+        const totalPrice = price * selectedQuantity;
 
         if (!token && !storageToken) {
             // if User is not authorized
@@ -198,15 +169,10 @@ const EventDetail = () => {
             return;
         } else {
             try {
-                const purchasedSeatIds = selectedSeats.map((seat) => seat.id);
-
-                console.log("Purchased Seats:", purchasedSeatIds);
-
                 const response = await axios.post(
                     `/api/tickets/${params.id}/purchase`,
                     {
                         quantity: selectedQuantity,
-                        purchasedSeats: purchasedSeatIds,
                     },
                     {
                         headers: {
@@ -214,41 +180,14 @@ const EventDetail = () => {
                         },
                     }
                 );
-
-                console.log("Purchase Response:", response.data);
-
-                // Update purchasedSeats state
-                setPurchasedSeats((prevPurchasedSeats) => [
-                    ...prevPurchasedSeats,
-                    ...purchasedSeatIds,
-                ]);
-
-                console.log("Updated Purchased Seats:", purchasedSeats);
-
-                // Update availableSeats state
-                setAvailableSeats((prevAvailableSeats) =>
-                    prevAvailableSeats.filter(
-                        (seat) => !purchasedSeatIds.includes(seat.id)
-                    )
-                );
-
-                console.log("Updated Available Seats:", availableSeats);
-
-                // Clear selected seats
-                setSelectedSeats([]);
-
-                // Update total price and selected quantity
-                setTotal(0);
-                setSelectedQuantity(1);
-
-                // Display success message and purchased seat IDs
                 toast.success(response.data.message);
-                toast.info(`Purchased Seats: ${purchasedSeatIds.join(", ")}`);
+                setTotal(totalPrice);
+                console.log("Purchase success:", response.data);
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
                 } else {
-                    toast.error("Error purchasing tickets");
+                    toast.error("You must be authorized to purchase tickets");
                     console.error("Purchase error:", error);
                 }
             }

@@ -5,6 +5,7 @@ import {
     updateTicket,
     deleteTicket,
     createTicket,
+    getPurchasedSeatsForEvent,
 } from "../models/ticketModel.js";
 import db from "../config/db.js";
 
@@ -53,13 +54,48 @@ export const purchaseTickets = async (req, res) => {
 
         const total_price = event.price * quantity;
 
-        await createTicket(id, userid, quantity, total_price);
+        // Get purchased seats for the event
+        const purchasedSeats = await getPurchasedSeatsForEvent(id);
 
-        //console.log(quantity);
+        // Generate new purchased seats
+        const newPurchasedSeats = [];
+        let seatId = Math.max(...purchasedSeats) + 1; // Get the next available seat ID
 
-        await db("events").where('id', id).decrement('quantity_available', quantity)
+        for (let i = 0; i < quantity; i++) {
+            newPurchasedSeats.push(seatId);
+            seatId++;
+        }
 
-        res.status(201).json({ message: "Congratulations! Tickets purchased successfully" });
+        // Create a new ticket using the existing createTicket function
+        const newTicket = await createTicket(
+            id, // eventid
+            userid,
+            quantity,
+            total_price,
+            JSON.stringify(newPurchasedSeats) // Include purchased seats
+        );
+
+        console.log("New Ticket: ", newTicket);
+
+        await db("purchased_seats").insert(
+            newPurchasedSeats.map((seatId) => ({
+                event_id: id,
+                seat_id: seatId,
+                user_id: userid,
+            }))
+        );
+
+        await db("events")
+            .where("id", id)
+            .decrement("quantity_available", newPurchasedSeats.length);
+
+        console.log("Generated Purchased Seats:", newPurchasedSeats);
+
+        res.status(201).json({
+            message: "Congratulations! Tickets purchased successfully",
+            purchasedSeats: newPurchasedSeats,
+            newTicket,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error purchasing tickets" });
