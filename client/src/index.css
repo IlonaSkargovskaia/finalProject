@@ -83,9 +83,22 @@ a.purple:hover, button.purple:hover{
     color: #fff;
 }
 
+.mycard{
+    transition: all .3s ease-in-out;
+}
+
+.mycard:hover{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 7px 3px, rgba(0, 0, 0, 0.14) 0px 0px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+    
+}
+
 a.card-title{
     text-decoration: none;
     font-weight: 800;
+}
+
+.card__img-bg{
+    background-color: #000;
 }
 
 .card{
@@ -374,7 +387,8 @@ table.org-table>thead{
 }
 
 .react-multi-carousel-track{
-    gap: 1rem
+    gap: 1rem;
+    padding: 1rem !important;
 }
 
 .location-links{

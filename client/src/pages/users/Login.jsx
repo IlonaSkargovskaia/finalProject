@@ -60,8 +60,10 @@ const Login = ({ setAuth }) => {
                     console.log('Role in Login: ', role)
 
                     if (role === "organizer") {
+                        console.log("Navigating to organizer dashboard");
                         navigate("/organizerdashboard");
                     } else {
+                        console.log("Navigating to user dashboard");
                         navigate("/userdashboard");
                     }
     

@@ -19,9 +19,9 @@ const OrganizerDashboard = ({ setAuth }) => {
         const storageToken = localStorage.getItem("token");
 
         try {
-            const decodedToken = jwt.decode(token || storageToken); // Decode the token
-
+            const decodedToken = jwt.decode(token || storageToken); 
             console.log("Decoded token in OrgDash:", decodedToken);
+
             if (decodedToken) {
                 const res = await fetch(`/dashboard/`, {
                     method: "GET",
@@ -33,8 +33,9 @@ const OrganizerDashboard = ({ setAuth }) => {
                 const data = await res.json();
                 console.log("data from OrganizerDash: ", data);
 
-                setUsername(data.username);
-                setRole(data.role);
+                const { username, role } = data;
+                setUsername(username);
+                setRole(role);
 
                 // Check if the toast has been shown before
                 const toastShown = localStorage.getItem("toastShown");
@@ -56,10 +57,6 @@ const OrganizerDashboard = ({ setAuth }) => {
                     );
 
                     const userEventsData = await userEventsResponse.json();
-                    console.log(
-                        "userEventsData from OrgDash: ",
-                        userEventsData
-                    );
                     setUserEvents(userEventsData);
                 } catch (error) {
                     console.log(error);
@@ -75,7 +72,7 @@ const OrganizerDashboard = ({ setAuth }) => {
         const decodedToken = jwt.decode(token || storageToken);
 
         if (decodedToken) {
-            getName(); // Call the getName function
+            getName(); 
 
             // Fetch events with search query
             const fetchUserEvents = async () => {
@@ -91,7 +88,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                     );
 
                     const userEventsData = await userEventsResponse.json();
-                    
+
                     setUserEvents(userEventsData);
                 } catch (error) {
                     console.log(error);
@@ -157,8 +154,8 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </Col>
                 <Col>
                     <Link to="#">
-                        <div className="card bg-dark text-white">
-                            Update your profile
+                        <div className="card bg-light">
+                            Update profile
                         </div>
                     </Link>
                 </Col>

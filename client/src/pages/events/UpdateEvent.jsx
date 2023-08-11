@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Col, Container, Form, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { AppContext } from "../../App";
 
 const UpdateEvent = () => {
     const { eventId } = useParams();
     //console.log("EventID from UpdEv: ", eventId);
+    const { token } = useContext(AppContext); // Use the context to get the token
+    const storageToken = localStorage.getItem("token"); // Get token from localStorage
+
     const [eventData, setEventData] = useState({
         title: "",
         description: "",
@@ -38,6 +42,7 @@ const UpdateEvent = () => {
     const [selectedLocation, setSelectedLocation] = useState(""); // State for selected location
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null); // State for selected image file
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -82,9 +87,47 @@ const UpdateEvent = () => {
         setEventData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleUpdateEvent = async () => {
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+    };
+
+    // try {
+    //     await axios.put(`/api/events/${eventId}`, eventData);
+    // } catch (error) {
+    //     console.error("Error updating event:", error);
+    // }
+
+    const handleUpdateEvent = async (e) => {
+        e.preventDefault();
         try {
-            await axios.put(`/api/events/${eventId}`, eventData);
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+
+            // Upload the image to AWS S3
+            const uploadResponse = await axios.post(`/upload`, formData, {
+                headers: {
+                    Authorization: token || storageToken,
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            const imageUrl = uploadResponse.data.result.url;
+            console.log("Image URL:", imageUrl);
+
+            // Update event data with the image URL
+            const updatedEventData = {
+                ...eventData,
+                image: imageUrl,
+            };
+            console.log("Updated Event Data:", updatedEventData);
+
+            // Make the PUT request to update the event with the new image URL
+            const updateResponse = await axios.put(
+                `/api/events/${eventId}`,
+                updatedEventData
+            );
+            console.log("Update Response:", updateResponse.data);
         } catch (error) {
             console.error("Error updating event:", error);
         }
@@ -95,7 +138,7 @@ const UpdateEvent = () => {
             <Container>
                 <h2>Update Event</h2>
 
-                <Form className="add__form">
+                <Form className="add__form" onSubmit={handleUpdateEvent}>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm="4">
                             Title:
@@ -120,6 +163,19 @@ const UpdateEvent = () => {
                                 name="description"
                                 value={description}
                                 onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3">
+                        <Form.Label column sm="4">
+                            Upload Image:
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="file"
+                                accept=".jpg,.jpeg,.png"
+                                onChange={handleFileChange}
                             />
                         </Col>
                     </Form.Group>
@@ -269,10 +325,24 @@ const UpdateEvent = () => {
                             />
                         </Col>
                     </Form.Group>
-
-                    <button onClick={handleUpdateEvent} className="btn purple">
-                        Update Event
-                    </button>
+                    <Row className="justify-content-between">
+                        <Col>
+                            <button
+                                onClick={handleUpdateEvent}
+                                className="btn purple"
+                            >
+                                Update Event
+                            </button>
+                        </Col>
+                        <Col className="text-end">
+                            <Link
+                                to="/organizerdashboard"
+                                className="btn btn-link "
+                            >
+                                Back to Organizer Dashboard
+                            </Link>
+                        </Col>
+                    </Row>
                 </Form>
             </Container>
         </div>

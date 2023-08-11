@@ -57,9 +57,9 @@ const CardEvent = ({ event }) => {
     }, [category_id, location_id]);
 
     return (
-        <Card className="h-100" >
+        <Card className="h-100 mycard" >
             <Card.Text className="card__category"> {categoryName}</Card.Text>
-            <Link to={`/events/${id}`}>
+            <Link to={`/events/${id}`} className="card__img-bg">
                 <Card.Img variant="top" src={image} />
             </Link>
             <Card.Body>
