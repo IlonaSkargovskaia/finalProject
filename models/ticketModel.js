@@ -48,6 +48,16 @@ export const createTicket = async (eventid, userid, quantity, total_price, seat)
     }
 };
 
+export const getUserPurchasedTickets = async (username) => {
+    try {
+        const purchasedTickets = await db.select("*").from("tickets").where("username", username);
+        return purchasedTickets;
+    } catch (error) {
+        console.log(error);
+        throw new Error({ error: "Error fetch tickets by user" });
+    }
+}
+
 
 export const addNewTicket = async (ticketInfo) => {
     try {

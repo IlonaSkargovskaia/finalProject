@@ -239,6 +239,7 @@ const EventDetail = () => {
                 console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
                 toast.success(response.data.message);
+                
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");

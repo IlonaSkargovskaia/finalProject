@@ -32,6 +32,21 @@ export const getTicketByIdController = async (req, res) => {
     }
 };
 
+export const getUserPurchasedTickets = async(req, res) => {
+    const userid = req.user;
+
+    try {
+        const purchasedTickets = await db.select("*").from("tickets").where("userid", userid);
+        
+        //console.log('PurchasedTickets from tick Controller: ', purchasedTickets);
+        
+        res.status(200).json(purchasedTickets);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Error fetching purchased tickets" });
+    }
+}
+
 export const purchaseTickets = async (req, res) => {
     try {
         const { id } = req.params;
@@ -44,9 +59,7 @@ export const purchaseTickets = async (req, res) => {
         console.log("selectedSeats:", selectedSeats);
 
         const event = await db("events").where("id", id).first();
-        
        
-
         if (!event) {
             return res.status(404).json({ message: "Event not found" });
         }
