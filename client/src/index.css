@@ -394,7 +394,7 @@ table.org-table>thead{
 .location-links{
     display: flex;
     gap: 4rem;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     
 }
