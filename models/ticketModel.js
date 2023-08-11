@@ -10,18 +10,6 @@ export const getAllTickets = async () => {
     }
 };
 
-export const getPurchasedSeatsForEvent = async (eventId) => {
-    try {
-        const purchasedSeats = await db("purchased_seats")
-            .select("seat_id")
-            .where("event_id", eventId);
-
-        return purchasedSeats.map((seat) => seat.seat_id);
-    } catch (error) {
-        throw error;
-    }
-};
-
 export const getTicketById = async (id) => {
     try {
         const ticket = await db
@@ -40,24 +28,26 @@ export const getTicketById = async (id) => {
     }
 };
 
-export const createTicket = async (eventid, userid, quantity, total_price, purchasedSeats) => {
-
+export const createTicket = async (eventid, userid, quantity, total_price, seat) => {
     try {
-        const createTicket = await db("tickets").insert({
+        const { row, seatNumber } = seat;
+        
+        const newTicket = await db("tickets").insert({
             eventid: eventid,
             userid: userid,
             quantity: quantity,
             total_price: total_price,
-            purchased_seats: purchasedSeats,
+            row: row,             // Inserting the 'row' value
+            seat_number: seatNumber // Inserting the 'seat_number' value
         }).returning("*");
-        // console.log(createTicket);
-        return createTicket[0];
+        
+        return newTicket[0];
     } catch (error) {
         console.log(error);
         throw new Error({ error: "Error adding new ticket to the database" });
     }
-
 };
+
 
 export const addNewTicket = async (ticketInfo) => {
     try {

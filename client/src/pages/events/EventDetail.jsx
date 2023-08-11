@@ -124,23 +124,27 @@ const EventDetail = () => {
     };
 
     const renderSeats = () => {
-        const rows = Math.ceil(total_places / 10); // Assuming 10 seats per row
+        const rows = Math.ceil(total_places / 10); //  10 seats per row
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
                     const seatIndexWithinTotalPlaces =
                         rowIndex * 10 + seatIndex;
+                    
                     const seat = {
                         id: seatIndexWithinTotalPlaces + 1,
                         row: rowIndex + 1,
                         seatNumber: seatIndex + 1,
                     };
+
                     const isSelected = selectedSeats.some(
                         (selectedSeat) => selectedSeat.id === seat.id
                     );
+
                     const isAvailable = availableSeats.some(
                         (availableSeat) => availableSeat.id === seat.id
                     );
+
                     const isPurchased = !isAvailable || isSelected;
     
                     const seatClassName = `seat ${
@@ -176,6 +180,7 @@ const EventDetail = () => {
                     `/api/tickets/${params.id}/purchase`,
                     {
                         quantity: selectedQuantity,
+                        selectedSeats: selectedSeats, 
                     },
                     {
                         headers: {
@@ -183,6 +188,11 @@ const EventDetail = () => {
                         },
                     }
                 );
+
+                console.log('Purchase API Response:', response.data);
+
+                const successMessage = response.data.message;
+                
     
                 // Update selected seats and available seats
                 setSelectedSeats((prevSelectedSeats) =>
@@ -191,6 +201,7 @@ const EventDetail = () => {
                         purchased: true,
                     }))
                 );
+
                 setAvailableSeats((prevAvailableSeats) =>
                     prevAvailableSeats.filter(
                         (seat) =>
@@ -200,8 +211,10 @@ const EventDetail = () => {
                     )
                 );
     
-                console.log('Selected seats:', selectedSeats); //after bought
+                console.log('Selected seats:', selectedSeats); //after bought 
+                // {id: 15, row: 2, seatNumber: 5}
                 toast.success(response.data.message);
+
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
