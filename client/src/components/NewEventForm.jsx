@@ -139,7 +139,7 @@ const NewEventForm = (props) => {
                     <Col sm="8">
                         <Form.Control
                             type="file"
-                            accept=".jpg,.jpeg,.png" // Add accepted file types here
+                            accept=".jpg,.jpeg,.png, .webp" // Add accepted file types here
                             onChange={(e) => handleFileChange(e)}
                         />
                     </Col>

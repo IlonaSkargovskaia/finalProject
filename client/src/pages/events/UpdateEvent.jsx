@@ -128,6 +128,7 @@ const UpdateEvent = () => {
                 updatedEventData
             );
             console.log("Update Response:", updateResponse.data);
+            alert('Event updated successfully!')
         } catch (error) {
             console.error("Error updating event:", error);
         }
@@ -174,7 +175,7 @@ const UpdateEvent = () => {
                         <Col sm="8">
                             <Form.Control
                                 type="file"
-                                accept=".jpg,.jpeg,.png"
+                                accept=".jpg,.jpeg,.png, .webp"
                                 onChange={handleFileChange}
                             />
                         </Col>
