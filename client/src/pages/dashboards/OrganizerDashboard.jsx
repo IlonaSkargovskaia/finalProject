@@ -238,6 +238,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 <button className="btn purple" onClick={(e) => logout(e)}>
                     Logout
                 </button>
+                
             </div>
         </Container>
     );
