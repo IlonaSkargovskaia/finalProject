@@ -17,6 +17,7 @@ import Register from "./pages/users/Register";
 import UpdateEvent from "./pages/events/UpdateEvent";
 import jwt from "jsonwebtoken";
 import EventsList from "./pages/events/EventsList";
+import Reviews from "./pages/reviews/Reviews";
 
 
 export const AppContext = createContext();
@@ -129,7 +130,7 @@ const App = () => {
                             element={<EventListPageCat />}
                         />
                         <Route path="/events/:id" element={<EventDetail />} />
-
+                        <Route path="/reviews" element={<Reviews />} />
                         <Route path="/create-event" element={<AddNewEvent />} />
 
                         <Route

@@ -16,6 +16,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LeafletMap from "../../components/LeafletMap";
 
+import {
+    FacebookShareButton,
+    WhatsappShareButton,
+    TelegramShareButton,
+    VKShareButton,
+    LinkedinShareButton,
+    FacebookIcon,
+    WhatsappIcon,
+    TelegramIcon,
+    LinkedinIcon,
+    VKIcon,
+} from "react-share";
+
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -169,16 +182,22 @@ const EventDetail = () => {
                                     {isSelected ? (
                                         // `You selected: Row ${seat.row}, Seat ${seat.seatNumber}`
                                         <span>
-                                            <CiMapPin style={{fontSize: '25px'}}/> 
+                                            <CiMapPin
+                                                style={{ fontSize: "25px" }}
+                                            />
                                             <br />
-                                            Row: {seat.row}<br />
+                                            Row: {seat.row}
+                                            <br />
                                             Seat: {seat.seatNumber}
                                         </span>
                                     ) : (
                                         <span>
-                                            <CiCircleRemove style={{fontSize: '25px'}}/> 
+                                            <CiCircleRemove
+                                                style={{ fontSize: "25px" }}
+                                            />
                                             <br />
-                                            Row: {seat.row}<br />
+                                            Row: {seat.row}
+                                            <br />
                                             Seat: {seat.seatNumber}
                                         </span>
                                     )}
@@ -241,7 +260,6 @@ const EventDetail = () => {
                 console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
                 toast.success(response.data.message);
-                
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
@@ -275,7 +293,45 @@ const EventDetail = () => {
                                 <Card.Img variant="left" src={image} />
                             </Card.Header>
                             <Card.Body>
-                                <Card.Title>{title}</Card.Title>
+                                <Row>
+                                    <Col>
+                                        <Card.Title>{title}</Card.Title>
+                                    </Col>
+
+                                    <Col className="text-end socials">
+                                        <FacebookShareButton
+                                            url={window.location.href}
+                                            quote={`Check out this awesome event: ${title}`}
+                                        >
+                                            <FacebookIcon size={32} round />
+                                        </FacebookShareButton>
+                                        <WhatsappShareButton
+                                            url={window.location.href}
+                                            title={`Check out this awesome event: ${title}`}
+                                        >
+                                            <WhatsappIcon size={32} round />
+                                        </WhatsappShareButton>
+                                        <TelegramShareButton
+                                            url={window.location.href}
+                                            title={`Check out this awesome event: ${title}`}
+                                        >
+                                            <TelegramIcon size={32} round />
+                                        </TelegramShareButton>
+                                        <LinkedinShareButton
+                                            url={window.location.href}
+                                            title={`Check out this awesome event: ${title}`}
+                                        >
+                                            <LinkedinIcon size={32} round />
+                                        </LinkedinShareButton>
+                                        <VKShareButton
+                                            url={window.location.href}
+                                            title={`Check out this awesome event: ${title}`}
+                                        >
+                                            <VKIcon size={32} round />
+                                        </VKShareButton>
+                                    </Col>
+                                </Row>
+
                                 <Card.Text className="detail__date">
                                     <CiCalendarDate />
                                     {hasDateTime
@@ -367,6 +423,16 @@ const EventDetail = () => {
                                 )}
                             </Card.Body>
                         </Card>
+                        <Card className="card__right interactive">
+                            <h4 style={{ textAlign: "center" }}>
+                                Interactive hall
+                            </h4>
+                            <div className="card__interactive-total">
+                                <h3>choose available places:</h3>
+                                <p>{total_places} places in total</p>
+                            </div>
+                            <div className="hall">{renderSeats()}</div>
+                        </Card>
                     </Col>
                     <Col lg={4} md={12} sm={12} className="mb-4">
                         <Card className="card__right">
@@ -379,20 +445,7 @@ const EventDetail = () => {
                         </Card>
                     </Col>
                 </Row>
-                <Row>
-                    <Col lg={8} md={12} sm={12}>
-                        <Card className="card__right interactive">
-                            <h4 style={{ textAlign: "center" }}>
-                                 Interactive hall
-                            </h4>
-                            <div className="card__interactive-total">
-                                <h3>choose available places:</h3>
-                                <p>{total_places} places in total</p>
-                            </div>
-                            <div className="hall">{renderSeats()}</div>
-                        </Card>
-                    </Col>
-                </Row>
+                
             </Container>
         </div>
     );

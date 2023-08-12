@@ -187,6 +187,10 @@ p.card__date{
     margin: 0;
 }
 
+.socials button{
+    margin: 0 3px;
+}
+
 /* INTERRACTIVE HALL */
 
 .seat-row{
@@ -231,12 +235,17 @@ p.card__date{
     font-size: 20px;
 }
 
+.interactive{
+    margin-top: 25px;
+}
+
 .interactive h4{
     background: rgb(123,30,162);
     background: linear-gradient(90deg, rgba(123,30,162,1) 0%, rgba(224,2,255,1) 100%);
     color: #fff;
     padding: 2rem;
     border-radius: 5px;
+
 }
 
 
@@ -400,7 +409,19 @@ table.org-table>thead{
 }
 
 
+.my-authform{
+    max-width: 500px !important;
+}
 
+.login-icon{
+    margin: 0 3px 3px 0;
+    font-size: 20px;
+}
+
+.register-icon{
+    margin: 0 0px 3px 0;
+    font-size: 20px;
+}
 
 
 .react-multi-carousel-track{
@@ -453,6 +474,8 @@ table.org-table>thead{
 
 .detail__date{
     color: #898a8c;
+    font-size: 14px;
+    margin: 16px 0;
 }
 
 .detail__price{
@@ -461,7 +484,53 @@ table.org-table>thead{
     font-weight: 700;
 }
 
+/* right categories */
+.categories{
+    padding: 20px;
+   
+}
 
+.categories li{
+    margin: 10px 0;
+}
+
+.categories a{
+    color: #7b1fa2;
+    transition: all .3s ease-in-out;
+}
+
+.categories a:hover{
+    text-decoration: underline !important;
+}
+
+/* reviews */
+.add-review{
+    padding: 20px ;
+    margin-bottom: 20px;
+}
+
+.review{
+    padding: 20px ;
+}
+
+.review h4{
+    margin-bottom: 0;
+    color:#7b1fa2;
+}
+.review p{
+    margin: 0;
+}
+.review-user{
+    color: #838383;
+}
+
+.review .review-comment{
+    background-color: #ececec;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 12px;
+}
 
 /* media */
 

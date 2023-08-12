@@ -1,0 +1,124 @@
+import React, { useState } from "react";
+import ReactStars from "react-rating-stars-component";
+import { Row, Col } from "react-bootstrap";
+
+const ReviewForm = () => {
+    const [reviewData, setReviewData] = useState({
+        eventid: "",
+        userid: "",
+        rating: "",
+        comment: "",
+    });
+
+    const ratingChanged = (newRating) => {
+        // Set the selected rating in the reviewData state
+        console.log(newRating);
+        setReviewData((prevData) => ({
+            ...prevData,
+            rating: newRating.toString(),
+        }));
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setReviewData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        // Send reviewData to API endpoint using fetch or Axios
+        try {
+            const response = await fetch("/api/reviews", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(reviewData),
+            });
+
+            console.log("New comment: ", response);
+        } catch (error) {
+            console.error("Error post review to the server:", error);
+        }
+    };
+
+    return (
+        <div className="card mt-5 add-review">
+            <h2>Add a Review</h2>
+            <form onSubmit={handleSubmit} className="">
+                <Row>
+                    <Col>
+                        <div className="mb-3">
+                            <label htmlFor="eventid" className="form-label">
+                                Event ID:
+                            </label>
+                            <input
+                                type="text"
+                                id="eventid"
+                                name="eventid"
+                                className="form-control"
+                                value={reviewData.eventid}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="mb-3">
+                            <label htmlFor="userid" className="form-label">
+                                User ID:
+                            </label>
+                            <input
+                                type="text"
+                                id="userid"
+                                name="userid"
+                                className="form-control"
+                                value={reviewData.userid}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="mb-3">
+                            <label className="form-label">Rating:</label>
+
+                            <ReactStars
+                                count={5}
+                                onChange={ratingChanged}
+                                size={24}
+                                isHalf={true}
+                                emptyIcon={<i className="far fa-star"></i>}
+                                halfIcon={
+                                    <i className="fa fa-star-half-alt"></i>
+                                }
+                                fullIcon={<i className="fa fa-star"></i>}
+                                activeColor="#ffd700"
+                            />
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div className="mb-3">
+                            <label htmlFor="comment" className="form-label">
+                                Comment:
+                            </label>
+                            <textarea
+                                id="comment"
+                                name="comment"
+                                className="form-control"
+                                value={reviewData.comment}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                    </Col>
+                </Row>
+
+                <button type="submit" className="btn purple">
+                    Submit review
+                </button>
+            </form>
+        </div>
+    );
+};
+
+export default ReviewForm;

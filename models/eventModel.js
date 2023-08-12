@@ -3,7 +3,7 @@ import db from '../config/db.js';
 
 export const getAllEvents = async () => {
     try {
-        const events = await db.select('*').from('events').orderBy('id', 'asc');;
+        const events = await db.select('*').from('events').orderBy('date', 'asc');;
         return events;
     } catch (error) {
         console.log('error: ', error);

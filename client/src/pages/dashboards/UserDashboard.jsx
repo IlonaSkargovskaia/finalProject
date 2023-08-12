@@ -123,10 +123,10 @@ const UserDashboard = ({ setAuth }) => {
                 <Col lg={8} md={12} sm={12} className="mb-4">
                     <div>
                         <Row>
-                            <Col>
+                            <Col md={8} sm={6}>
                                 <h2>Your orders on "TicketPRO":</h2>
                             </Col>
-                            <Col style={{textAlign: 'right'}}>
+                            <Col style={{ textAlign: "right" }}>
                                 <Link className="btn purple" to="/">
                                     Choose new event
                                 </Link>
@@ -141,10 +141,10 @@ const UserDashboard = ({ setAuth }) => {
                                     <tr>
                                         <th>Event</th>
                                         <th>Date</th>
-                                        <th>Total price</th>
                                         <th>Quantity</th>
                                         <th>Row</th>
                                         <th>Seat</th>
+                                        <th>Total price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,10 +154,10 @@ const UserDashboard = ({ setAuth }) => {
                                             <td>
                                                 {ticket.createdat.slice(0, 10)}
                                             </td>
-                                            <td>{ticket.total_price} ILS</td>
                                             <td>{ticket.quantity}</td>
                                             <td>{ticket.row}</td>
                                             <td>{ticket.seat_number}</td>
+                                            <td>{ticket.total_price} ILS</td>
                                         </tr>
                                     ))}
                                 </tbody>

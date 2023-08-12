@@ -70,7 +70,7 @@ const Register = ({ setAuth }) => {
                 />
             <h1 className="text-center">Register</h1>
             <Row className="justify-content-center text-center">
-            <form onSubmit={onSubmitForm} className="w-50">
+            <form onSubmit={onSubmitForm} className="my-authform">
                 <input
                     type="text"
                     name="username"
@@ -100,8 +100,8 @@ const Register = ({ setAuth }) => {
                 />
                 <button className="btn purple">Submit</button>
                 </form>
-                <span>Do you already have account?</span>
-                <Link to="/login">Login</Link>
+                <p style={{marginTop: '25px'}}>Do you already have account? <Link to="/login">Login</Link></p>
+                
             
             </Row>
         </Container>

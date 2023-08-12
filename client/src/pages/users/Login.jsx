@@ -81,7 +81,7 @@ const Login = ({ setAuth }) => {
     return (
         <div>
             <Container>
-                {/* <ToastContainer
+                <ToastContainer
                     position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -92,10 +92,10 @@ const Login = ({ setAuth }) => {
                     draggable
                     pauseOnHover
                     theme="dark"
-                /> */}
+                />
                 <h1 className="text-center">Login</h1>
                 <Row className="justify-content-center text-center">
-                    <form onSubmit={onSubmitForm} className="w-50">
+                    <form onSubmit={onSubmitForm} className="my-authform">
                         <input
                             type="email"
                             name="email"
@@ -116,8 +116,8 @@ const Login = ({ setAuth }) => {
                         />
                         <button className="btn purple">Submit</button>
                     </form>
-                    <span >Don't have an account yet?</span>
-                    <Link to="/register" >Register</Link>
+                    <p style={{marginTop: '25px'}}>Don't have an account yet?  <Link to="/register" >Register now</Link></p>
+                    
                 </Row>
             </Container>
         </div>

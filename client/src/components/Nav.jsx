@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import { CiSearch, CiUser } from "react-icons/ci";
+import { BsPersonCheck, BsPersonCircle, BsPersonPlus } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -69,8 +70,7 @@ const Navigation = ({
                     />
 
                     <Navbar.Collapse id="navbarScroll">
-                        <Nav.Link href="/events">All events </Nav.Link>
-                        {"  "}
+                        <Nav.Link href="/events" style={{marginRight: '15px'}}>All events </Nav.Link>
                         <Nav className="me-auto my-2 my-lg-0" navbarScroll>
                             <NavDropdown
                                 title="Categories"
@@ -155,7 +155,9 @@ const Navigation = ({
                                     Center
                                 </NavDropdown.Item>
                             </NavDropdown>
+                            <Nav.Link href="/reviews" >Reviews </Nav.Link>
                         </Nav>
+                        
 
                         <Form className="d-flex" onSubmit={handleSearchSubmit}>
                             <InputGroup className="search__top">
@@ -181,7 +183,7 @@ const Navigation = ({
                                             as={Link}
                                             to="/organizerdashboard"
                                         >
-                                            Profile
+                                            <BsPersonCircle className="login-icon"/> Profile
                                         </Button>
                                     ) : (
                                         <Button
@@ -189,7 +191,7 @@ const Navigation = ({
                                             as={Link}
                                             to="/userdashboard"
                                         >
-                                            Profile
+                                            <BsPersonCircle className="login-icon"/> Profile
                                         </Button>
                                     )}
 
@@ -209,7 +211,7 @@ const Navigation = ({
                                         as={Link}
                                         to="/login"
                                     >
-                                        Login
+                                        <BsPersonCheck className="login-icon"/>Login
                                     </Button>
                                     <div className="vr" />
                                     <Button
@@ -217,7 +219,7 @@ const Navigation = ({
                                         as={Link}
                                         to="/register"
                                     >
-                                        Sign up
+                                        <BsPersonPlus className="register-icon"/> Sign up
                                     </Button>
                                 </>
                             )}

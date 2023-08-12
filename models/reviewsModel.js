@@ -2,7 +2,7 @@ import db from '../config/db.js';
 
 export const getAllReviews = async () => {
     try {
-        const reviews = await db.select('*').from('reviews');
+        const reviews = await db.select('*').from('reviews').orderBy('id', 'desc');
         return reviews;
     } catch (error) {
         console.log(error);
