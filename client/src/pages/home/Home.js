@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import EventsByDate from "../events/EventsByDate";
 import { Col, Container, Row } from "react-bootstrap";
 import { CiLocationOn } from "react-icons/ci";
+import { GoCommentDiscussion } from "react-icons/go";
 import Header from "../../components/Header";
 import LastReviews from "../reviews/LastReviews";
 
@@ -17,13 +18,15 @@ const Home = () => {
 
             <section className="home__locations">
                 <Container>
-
                     <div className="choose-location-section">
                         <Row className="location-links">
                             <Col>
-                                <h3> <CiLocationOn /> Choose location: </h3>
+                                <h3>
+                                    {" "}
+                                    <CiLocationOn /> Choose location:{" "}
+                                </h3>
                             </Col>
-                            
+
                             <Col>
                                 <Link
                                     to="/location/1"
@@ -58,7 +61,18 @@ const Home = () => {
 
             <EventsNewest />
 
-            <Container style={{padding: '50px 0 30px 0'}}><LastReviews /></Container>
+            <Container style={{ padding: "50px 0 30px 0" }}>
+                <LastReviews />
+                <div style={{ textAlign: "center" }}>
+                    <Link
+                        to="/reviews"
+                        className="btn btn-outline-dark"
+                        style={{ maxWidth: "200px", margin: "auto" }}
+                    >
+                        <GoCommentDiscussion /> Add new comment
+                    </Link>
+                </div>
+            </Container>
         </div>
     );
 };

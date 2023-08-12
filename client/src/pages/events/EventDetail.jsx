@@ -28,6 +28,7 @@ import {
     LinkedinIcon,
     VKIcon,
 } from "react-share";
+import RightCategories from "../../components/RightCategories";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -448,6 +449,9 @@ const EventDetail = () => {
                             <Card.Text>{address} </Card.Text>
                             {/* Event ID: {id} */}
                             <LeafletMap id={id} />
+                        </Card>
+                        <Card className='mt-3'>
+                            <RightCategories />
                         </Card>
                     </Col>
                 </Row>

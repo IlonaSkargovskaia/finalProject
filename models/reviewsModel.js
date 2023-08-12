@@ -10,6 +10,19 @@ export const getAllReviews = async () => {
     }
 }
 
+export const getUserReviews = async (userid) => {
+    try {
+        const reviews = await db.select('*')
+            .from('reviews')
+            .where('userid', userid)
+            .orderBy('id', 'desc');
+        return reviews;
+    } catch (error) {
+        console.log(error);
+        throw new Error({ error: 'Error fetching user reviews from the database' });
+    }
+};
+
 export const getReviewById = async (id) => {
     try {
         const review = await

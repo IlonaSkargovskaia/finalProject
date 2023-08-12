@@ -1,4 +1,4 @@
-import { getAllReviews, addNewReview, getReviewById, updateReview, deleteReview} from "../models/reviewsModel.js";
+import { getAllReviews, addNewReview, getReviewById, updateReview, deleteReview, getUserReviews} from "../models/reviewsModel.js";
 
 export const getAllReviewsController = async (req, res) => {
     try {
@@ -9,6 +9,17 @@ export const getAllReviewsController = async (req, res) => {
         res.status(500).json({msg: 'Internal server error'})
     }
 }
+
+export const getUserReviewsController = async (req, res) => {
+    const { userid } = req.params;
+    try {
+        const reviews = await getUserReviews(userid);
+        res.status(200).json(reviews);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
+};
 
 export const getReviewByIdController = async (req,res) => {
     const {id} = req.params;

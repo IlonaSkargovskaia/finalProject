@@ -308,6 +308,15 @@ p.card__date{
     text-align: center;
 }
 
+.review-user-card{
+    padding: 20px;
+}
+
+.user-dash-prof{
+    background: #7b1ea2 !important;
+    color: #fff !important;
+}
+
 table.org-table>tbody, table.org-table>thead {
     vertical-align: middle;
 }
@@ -419,7 +428,7 @@ table.org-table>thead{
 }
 
 .register-icon{
-    margin: 0 0px 3px 0;
+    /* margin: 0 0px 3px 0; */
     font-size: 20px;
 }
 
@@ -494,6 +503,12 @@ table.org-table>thead{
     margin: 10px 0;
 }
 
+.categories svg{
+    font-size: 20px;
+    color: #7b1ea2;
+    margin-right: 10px;
+}
+
 .categories a{
     color: #7b1fa2;
     transition: all .3s ease-in-out;
@@ -501,6 +516,10 @@ table.org-table>thead{
 
 .categories a:hover{
     text-decoration: underline !important;
+}
+
+svg{
+    margin-bottom: 3px;
 }
 
 /* reviews */
@@ -511,6 +530,8 @@ table.org-table>thead{
 
 .review-image{
     max-width: 100%;
+    height: -webkit-fill-available;
+    object-fit: cover;
 }
 
 .review{

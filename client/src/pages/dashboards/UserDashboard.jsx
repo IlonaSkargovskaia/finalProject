@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { CiStar } from "react-icons/ci";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
@@ -11,7 +12,46 @@ const UserDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
     const [role, setRole] = useState("");
     const [purchasedTickets, setPurchasedTickets] = useState([]);
+    const [userReviews, setUserReviews] = useState([]);
     const { token } = useContext(AppContext);
+
+    const getUserReviews = async () => {
+        const storageToken = localStorage.getItem("token");
+        try {
+            const decodedToken = jwt.decode(token || storageToken);
+            const res = await fetch(`/api/reviews/user/${decodedToken.user}`, {
+                method: "GET",
+                headers: {
+                    Authorization: token || storageToken,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch user reviews");
+            }
+
+            const data = await res.json();
+
+            // Fetch event details for each review
+            const reviewsWithEventTitles = await Promise.all(
+                data.map(async (review) => {
+                    const eventDetailsRes = await fetch(
+                        `/api/events/${review.eventid}`
+                    );
+                    const eventDetails = await eventDetailsRes.json();
+                    return {
+                        ...review,
+                        eventTitle: eventDetails.title,
+                    };
+                })
+            );
+
+            console.log("Reviews in userDash: ", reviewsWithEventTitles);
+            setUserReviews(reviewsWithEventTitles); // Store the user's reviews
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const getName = async () => {
         const storageToken = localStorage.getItem("token");
@@ -86,6 +126,7 @@ const UserDashboard = ({ setAuth }) => {
     useEffect(() => {
         getName();
         getPurchasedTickets();
+        getUserReviews();
     }, []);
 
     const logout = (e) => {
@@ -113,8 +154,32 @@ const UserDashboard = ({ setAuth }) => {
             />
             <Row>
                 <Col lg={4} md={12} sm={12} className="mb-4">
-                    <h1>Hello, {username}</h1>
-                    <p>You authorized as "{role}"</p>
+                    <Card className="p-3 mb-3 user-dash-prof">
+                        <h1>Hello, {username}</h1>
+                        <p>You authorized as "{role}"</p>
+                    </Card>
+
+                    <h3> Your last comments: </h3>
+
+                    {userReviews.map((review, index) => {
+                        return (
+                            <Card className="my-3 review-user-card">
+                                <div className="d-flex gap-4">
+                                    <div>
+                                        Event: <b>{review.eventTitle}</b>
+                                    </div>
+                                    <div>Your rating: {review.rating} <CiStar /></div>
+                                </div>
+
+                                <hr />
+                                <div>
+                                    <i style={{ fontSize: "13px" }}>
+                                        {review.comment}
+                                    </i>
+                                </div>
+                            </Card>
+                        );
+                    })}
 
                     <button className="btn purple" onClick={(e) => logout(e)}>
                         Logout

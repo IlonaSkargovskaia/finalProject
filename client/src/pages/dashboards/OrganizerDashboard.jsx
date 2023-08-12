@@ -5,8 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
+import {AiOutlineDelete} from 'react-icons/ai';
+import {GoPencil} from 'react-icons/go';
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import { BsPlusCircle } from "react-icons/bs";
 
 const OrganizerDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
@@ -161,8 +164,8 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </Col>
                 <Col>
                     <Link to="/create-event">
-                        <div className="card bg-success text-white">
-                            Add new event
+                        <div className="btn btn-success">
+                        <BsPlusCircle />Add new event
                         </div>
                     </Link>
                 </Col>
@@ -172,7 +175,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 <h3>Your events:</h3>
                 <input
                     type="text"
-                    placeholder="Search by title..."
+                    placeholder="Search events by title..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="me-2 form-control"
@@ -211,19 +214,20 @@ const OrganizerDashboard = ({ setAuth }) => {
                                     <td>{event.quantity_available}</td>
                                     <td>
                                         <Link to={`/update-event/${event.id}`}>
-                                            <div className="card bg-warning update-btn">
-                                                Update event
+                                            <div className="btn btn-warning">
+                                                <GoPencil /> Update event
                                             </div>
                                         </Link>
                                     </td>
-                                    <td>
+                                    <td style={{textAlign: 'center'}}>
                                         <Button
-                                            className="card bg-danger text-white danger-btn"
+                                            className=" btn btn-danger "
                                             onClick={() =>
                                                 deleteEvent(event.id)
                                             }
+                                            
                                         >
-                                            Delete event
+                                            <AiOutlineDelete /> Delete event
                                         </Button>
                                     </td>
                                 </tr>
