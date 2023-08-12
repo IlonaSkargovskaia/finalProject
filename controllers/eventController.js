@@ -1,4 +1,4 @@
-import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId, getLastEvents } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId, getLastEvents, getAllAddresses } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
@@ -34,6 +34,23 @@ export const getEventByIDController = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' })
     }
 }
+
+export const getAddressController = async (req, res) => {
+    const { id } = req.params;
+    console.log('Event ID in controller:', id); 
+    try {
+        const event = await getEventByID(id);
+        if (!event) {
+            return res.status(404).json({ msg: 'Event not found' });
+        }
+        
+        res.status(200).json({ address: event.address });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 
 export const getEventsByDateController = async (req, res) => {
     const { date } = req.query;

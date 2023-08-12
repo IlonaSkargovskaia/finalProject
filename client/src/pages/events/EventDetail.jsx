@@ -14,6 +14,7 @@ import {
 import { AppContext } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LeafletMap from "../../components/LeafletMap";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -27,6 +28,7 @@ const EventDetail = () => {
     const { token } = useContext(AppContext);
 
     const {
+        id,
         title,
         description,
         date,
@@ -369,11 +371,11 @@ const EventDetail = () => {
                     <Col lg={4} md={12} sm={12} className="mb-4">
                         <Card className="card__right">
                             <Card.Text>
-                                {" "}
                                 <CiLocationOn /> <b>Location:</b>
                             </Card.Text>
-                            <Card.Text>{address}</Card.Text>
-                            <Card.Text>Israel</Card.Text>
+                            <Card.Text>{address} </Card.Text>
+                            {/* Event ID: {id} */}
+                            <LeafletMap id={id} />
                         </Card>
                     </Col>
                 </Row>

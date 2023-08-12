@@ -21,6 +21,16 @@ export const getLastEvents = async () => {
     }
 }
 
+export const getAllAddresses = async () => {
+    try {
+        const addresses = await db.select('address').from('events');
+        return addresses;
+    } catch (error) {
+        console.log('error: ', error);
+        throw new Error('Error fetching addresses from the database');
+    }
+}
+
 export const getEventByID = async (id) => {
     try {
         const event = await db.select('*').from('events').where({id}).first();

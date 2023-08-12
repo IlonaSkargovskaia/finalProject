@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllEventsController, addEventController, getEventByIDController,updateEventController, deleteEventController, getEventsByCategoryController, getEventsByLocationController,getEventsByDateController, getEventsByUserIdController, getlastEventsController } from '../controllers/eventController.js';
+import { getAllEventsController, addEventController, getEventByIDController,updateEventController, deleteEventController, getEventsByCategoryController, getEventsByLocationController,getEventsByDateController, getEventsByUserIdController, getlastEventsController, getAddressController } from '../controllers/eventController.js';
 import { authorization } from "../middleware/authorization.js";
 
 
@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/api/events', getAllEventsController);
 router.get('/api/events-last', getlastEventsController);
-
+router.get('/api/events/:id/address', getAddressController);
 router.post('/api/events', authorization, addEventController);
 router.get('/api/events/user/:user_id', authorization, getEventsByUserIdController);
 
