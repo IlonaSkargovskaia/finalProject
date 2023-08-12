@@ -5,6 +5,7 @@ import EventsByDate from "../events/EventsByDate";
 import { Col, Container, Row } from "react-bootstrap";
 import { CiLocationOn } from "react-icons/ci";
 import Header from "../../components/Header";
+import LastReviews from "../reviews/LastReviews";
 
 const Home = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
@@ -57,7 +58,7 @@ const Home = () => {
 
             <EventsNewest />
 
-
+            <Container style={{padding: '50px 0 30px 0'}}><LastReviews /></Container>
         </div>
     );
 };

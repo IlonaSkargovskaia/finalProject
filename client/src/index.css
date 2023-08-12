@@ -509,6 +509,10 @@ table.org-table>thead{
     margin-bottom: 20px;
 }
 
+.review-image{
+    max-width: 100%;
+}
+
 .review{
     padding: 20px ;
 }

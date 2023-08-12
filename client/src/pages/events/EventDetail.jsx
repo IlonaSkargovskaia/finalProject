@@ -341,8 +341,10 @@ const EventDetail = () => {
                                 <hr />
                                 <Card.Text>{description} </Card.Text>
 
-                                <h3>Buy tickets:</h3>
+                                
                                 {quantity_available > 0 ? (
+                                    <div>
+                                    <h3>Buy tickets:</h3>
                                     <Form className="purchase__form">
                                         <Form.Group>
                                             <Row className="align-items-center">
@@ -415,11 +417,15 @@ const EventDetail = () => {
                                             </Row>
                                         </Form.Group>
                                     </Form>
+                                    </div>
                                 ) : (
+                                    <>
+                                    <h3>SOLD OUT</h3>
                                     <p className="sold_out">
                                         No tickets available, choose another
                                         event
                                     </p>
+                                    </>
                                 )}
                             </Card.Body>
                         </Card>
