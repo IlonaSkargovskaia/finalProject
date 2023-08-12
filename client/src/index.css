@@ -534,6 +534,12 @@ svg{
     object-fit: cover;
 }
 
+.review-comment{
+    background: #faf4ec;
+    padding: 10px;
+    border-radius: 5px;
+}
+
 .review{
     padding: 20px ;
 }

@@ -163,7 +163,7 @@ const UserDashboard = ({ setAuth }) => {
 
                     {userReviews.map((review, index) => {
                         return (
-                            <Card className="my-3 review-user-card">
+                            <Card className="my-3 review-user-card" key={index}>
                                 <div className="d-flex gap-4">
                                     <div>
                                         Event: <b>{review.eventTitle}</b>
@@ -172,7 +172,7 @@ const UserDashboard = ({ setAuth }) => {
                                 </div>
 
                                 <hr />
-                                <div>
+                                <div className="review-comment">
                                     <i style={{ fontSize: "13px" }}>
                                         {review.comment}
                                     </i>
