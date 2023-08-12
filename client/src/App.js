@@ -18,6 +18,7 @@ import UpdateEvent from "./pages/events/UpdateEvent";
 import jwt from "jsonwebtoken";
 import EventsList from "./pages/events/EventsList";
 import Reviews from "./pages/reviews/Reviews";
+import ScrollButton from "./components/ScrollButton";
 
 
 export const AppContext = createContext();
@@ -28,6 +29,7 @@ const App = () => {
     const [username, setUsername] = useState("");
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [userRole, setUserRole] = useState(""); 
+    
 
     const navigate = useNavigate(); 
 
@@ -115,7 +117,6 @@ const App = () => {
                         userRole={userRole}
                     />
 
-                    
                 </header>
 
                 <main className="main">
@@ -182,8 +183,10 @@ const App = () => {
                         <Route path="/update-event/:eventId" element={<UpdateEvent />} />
                     </Routes>
                 </main>
+
                 <footer className="footer">
                     <Footer />
+                    <ScrollButton />
                 </footer>
             </div>
         </AppContext.Provider>
