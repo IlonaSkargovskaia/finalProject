@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { Row, Col } from "react-bootstrap";
+import QRCode from "react-qr-code";
 
 const ReviewForm = () => {
     const [reviewData, setReviewData] = useState({
@@ -43,8 +44,12 @@ const ReviewForm = () => {
     };
 
     return (
+        
         <div className="card mt-5 add-review">
+
+
             <h2>Add a Review</h2>
+
             <form onSubmit={handleSubmit} className="">
                 <Row>
                     <Col>

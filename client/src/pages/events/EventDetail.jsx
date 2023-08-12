@@ -29,6 +29,7 @@ import {
     VKIcon,
 } from "react-share";
 import RightCategories from "../../components/RightCategories";
+import QRCode from "react-qr-code";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -342,90 +343,96 @@ const EventDetail = () => {
                                 <hr />
                                 <Card.Text>{description} </Card.Text>
 
-                                
                                 {quantity_available > 0 ? (
                                     <div>
-                                    <h3>Buy tickets:</h3>
-                                    <Form className="purchase__form">
-                                        <Form.Group>
-                                            <Row className="align-items-center">
-                                                <Col>
-                                                    <Form.Label>
-                                                        Quantity:
-                                                    </Form.Label>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Select
-                                                        value={selectedQuantity}
-                                                        onChange={
-                                                            handleQuantityChange
-                                                        }
-                                                    >
-                                                        {Array.from(
-                                                            {
-                                                                length: quantity_available,
-                                                            },
-                                                            (_, index) => (
-                                                                <option
-                                                                    key={index}
-                                                                    value={
-                                                                        index +
-                                                                        1
-                                                                    }
-                                                                >
-                                                                    {index + 1}
-                                                                </option>
-                                                            )
-                                                        )}
-                                                    </Form.Select>
-                                                </Col>
+                                        <h3>Buy tickets:</h3>
+                                        <Form className="purchase__form">
+                                            <Form.Group>
+                                                <Row className="align-items-center">
+                                                    <Col>
+                                                        <Form.Label>
+                                                            Quantity:
+                                                        </Form.Label>
+                                                    </Col>
+                                                    <Col>
+                                                        <Form.Select
+                                                            value={
+                                                                selectedQuantity
+                                                            }
+                                                            onChange={
+                                                                handleQuantityChange
+                                                            }
+                                                        >
+                                                            {Array.from(
+                                                                {
+                                                                    length: quantity_available,
+                                                                },
+                                                                (_, index) => (
+                                                                    <option
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        value={
+                                                                            index +
+                                                                            1
+                                                                        }
+                                                                    >
+                                                                        {index +
+                                                                            1}
+                                                                    </option>
+                                                                )
+                                                            )}
+                                                        </Form.Select>
+                                                    </Col>
 
-                                                <Col>
-                                                    <Card.Text>
-                                                        <b>Tickets left:</b>{" "}
-                                                        {quantity_available ===
-                                                        0
-                                                            ? "SOLD OUT"
-                                                            : quantity_available}
-                                                    </Card.Text>
-                                                </Col>
-                                            </Row>
+                                                    <Col>
+                                                        <Card.Text>
+                                                            <b>Tickets left:</b>{" "}
+                                                            {quantity_available ===
+                                                            0
+                                                                ? "SOLD OUT"
+                                                                : quantity_available}
+                                                        </Card.Text>
+                                                    </Col>
+                                                </Row>
 
-                                            <hr />
+                                                <hr />
 
-                                            <Row className="align-items-center my-4">
-                                                <Col>
-                                                    <Card.Text className="detail__price">
-                                                        <CiWallet /> {price} -{" "}
-                                                        {max_price} ILS
-                                                    </Card.Text>
-                                                </Col>
-                                                <Col>
-                                                    <Card.Text>
-                                                        Amount: <br />{" "}
-                                                        <b>{total} ILS</b>
-                                                    </Card.Text>
-                                                </Col>
-                                                <Col>
-                                                    <Button
-                                                        className="purple"
-                                                        onClick={handlePurchase}
-                                                    >
-                                                        <CiShoppingCart /> Buy
-                                                        ticket
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </Form.Group>
-                                    </Form>
+                                                <Row className="align-items-center my-4">
+                                                    <Col>
+                                                        <Card.Text className="detail__price">
+                                                            <CiWallet /> {price}{" "}
+                                                            - {max_price} ILS
+                                                        </Card.Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Card.Text>
+                                                            Amount: <br />{" "}
+                                                            <b>{total} ILS</b>
+                                                        </Card.Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Button
+                                                            className="purple"
+                                                            onClick={
+                                                                handlePurchase
+                                                            }
+                                                        >
+                                                            <CiShoppingCart />{" "}
+                                                            Buy ticket
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </Form.Group>
+                                        </Form>
                                     </div>
                                 ) : (
                                     <>
-                                    <h3>SOLD OUT</h3>
-                                    <p className="sold_out">
-                                        No tickets available, choose another
-                                        event
-                                    </p>
+                                        <h3>SOLD OUT</h3>
+                                        <p className="sold_out">
+                                            No tickets available, choose another
+                                            event
+                                        </p>
                                     </>
                                 )}
                             </Card.Body>
@@ -447,15 +454,38 @@ const EventDetail = () => {
                                 <CiLocationOn /> <b>Location:</b>
                             </Card.Text>
                             <Card.Text>{address} </Card.Text>
-                            {/* Event ID: {id} */}
+
                             <LeafletMap id={id} />
                         </Card>
-                        <Card className='mt-3'>
+
+                        <Card className="p-3 mt-3">
+                            <h3>Test QR codes</h3>
+                            <div
+                                style={{
+                                    height: "auto",
+                                    margin: "0 auto",
+                                    maxWidth: 64,
+                                    width: "100%",
+                                }}
+                            >
+                                <QRCode
+                                    size={256}
+                                    style={{
+                                        height: "auto",
+                                        maxWidth: "100%",
+                                        width: "100%",
+                                    }}
+                                    value={"hey"}
+                                    viewBox={`0 0 256 256`}
+                                />
+                            </div>
+                        </Card>
+
+                        <Card className="mt-3">
                             <RightCategories />
                         </Card>
                     </Col>
                 </Row>
-                
             </Container>
         </div>
     );
