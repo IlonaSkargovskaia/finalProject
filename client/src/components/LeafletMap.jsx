@@ -30,9 +30,7 @@ const LeafletMap = () => {
     const getAddressCoordinates = async (address) => {
         try {
             const response = await axios.get(
-                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                    address
-                )}`
+                `https://geocode.maps.co/search?q=${address}}`
             );
 
             if (response.data && response.data.length > 0) {

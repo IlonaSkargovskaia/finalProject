@@ -9,3 +9,14 @@ export const getPlaceByUUID = async (uuid) => {
       throw new Error('Error fetching place from the database');
   }
 };
+
+export const insertQrCodeData = async (ticketUuid, qrCodeData) => {
+  try {
+      await db('places').where('ticket_uuid', ticketUuid).update({
+          qr_code_data: qrCodeData,
+      });
+  } catch (error) {
+      console.error(error);
+      throw new Error('Error inserting qr_code_data into the database');
+  }
+};

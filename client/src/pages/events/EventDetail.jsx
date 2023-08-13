@@ -31,7 +31,6 @@ import {
 import RightCategories from "../../components/RightCategories";
 import QRCode from "react-qr-code";
 import InterractiveHall from "./InterractiveHall";
-import { useNavigate } from "react-router-dom";
 import TicketDetails from "../../components/TicketDetails";
 
 const EventDetail = () => {
@@ -41,8 +40,6 @@ const EventDetail = () => {
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
     const [ticketData, setTicketData] = useState(null);
-
-    
 
     const params = useParams();
     const { token } = useContext(AppContext);
@@ -264,7 +261,7 @@ const EventDetail = () => {
                     )
                 );
 
-                console.log("Selected seats:", selectedSeats); //after bought
+                //console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
 
                 if (
@@ -273,12 +270,53 @@ const EventDetail = () => {
                 ) {
                     const ticketId = response.data.ticketData.ticketId;
                     console.log("ticket id in detail:", ticketId);
+                    // setTicketData(response.data.ticketData);
+                    const purchasedSeatsWithUuid = selectedSeats.map(seat => ({
+                        ...seat,
+                        ticket_uuid: ticketId, 
+                    }));
+                
                     setTicketData(response.data.ticketData);
-                    
-                } else {
-                    console.error("Ticket ID not found in API response");
-                }
+                    // Prepare data for qr_code_data
+                    const qrCodeData = {
+                        ticketId,
+                        eventId: id,
+                        eventTitle: title,
+                        seats: purchasedSeatsWithUuid.map(seat => ({
+                            seat: seat.seatNumber,
+                            row: seat.row,
+                        })),
+                    };
 
+                    const qrCodeString = JSON.stringify(qrCodeData);
+
+                    // Update selectedSeats state to include qrCodeData
+                    setSelectedSeats((prevSelectedSeats) =>
+                        prevSelectedSeats.map((seat) =>
+                            selectedSeats.some(
+                                (selectedSeat) => selectedSeat.id === seat.id
+                            )
+                                ? { ...seat, qrCodeData: qrCodeString }
+                                : seat
+                        )
+                    );
+                    try {
+                        await Promise.all(
+                            selectedSeats.map(async seat => {
+                                // Insert a new record into the "places" table with the provided qr_code_data
+                                await axios.post('/api/places', {
+                                    ticket_uuid: seat.ticket_uuid,
+                                    qr_code_data: qrCodeString,
+                                });
+                            })
+                        );
+                
+                        toast.success('Tickets purchased successfully');
+                    } catch (error) {
+                        console.error('Error inserting qr_code_data:', error);
+                        toast.error('Error inserting qr_code_data');
+                    }
+                }
                 // toast.success(successMessage);
             } catch (error) {
                 if (error.response.status === 400) {
@@ -290,8 +328,6 @@ const EventDetail = () => {
             }
         }
     };
-
-   
 
     return (
         <div>
@@ -463,12 +499,8 @@ const EventDetail = () => {
                             totalPlaces={total_places}
                             renderSeats={renderSeats}
                         />
-                        
-                        {ticketData && (
-                            <TicketDetails
-                                ticket={ticketData}
-                            />
-                        )}
+
+                        {ticketData && <TicketDetails ticket={ticketData} />}
                     </Col>
 
                     {/* right column */}
