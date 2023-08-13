@@ -30,7 +30,7 @@ const LeafletMap = () => {
     const getAddressCoordinates = async (address) => {
         try {
             const response = await axios.get(
-                `https://geocode.maps.co/search?q=${address}}`
+                `https://geocode.maps.co/search?q='${address}'}`
             );
 
             if (response.data && response.data.length > 0) {
