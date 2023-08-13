@@ -3,19 +3,21 @@ import { Button, Modal } from "react-bootstrap";
 import QRCode from "react-qr-code";
 
 const TicketDetails = ({ ticket }) => {
-    console.log(ticket);
+     console.log(ticket);
     const [showModal, setShowModal] = useState(true);
 
     const handleClose = () => {
         setShowModal(false);
     };
 
-    const qrCodeValue = JSON.stringify({
-        title: ticket.title,
-        row: ticket.seats[0].row,
-        seat: ticket.seats[0].seatNumber,
-        ticketId: ticket.ticketId
-    });
+    const generateQRCodeValue = (seat) => {
+        return JSON.stringify({
+            title: ticket.title,
+            row: seat.row,
+            seat: seat.seatNumber,
+            ticketId: ticket.ticketId,
+        });
+    };
     return (
         <Modal show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -27,12 +29,18 @@ const TicketDetails = ({ ticket }) => {
                     <div key={ticket.ticketId}>
                         <p>Ticket ID: {ticket.ticketId}</p>
                         <p>Quantity: {ticket.quantity}</p>
-                        <p>Row: {ticket.seats[0].row}</p>
-                        <p>Seat: {ticket.seats[0].seatNumber}</p>
                         <p>Amount: {ticket.total_price} ILS</p>
-                        <div style={{ maxWidth: "256px", margin: "0 auto" }}>
-                            <QRCode value={qrCodeValue} size={256} />
-                        </div>
+                        <hr />
+                        <p>show the code to the security guard at the entrance to the event</p>
+                        {ticket.seats.map((seat) => (
+                            <div key={seat.id} className="mb-4">
+                                <h5>{ticket.title}</h5>
+                                <p>Row: {seat.row}, Seat: {seat.seatNumber}</p>
+                                <div style={{ maxWidth: "256px", margin: "0 auto" }}>
+                                    <QRCode value={generateQRCodeValue(seat)} size={256} />
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
             </Modal.Body>

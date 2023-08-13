@@ -240,8 +240,7 @@ const EventDetail = () => {
                     }
                 );
 
-                console.log("Purchase API Response:", response.data);
-
+                // console.log("Purchase API Response:", response.data);
                 const successMessage = response.data.message;
 
                 // Update selected seats and available seats
@@ -284,8 +283,7 @@ const EventDetail = () => {
                         ],
                     }));
 
-                    console.log(
-                        "Setting ticketData:",
+                    console.log("Setting ticketData:",
                         response.data.ticketData
                     );
                     setTicketData(response.data.ticketData);
@@ -294,7 +292,7 @@ const EventDetail = () => {
                     console.error("Ticket ID not found in API response");
                 }
 
-                // toast.success(successMessage);
+                 toast.success(successMessage);
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
@@ -514,28 +512,6 @@ const EventDetail = () => {
                             <LeafletMap id={id} />
                         </Card>
 
-                        <Card className="p-3 mt-3">
-                            <h3>Test QR codes</h3>
-                            <div
-                                style={{
-                                    height: "auto",
-                                    margin: "0 auto",
-                                    maxWidth: 64,
-                                    width: "100%",
-                                }}
-                            >
-                                <QRCode
-                                    size={256}
-                                    style={{
-                                        height: "auto",
-                                        maxWidth: "100%",
-                                        width: "100%",
-                                    }}
-                                    value={"hey"}
-                                    viewBox={`0 0 256 256`}
-                                />
-                            </div>
-                        </Card>
 
                         <Card className="mt-3">
                             <RightCategories />

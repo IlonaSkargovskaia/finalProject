@@ -522,6 +522,10 @@ svg{
     margin-bottom: 3px;
 }
 
+.modal.show .modal-dialog{
+    top: 15%;
+}
+
 /* reviews */
 .add-review{
     padding: 20px ;
