@@ -28,7 +28,7 @@ export const getTicketById = async (id) => {
     }
 };
 
-export const createTicket = async (eventid, userid, quantity, total_price, seat) => {
+export const createTicket = async (eventid, userid, quantity, total_price, seat, qrCodeData) => {
     try {
         const { row, seatNumber } = seat;
         
@@ -37,8 +37,9 @@ export const createTicket = async (eventid, userid, quantity, total_price, seat)
             userid: userid,
             quantity: quantity,
             total_price: total_price,
-            row: row,             // Inserting the 'row' value
-            seat_number: seatNumber // Inserting the 'seat_number' value
+            row: row,             
+            seat_number: seatNumber,
+            qr_code_data:  qrCodeData 
         }).returning("*");
         
         return newTicket[0];

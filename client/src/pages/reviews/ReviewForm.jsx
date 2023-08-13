@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { Row, Col } from "react-bootstrap";
 import QRCode from "react-qr-code";
@@ -10,6 +10,22 @@ const ReviewForm = () => {
         rating: "",
         comment: "",
     });
+
+    const [eventList, setEventList] = useState([]); 
+
+    useEffect(() => {
+        // Fetch the list of events from the server and populate eventList state
+        async function fetchEvents() {
+            try {
+                const response = await fetch("/api/events"); 
+                const eventData = await response.json();
+                setEventList(eventData);
+            } catch (error) {
+                console.error("Error fetching events:", error);
+            }
+        }
+        fetchEvents();
+    }, []);
 
     const ratingChanged = (newRating) => {
         // Set the selected rating in the reviewData state
@@ -55,16 +71,22 @@ const ReviewForm = () => {
                     <Col>
                         <div className="mb-3">
                             <label htmlFor="eventid" className="form-label">
-                                Event ID:
+                                Event:
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 id="eventid"
                                 name="eventid"
                                 className="form-control"
                                 value={reviewData.eventid}
                                 onChange={handleInputChange}
-                            />
+                            >
+                                <option value="">Select an event</option>
+                                {eventList.map((event) => (
+                                    <option key={event.id} value={event.id}>
+                                        {event.title}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </Col>
                     <Col>

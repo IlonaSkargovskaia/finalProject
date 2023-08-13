@@ -32,20 +32,23 @@ export const getTicketByIdController = async (req, res) => {
     }
 };
 
-export const getUserPurchasedTickets = async(req, res) => {
+export const getUserPurchasedTickets = async (req, res) => {
     const userid = req.user;
 
     try {
-        const purchasedTickets = await db.select("*").from("tickets").where("userid", userid);
-        
+        const purchasedTickets = await db
+            .select("*")
+            .from("tickets")
+            .where("userid", userid).orderBy('id', 'desc');
+
         //console.log('PurchasedTickets from tick Controller: ', purchasedTickets);
-        
+
         res.status(200).json(purchasedTickets);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Error fetching purchased tickets" });
     }
-}
+};
 
 export const purchaseTickets = async (req, res) => {
     try {
@@ -59,7 +62,7 @@ export const purchaseTickets = async (req, res) => {
         console.log("selectedSeats:", selectedSeats);
 
         const event = await db("events").where("id", id).first();
-       
+
         if (!event) {
             return res.status(404).json({ message: "Event not found" });
         }
@@ -72,22 +75,67 @@ export const purchaseTickets = async (req, res) => {
 
         const total_price = event.price * quantity;
 
+        //QR CODES!!!!
+        const ticketData = {
+            event_id: event.id,
+            user_id: userid,
+            quantity,
+            total_price,
+            seats: selectedSeats,
+        };
+
+        const qrCodeData = JSON.stringify(ticketData);
+
         const ticketIds = [];
-        
+
         for (const seat of selectedSeats) {
-            const ticket = await createTicket(event.id, userid, quantity, total_price, seat);
+            const ticket = await createTicket(
+                event.id,
+                userid,
+                quantity,
+                total_price,
+                seat,
+                qrCodeData
+            );
             ticketIds.push(ticket.id);
         }
 
-        await db("events").where('id', id).decrement('quantity_available', quantity)
+        await db("events")
+            .where("id", id)
+            .decrement("quantity_available", quantity);
 
-        res.status(201).json({ message: "Congratulations! Tickets purchased successfully" });
+        res.status(201).json({
+            message: "Congratulations! Tickets purchased successfully",
+            ticketData: ticketData,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error purchasing tickets" });
     }
 };
 
+export const getTicketQRCodeDataController = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const ticket = await getTicketById(id);
+
+        if (!ticket) {
+            return res.status(404).json({ message: "Ticket not found" });
+        }
+
+        if (!ticket.qr_code_data) {
+            return res
+                .status(404)
+                .json({ message: "QR code data not found for this ticket" });
+        }
+
+        res.status(200).json({ qrCodeData: ticket.qr_code_data });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error fetching QR code data" });
+    }
+};
 
 export const addNewTicketController = async (req, res) => {
     const { userid, eventid, quantity, totalprice } = req.body;
