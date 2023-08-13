@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { Row, Col } from "react-bootstrap";
-import QRCode from "react-qr-code";
+import { ToastContainer, toast } from "react-toastify";
 
 const ReviewForm = () => {
     const [reviewData, setReviewData] = useState({
@@ -11,13 +11,13 @@ const ReviewForm = () => {
         comment: "",
     });
 
-    const [eventList, setEventList] = useState([]); 
+    const [eventList, setEventList] = useState([]);
 
     useEffect(() => {
         // Fetch the list of events from the server and populate eventList state
         async function fetchEvents() {
             try {
-                const response = await fetch("/api/events"); 
+                const response = await fetch("/api/events");
                 const eventData = await response.json();
                 setEventList(eventData);
             } catch (error) {
@@ -54,15 +54,26 @@ const ReviewForm = () => {
             });
 
             console.log("New comment: ", response);
+            toast.success('Comment added successfully');
         } catch (error) {
             console.error("Error post review to the server:", error);
         }
     };
 
     return (
-        
         <div className="card mt-5 add-review">
-
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
 
             <h2>Add a Review</h2>
 

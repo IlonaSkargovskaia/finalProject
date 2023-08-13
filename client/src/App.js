@@ -54,15 +54,15 @@ const App = () => {
             if (data === true) {
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(storageToken);
-    
+    console.log('decodedtoken in app', decodedToken);
                 if (decodedToken) {
                     const { role } = decodedToken;
     
-                    setUserRole(role);
+                    setUserRole(role.trim());
 
                     console.log('Role from App: ', role)
     
-                    // if (role === "organizer") {
+                    // if (role.trim() === "organizer") {
                     //     navigate("/organizerdashboard");
                     // } else {
                     //     navigate("/userdashboard");
@@ -106,7 +106,7 @@ const App = () => {
     
 
     return (
-        <AppContext.Provider value={{ token, setToken, setUserRole }}>
+        <AppContext.Provider value={{ token, setToken, setUserRole,userRole }}>
             <div className="wrapper">
                 <header>
                     <Navigation
@@ -151,7 +151,7 @@ const App = () => {
                         <Route
                             path="/userdashboard"
                             element={
-                                token ? (
+                                token && userRole === 'user' ? (
                                     <UserDashboard setAuth={setAuth} />
                                 ) : (
                                     <Navigate to="/login" />
@@ -164,7 +164,7 @@ const App = () => {
                                 !token ? (
                                     <Login setAuth={setAuth}/>
                                 ) : (
-                                    <Navigate to="/userdashboard" />
+                                    <Navigate to="/" />
                                 )
                             }
                         />

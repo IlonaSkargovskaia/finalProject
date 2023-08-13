@@ -15,10 +15,10 @@ const Login = ({ setAuth }) => {
 
     const { email, password } = inputs;
 
-    const { setToken } = useContext(AppContext);
+    const { setToken,setUserRole } = useContext(AppContext);
     const navigate = useNavigate(); 
 
-    const [userRole, setUserRole] = useState(""); 
+    // const [userRole, setUserRole] = useState(""); 
 
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -40,7 +40,7 @@ const Login = ({ setAuth }) => {
 
             const data = await res.json();
            
-            console.log('Data in Login:', data);
+            //console.log('Data in Login:', data);
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
@@ -48,24 +48,24 @@ const Login = ({ setAuth }) => {
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(data.token);
                 
-                console.log('Decoded token in Login:',decodedToken);
+                //console.log('Decoded token in Login:',decodedToken);
                 
                 if (decodedToken) {
                     const { role } = decodedToken;
     
                     setToken(data.token);
                     setAuth(true);
-                    setUserRole(role);
+                    setUserRole(role.trim());
                     
                     console.log('Role in Login: ', role)
 
-                    if (role === "organizer") {
-                        console.log("Navigating to organizer dashboard");
-                        navigate("/organizerdashboard");
-                    } else {
-                        console.log("Navigating to user dashboard");
-                        navigate("/userdashboard");
-                    }
+                    // if (role.trim() === "organizer") {
+                    //     console.log("Navigating to organizer dashboard");
+                    //     navigate("/organizerdashboard");
+                    // } else {
+                    //     console.log("Navigating to user dashboard");
+                    //     navigate("/userdashboard");
+                    // }
     
                 }
             } else {

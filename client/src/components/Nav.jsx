@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { BsPersonCheck, BsPersonCircle, BsPersonPlus } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-
+import { AppContext } from "../App";
 import {
     Navbar,
     NavDropdown,
@@ -27,6 +27,7 @@ const Navigation = ({
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    
 
     const navigate = useNavigate();
 
