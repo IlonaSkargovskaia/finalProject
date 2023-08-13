@@ -41,8 +41,6 @@ const EventDetail = () => {
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
     const [ticketData, setTicketData] = useState(null);
 
-    
-
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -272,10 +270,26 @@ const EventDetail = () => {
                 ) {
                     const ticketId = response.data.ticketData.ticketId;
                     console.log("ticket id in detail:", ticketId);
+
+                    setTicketData((prevTicketData) => ({
+                        ...prevTicketData,
+                        purchasedTickets: [
+                            ...(prevTicketData?.purchasedTickets || []), // Handle the initial null case
+                            {
+                                uuid_id: ticketId,
+                                title: title,
+                                row: selectedSeats[0].row,
+                                seat: selectedSeats[0].seatNumber,
+                            },
+                        ],
+                    }));
+
+                    console.log(
+                        "Setting ticketData:",
+                        response.data.ticketData
+                    );
                     setTicketData(response.data.ticketData);
 
-                    
-                    
                 } else {
                     console.error("Ticket ID not found in API response");
                 }
@@ -291,8 +305,6 @@ const EventDetail = () => {
             }
         }
     };
-
-   
 
     return (
         <div>
@@ -464,11 +476,30 @@ const EventDetail = () => {
                             totalPlaces={total_places}
                             renderSeats={renderSeats}
                         />
-                        
-                        {ticketData && (
-                            <TicketDetails
-                                ticket={ticketData}
-                            />
+
+                        {ticketData && <TicketDetails ticket={ticketData} />}
+
+                        {ticketData && ticketData.purchasedTickets && (
+                            <div className="mt-4">
+                                <h3>QR Codes for Purchased Tickets</h3>
+                                {ticketData.purchasedTickets.map((ticket) => (
+                                    <div key={ticket.id} className="mb-4">
+                                        <h5>{ticket.title}</h5>
+                                        <p>UUID: {ticket.uuid_id}</p>
+
+                                        <p>
+                                            Row: {ticket.row}, Seat:{" "}
+                                            {ticket.seat}
+                                        </p>
+                                        <div style={{ maxWidth: "256px" }}>
+                                            <QRCode
+                                                value={ticket.uuid_id}
+                                                size={256}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </Col>
 
