@@ -7,8 +7,8 @@ import { AppContext } from "../../App";
 const UpdateEvent = () => {
     const { eventId } = useParams();
     //console.log("EventID from UpdEv: ", eventId);
-    const { token } = useContext(AppContext); // Use the context to get the token
-    const storageToken = localStorage.getItem("token"); // Get token from localStorage
+    const { token, isAuth } = useContext(AppContext); 
+    const storageToken = localStorage.getItem("token"); 
 
     const [eventData, setEventData] = useState({
         title: "",
@@ -43,6 +43,10 @@ const UpdateEvent = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedFile, setSelectedFile] = useState(null); // State for selected image file
+
+    useEffect(() => {
+        isAuth()
+    },[])
 
     useEffect(() => {
         const fetchEvent = async () => {

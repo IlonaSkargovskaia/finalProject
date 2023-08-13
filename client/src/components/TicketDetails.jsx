@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import QrCode from 'react-qr-code';
+import React, {useState} from "react";
+import { Card, Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const TicketDetails = ({ seat, event, token }) => {
-    const [ticketData, setTicketData] = useState(null);
+const TicketDetails = ({ ticket }) => {
+    
+    const [showModal, setShowModal] = useState(true);
 
-    useEffect(() => {
-        // Fetch QR code data from the backend
-        const fetchQRCodeData = async () => {
-            try {
-                const response = await axios.get(`/api/tickets/${event.id}/qrcode`, {
-                    headers: {
-                        Authorization: token,
-                    },
-                });
-                console.log('QR Code Data:', response.data.qrCodeData); 
-                setTicketData(response.data.qrCodeData);
-            } catch (error) {
-                console.error('Error fetching QR code data:', error);
-            }
-        };
-        
-        fetchQRCodeData();
-    }, [seat.id, token]);
-
+    const handleClose = () => {
+        setShowModal(false);
+    };
     return (
-        <div>
-            <h3>Ticket Details</h3>
-            {ticketData && (
-                <div>
-                    <h4>QR Code</h4>
-                    <QrCode value={ticketData.qrCodeData} />
-                    <p>Event ID: {event.id}</p>
-                    <p>Event Title: {event.title}</p>
-                </div>
-            )}
-        </div>
+        <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Ticket Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {/* Render ticket details using ticket */}
+                {/* For example: */}
+                {ticket && (
+                    <div>
+                        Ticket ID: {ticket.ticketId}
+                        {/* ... other ticket details ... */}
+                    </div>
+                )}
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 

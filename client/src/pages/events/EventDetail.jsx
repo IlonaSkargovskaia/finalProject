@@ -30,6 +30,9 @@ import {
 } from "react-share";
 import RightCategories from "../../components/RightCategories";
 import QRCode from "react-qr-code";
+import InterractiveHall from "./InterractiveHall";
+import { useNavigate } from "react-router-dom";
+import TicketDetails from "../../components/TicketDetails";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -37,7 +40,9 @@ const EventDetail = () => {
     const [total, setTotal] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
-    const [purchasedSeats, setPurchasedSeats] = useState([]); // Seats purchased by the user
+    const [ticketData, setTicketData] = useState(null);
+
+    
 
     const params = useParams();
     const { token } = useContext(AppContext);
@@ -261,7 +266,20 @@ const EventDetail = () => {
 
                 console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
-                toast.success(response.data.message);
+
+                if (
+                    response.data.ticketData &&
+                    response.data.ticketData.ticketId
+                ) {
+                    const ticketId = response.data.ticketData.ticketId;
+                    console.log("ticket id in detail:", ticketId);
+                    setTicketData(response.data.ticketData);
+                    
+                } else {
+                    console.error("Ticket ID not found in API response");
+                }
+
+                // toast.success(successMessage);
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
@@ -272,6 +290,8 @@ const EventDetail = () => {
             }
         }
     };
+
+   
 
     return (
         <div>
@@ -437,17 +457,21 @@ const EventDetail = () => {
                                 )}
                             </Card.Body>
                         </Card>
-                        <Card className="card__right interactive">
-                            <h4 style={{ textAlign: "center" }}>
-                                Interactive hall
-                            </h4>
-                            <div className="card__interactive-total">
-                                <h3>choose available places:</h3>
-                                <p>{total_places} places in total</p>
-                            </div>
-                            <div className="hall">{renderSeats()}</div>
-                        </Card>
+
+                        {/* Hall */}
+                        <InterractiveHall
+                            totalPlaces={total_places}
+                            renderSeats={renderSeats}
+                        />
+                        
+                        {ticketData && (
+                            <TicketDetails
+                                ticket={ticketData}
+                            />
+                        )}
                     </Col>
+
+                    {/* right column */}
                     <Col lg={4} md={12} sm={12} className="mb-4">
                         <Card className="card__right">
                             <Card.Text>

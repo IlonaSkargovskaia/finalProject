@@ -19,9 +19,13 @@ import jwt from "jsonwebtoken";
 import EventsList from "./pages/events/EventsList";
 import Reviews from "./pages/reviews/Reviews";
 import ScrollButton from "./components/ScrollButton";
+import { toast } from "react-toastify";
+import TicketDetails from "./components/TicketDetails";
 
 
 export const AppContext = createContext();
+
+
 
 const App = () => {
     const [loading, setLoading] = useState(true);
@@ -29,7 +33,7 @@ const App = () => {
     const [username, setUsername] = useState("");
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [userRole, setUserRole] = useState(""); 
-    
+    const [isVerify, setIsVerify] = useState(false);
 
     const navigate = useNavigate(); 
 
@@ -49,25 +53,25 @@ const App = () => {
             });
     
             const data = await res.json();
-            console.log(data); //true from verify
+            //console.log(data); //true from verify
+
     
             if (data === true) {
+
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(storageToken);
-    console.log('decodedtoken in app', decodedToken);
                 if (decodedToken) {
                     const { role } = decodedToken;
     
                     setUserRole(role.trim());
 
                     console.log('Role from App: ', role)
-    
-                    // if (role.trim() === "organizer") {
-                    //     navigate("/organizerdashboard");
-                    // } else {
-                    //     navigate("/userdashboard");
-                    // }
+                    setIsVerify(true);
                 }
+            }
+            else {
+                setIsVerify(false);
+                toast.error('You need to log in again');
             }
         } catch (error) {
             console.log(error);
@@ -106,7 +110,7 @@ const App = () => {
     
 
     return (
-        <AppContext.Provider value={{ token, setToken, setUserRole,userRole }}>
+        <AppContext.Provider value={{ token, setToken, setUserRole,userRole,isAuth, isVerify, setIsVerify}}>
             <div className="wrapper">
                 <header>
                     <Navigation
@@ -133,7 +137,7 @@ const App = () => {
                         <Route path="/events/:id" element={<EventDetail />} />
                         <Route path="/reviews" element={<Reviews />} />
                         <Route path="/create-event" element={<AddNewEvent />} />
-
+                        <Route path="/ticket/:ticketId" element={<TicketDetails />} />
                         <Route
                             path="/search"
                             element={<SearchResults events={events} />}

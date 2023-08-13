@@ -84,7 +84,7 @@ const UserDashboard = ({ setAuth }) => {
         const storageToken = localStorage.getItem("token");
         try {
             const decodedToken = jwt.decode(token || storageToken);
-            console.log("Decoded token in UserDash:", decodedToken);
+            //console.log("Decoded token in UserDash:", decodedToken);
 
             const res = await fetch(`/api/tickets/user/${decodedToken.user}`, {
                 method: "GET",
@@ -98,18 +98,30 @@ const UserDashboard = ({ setAuth }) => {
             }
 
             const data = await res.json();
-            console.log("Data in userDash: ", data);
+            //console.log("Data in userDash: ", data);
 
             if (Array.isArray(data)) {
                 const updatedTickets = await Promise.all(
                     data.map(async (ticket) => {
+                        console.log(ticket);
                         const eventDetails = await fetch(
                             `/api/events/${ticket.eventid}`
                         );
                         const eventData = await eventDetails.json();
+
+                        const placeDetailsRes = await fetch(
+                            `/api/places/${ticket.uuid_id}`
+                        );
+                        //console.log("Place Details Response:", placeDetailsRes);
+
+                        const placeData = await placeDetailsRes.json();
+                        //console.log("Place Data:", placeData);
+
                         const updatedTicket = {
                             ...ticket,
                             eventTitle: eventData.title,
+                            row: placeData.row,
+                            seat: placeData.seat,
                         };
                         return updatedTicket;
                     })
@@ -163,12 +175,17 @@ const UserDashboard = ({ setAuth }) => {
 
                     {userReviews.map((review, index) => {
                         return (
-                            <Card className="my-3 review-user-card" key={index}>
+                            <Card
+                                className="my-3 review-user-card"
+                                key={review.id}
+                            >
                                 <div className="d-flex gap-4">
                                     <div>
                                         Event: <b>{review.eventTitle}</b>
                                     </div>
-                                    <div>Your rating: {review.rating} <CiStar /></div>
+                                    <div>
+                                        Your rating: {review.rating} <CiStar />
+                                    </div>
                                 </div>
 
                                 <hr />
@@ -221,7 +238,7 @@ const UserDashboard = ({ setAuth }) => {
                                             </td>
                                             <td>{ticket.quantity}</td>
                                             <td>{ticket.row}</td>
-                                            <td>{ticket.seat_number}</td>
+                                            <td>{ticket.seat}</td>
                                             <td>{ticket.total_price} ILS</td>
                                         </tr>
                                     ))}

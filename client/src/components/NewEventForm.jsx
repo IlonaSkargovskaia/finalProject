@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { AppContext } from "../App";
@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const NewEventForm = (props) => {
     const { locations, categories } = props;
-    const { token } = useContext(AppContext);
+    const { token ,isAuth} = useContext(AppContext);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -20,6 +20,10 @@ const NewEventForm = (props) => {
     const [maxPrice, setMaxPrice] = useState("");
     const [totalPlaces, setTotalPlaces] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
+
+    useEffect(() => {
+        isAuth()
+    },[])
 
     const handleSubmit = async (e) => {
         e.preventDefault();

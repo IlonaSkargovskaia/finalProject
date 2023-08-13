@@ -16,7 +16,11 @@ const OrganizerDashboard = ({ setAuth }) => {
     const [userEvents, setUserEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
-    const { token } = useContext(AppContext);
+    const { token, isAuth } = useContext(AppContext);
+
+    useEffect(() => {
+        isAuth()
+    },[])
 
     const getName = async () => {
         const storageToken = localStorage.getItem("token");

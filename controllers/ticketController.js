@@ -7,6 +7,7 @@ import {
     createTicket,
 } from "../models/ticketModel.js";
 import db from "../config/db.js";
+import { v4 as uuidv4 } from "uuid";
 
 export const getAllTicketsController = async (req, res) => {
     try {
@@ -39,7 +40,7 @@ export const getUserPurchasedTickets = async (req, res) => {
         const purchasedTickets = await db
             .select("*")
             .from("tickets")
-            .where("userid", userid).orderBy('id', 'desc');
+            .where("userid", userid)
 
         //console.log('PurchasedTickets from tick Controller: ', purchasedTickets);
 
@@ -75,30 +76,37 @@ export const purchaseTickets = async (req, res) => {
 
         const total_price = event.price * quantity;
 
-        //QR CODES!!!!
-        const ticketData = {
-            event_id: event.id,
-            user_id: userid,
-            quantity,
-            total_price,
-            seats: selectedSeats,
-        };
+        const ticketId = uuidv4(); // Generate a unique ticket ID
 
-        const qrCodeData = JSON.stringify(ticketData);
-
-        const ticketIds = [];
-
-        for (const seat of selectedSeats) {
-            const ticket = await createTicket(
-                event.id,
-                userid,
+        const ticket = await db("tickets").insert(
+            {
+                uuid_id: ticketId, // Assign the generated ticketId
+                eventid: event.id,
+                userid: userid,
                 quantity,
                 total_price,
-                seat,
-                qrCodeData
-            );
-            ticketIds.push(ticket.id);
+            },
+            ["uuid_id"]
+        );
+
+        console.log('Ticket in controller purchase: ', ticket);
+
+        // Create an array to store place entries
+        const placeEntries = [];
+
+        // Iterate through selectedSeats and create place entries
+        for (const seat of selectedSeats) {
+            const placeEntry = {
+                ticket_uuid: ticketId, // The ID of the created ticket
+                seat: seat.seatNumber,
+                row: seat.row,
+                qr_code_data: null,
+            };
+            placeEntries.push(placeEntry);
         }
+
+        // Insert place entries into the places table
+        await db("places").insert(placeEntries);
 
         await db("events")
             .where("id", id)
@@ -106,7 +114,14 @@ export const purchaseTickets = async (req, res) => {
 
         res.status(201).json({
             message: "Congratulations! Tickets purchased successfully",
-            ticketData: ticketData,
+            ticketData: {
+                event_id: event.id,
+                user_id: userid,
+                quantity,
+                total_price,
+                seats: selectedSeats,
+                ticketId: ticketId,
+            },
         });
     } catch (error) {
         console.error(error);

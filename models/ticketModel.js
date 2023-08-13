@@ -15,7 +15,7 @@ export const getTicketById = async (id) => {
         const ticket = await db
             .select("*")
             .from("tickets")
-            .where({ id })
+            .where({ uuid_id: id })
             .first();
 
         if (!ticket) {
@@ -37,12 +37,33 @@ export const createTicket = async (eventid, userid, quantity, total_price, seat,
             userid: userid,
             quantity: quantity,
             total_price: total_price,
-            row: row,             
-            seat_number: seatNumber,
-            qr_code_data:  qrCodeData 
-        }).returning("*");
+        }).returning("uuid_id");
+
+        const ticketId = newTicket[0];
+
+        console.log('New Ticket in create controller', newTicket);
+
+        const placeEntry = {
+            ticket_uuid: ticketId, // The UUID of the created ticket
+            seat: seatNumber,
+            row: row,
+            qr_code_data: qrCodeData,
+        };
+
+        console.log('Place entry in create controller', placeEntry);
+
+        await db("places").insert(placeEntry);
         
-        return newTicket[0];
+        return {
+            uuid_id: ticketId,
+            eventid: eventid,
+            userid: userid,
+            quantity: quantity,
+            total_price: total_price,
+            seat: seatNumber,
+            row: row,
+            qr_code_data: qrCodeData,
+        };
     } catch (error) {
         console.log(error);
         throw new Error({ error: "Error adding new ticket to the database" });
@@ -74,7 +95,7 @@ export const addNewTicket = async (ticketInfo) => {
 export const updateTicket = async (id, ticketData) => {
     try {
         const updatedTicket = await db("tickets")
-            .where({ id })
+            .where({ uuid_id: id })
             .update(ticketData)
             .returning("*");
         return updatedTicket[0]; //{[...]}
@@ -87,7 +108,7 @@ export const updateTicket = async (id, ticketData) => {
 export const deleteTicket = async (id) => {
     try {
         const deletedTicket = await db("tickets")
-            .where({ id })
+            .where({ uuid_id: id })
             .del()
             .returning("*");
         return deletedTicket[0];

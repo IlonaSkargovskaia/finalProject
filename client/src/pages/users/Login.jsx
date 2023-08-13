@@ -15,7 +15,7 @@ const Login = ({ setAuth }) => {
 
     const { email, password } = inputs;
 
-    const { setToken,setUserRole } = useContext(AppContext);
+    const { setToken,setUserRole, setIsVerify } = useContext(AppContext);
     const navigate = useNavigate(); 
 
     // const [userRole, setUserRole] = useState(""); 
@@ -56,6 +56,7 @@ const Login = ({ setAuth }) => {
                     setToken(data.token);
                     setAuth(true);
                     setUserRole(role.trim());
+                    // setIsVerify(true);
                     
                     console.log('Role in Login: ', role)
 
