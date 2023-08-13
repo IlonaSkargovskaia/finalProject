@@ -98,38 +98,45 @@ const UserDashboard = ({ setAuth }) => {
             }
 
             const data = await res.json();
-            //console.log("Data in userDash: ", data);
+            console.log("Data in userDash: ", data);
 
-            if (Array.isArray(data)) {
-                const updatedTickets = await Promise.all(
-                    data.map(async (ticket) => {
-                        console.log(ticket);
-                        const eventDetails = await fetch(
-                            `/api/events/${ticket.eventid}`
-                        );
-                        const eventData = await eventDetails.json();
+            const updatedTickets = [];
 
-                        const placeDetailsRes = await fetch(
-                            `/api/places/${ticket.uuid_id}`
-                        );
-                        //console.log("Place Details Response:", placeDetailsRes);
-
-                        const placeData = await placeDetailsRes.json();
-                        //console.log("Place Data:", placeData);
-
-                        const updatedTicket = {
-                            ...ticket,
-                            eventTitle: eventData.title,
-                            row: placeData.row,
-                            seat: placeData.seat,
-                        };
-                        return updatedTicket;
-                    })
+            for (const ticket of data) {
+                console.log("Ticket:", ticket);
+                const eventDetailsRes = await fetch(
+                    `/api/events/${ticket.eventid}`
                 );
-                setPurchasedTickets(updatedTickets);
-            } else {
-                console.log("Invalid data format received from server:", data);
+                const eventData = await eventDetailsRes.json();
+                console.log("eventData:", eventData);
+
+                const placeDetailsRes = await fetch(
+                    `/api/places/${ticket.uuid_id}`
+                );
+
+                const placeData = await placeDetailsRes.text();
+                console.log("Place Data:", placeData);
+
+                if (placeData) {
+                    const parsedPlaceData = JSON.parse(placeData);
+                    console.log("Parsed Place Data:", parsedPlaceData);
+
+                    const updatedTicket = {
+                        ...ticket,
+                        eventTitle: eventData.title,
+                        row: parsedPlaceData.row,
+                        seat: parsedPlaceData.seat,
+                    };
+
+                    updatedTickets.push(updatedTicket);
+                } else {
+                    console.log(
+                        "Empty or invalid place data received from API."
+                    );
+                }
             }
+            console.log("Updated Tickets:", updatedTickets);
+            setPurchasedTickets(updatedTickets);
         } catch (error) {
             console.log(error);
         }

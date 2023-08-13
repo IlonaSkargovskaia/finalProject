@@ -3,7 +3,7 @@ import { Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const TicketDetails = ({ ticket }) => {
-    
+    console.log(ticket);
     const [showModal, setShowModal] = useState(true);
 
     const handleClose = () => {
@@ -12,15 +12,17 @@ const TicketDetails = ({ ticket }) => {
     return (
         <Modal show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Ticket Details</Modal.Title>
+                <Modal.Title>You purchased ticket successfully!!!</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {/* Render ticket details using ticket */}
-                {/* For example: */}
+                <h3>Ticket Details</h3>
                 {ticket && (
-                    <div>
-                        Ticket ID: {ticket.ticketId}
-                        {/* ... other ticket details ... */}
+                    <div key={ticket.ticketId}>
+                        <p>Ticket ID: {ticket.ticketId}</p>
+                        <p>Quantity: {ticket.quantity}</p>
+                        <p>Row: {ticket.seats[0].row}</p>
+                        <p>Seat: {ticket.seats[0].seatNumber}</p>
+                        <p>Amount: {ticket.total_price} ILS</p>
                     </div>
                 )}
             </Modal.Body>
