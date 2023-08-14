@@ -117,7 +117,7 @@ a.card-title{
 }
 
 .card__btn-block a{
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .card__category{
@@ -440,7 +440,7 @@ table.org-table>thead{
 
 
 .react-multi-carousel-track{
-    gap: 1rem;
+    gap: 2px;
     padding: 1rem !important;
 }
 
@@ -594,5 +594,15 @@ svg{
 
     .org__block{
         max-width: 100%;
+    }
+
+   
+}
+
+
+
+@media only screen and (max-width: 740px) {
+    .category-links{
+        flex-wrap: wrap;
     }
 }

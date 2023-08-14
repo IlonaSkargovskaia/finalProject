@@ -53,8 +53,6 @@ const App = () => {
             });
     
             const data = await res.json();
-            //console.log(data); //true from verify
-
     
             if (data === true) {
 
@@ -72,7 +70,7 @@ const App = () => {
             }
             else {
                 setIsVerify(false);
-                toast.error('You need to log in again');
+                toast.error('Access time out. Log in again');
             }
         } catch (error) {
             console.log(error);

@@ -15,7 +15,6 @@ const Register = ({ setAuth }) => {
     const { username, email, password } = inputs;
 
     const onChange = (e) => {
-        //копируем текущее состояние, обновляем поля при этом достаем имя поля и присваиваем значение введенное пользователем name : value
         setInputs({ ...inputs, [e.target.name]: e.target.value });
     };
 

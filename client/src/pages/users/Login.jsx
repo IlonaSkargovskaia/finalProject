@@ -18,7 +18,6 @@ const Login = ({ setAuth }) => {
     const { setToken,setUserRole, setIsVerify } = useContext(AppContext);
     const navigate = useNavigate(); 
 
-    // const [userRole, setUserRole] = useState(""); 
 
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -56,17 +55,9 @@ const Login = ({ setAuth }) => {
                     setToken(data.token);
                     setAuth(true);
                     setUserRole(role.trim());
-                    // setIsVerify(true);
                     
                     console.log('Role in Login: ', role)
 
-                    // if (role.trim() === "organizer") {
-                    //     console.log("Navigating to organizer dashboard");
-                    //     navigate("/organizerdashboard");
-                    // } else {
-                    //     console.log("Navigating to user dashboard");
-                    //     navigate("/userdashboard");
-                    // }
     
                 }
             } else {
