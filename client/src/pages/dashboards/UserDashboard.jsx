@@ -7,6 +7,7 @@ import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import QRCode from "react-qr-code";
 
 const UserDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
@@ -110,9 +111,7 @@ const UserDashboard = ({ setAuth }) => {
                 const eventData = await eventDetailsRes.json();
                 console.log("eventData:", eventData);
 
-                const placeDetailsRes = await fetch(
-                    `/api/places/${ticket.id}`
-                );
+                const placeDetailsRes = await fetch(`/api/places/${ticket.id}`);
 
                 const placeData = await placeDetailsRes.text();
                 console.log("Place Data:", placeData);
@@ -233,11 +232,13 @@ const UserDashboard = ({ setAuth }) => {
                                         <th>Quantity</th>
                                         <th>Row</th>
                                         <th>Seat</th>
-                                        <th>Total price</th>
+                                         <th>Total price</th>
+                                        {/*<th>QRCodes</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {purchasedTickets.map((ticket) => (
+                                        
                                         <tr key={ticket.id}>
                                             <td>{ticket.eventTitle}</td>
                                             <td>
@@ -247,6 +248,16 @@ const UserDashboard = ({ setAuth }) => {
                                             <td>{ticket.row}</td>
                                             <td>{ticket.seat}</td>
                                             <td>{ticket.total_price} ILS</td>
+                                            {/*<td>
+                                                 <div
+                                                    style={{ maxWidth: "50px" }}
+                                                >
+                                                    <QRCode
+                                                        value={ticket.uuid_id}
+                                                        size={50}
+                                                    />
+                                                </div> 
+                                            </td>*/}
                                         </tr>
                                     ))}
                                 </tbody>

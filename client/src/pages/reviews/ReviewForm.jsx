@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import { AppContext } from "../../App";
+import jwt from "jsonwebtoken";
 
 const ReviewForm = () => {
+    const { token } = useContext(AppContext);
     const [reviewData, setReviewData] = useState({
         eventid: "",
         userid: "",
@@ -12,8 +15,26 @@ const ReviewForm = () => {
     });
 
     const [eventList, setEventList] = useState([]);
+    const [username, setUsername] = useState("");
 
     useEffect(() => {
+         // Decode the token to get the user information
+         const decodedToken = jwt.decode(token);
+
+        // Fetch user information using the decoded user ID
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch(`/api/users/${decodedToken.user}`);
+                const userData = await response.json();
+
+                setUsername(userData.username); // Set the username in state
+            } catch (error) {
+                console.error("Error fetching user info:", error);
+            }
+        }
+
+        fetchUserInfo(); 
+
         // Fetch the list of events from the server and populate eventList state
         async function fetchEvents() {
             try {
@@ -25,7 +46,7 @@ const ReviewForm = () => {
             }
         }
         fetchEvents();
-    }, []);
+    }, [token]);
 
     const ratingChanged = (newRating) => {
         // Set the selected rating in the reviewData state
@@ -103,14 +124,14 @@ const ReviewForm = () => {
                     <Col>
                         <div className="mb-3">
                             <label htmlFor="userid" className="form-label">
-                                User ID:
+                                Username:
                             </label>
                             <input
                                 type="text"
                                 id="userid"
                                 name="userid"
+                                value={username} 
                                 className="form-control"
-                                value={reviewData.userid}
                                 onChange={handleInputChange}
                             />
                         </div>

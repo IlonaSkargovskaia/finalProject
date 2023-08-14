@@ -60,6 +60,7 @@ const App = () => {
 
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(storageToken);
+                console.log('decoded token', decodedToken);
                 if (decodedToken) {
                     const { role } = decodedToken;
     
