@@ -30,8 +30,9 @@ import {
     VKIcon,
 } from "react-share";
 import RightCategories from "../../components/RightCategories";
+import QRCode from "react-qr-code";
 import InterractiveHall from "./InterractiveHall";
-import TicketPDF from "../../components/TicketPDF";
+import TicketDetails from "../../components/TicketDetails";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -42,7 +43,6 @@ const EventDetail = () => {
     const [ticketData, setTicketData] = useState(null);
 
     const params = useParams();
-    // const navigate = useNavigate();
     const { token } = useContext(AppContext);
 
     const {
@@ -265,31 +265,37 @@ const EventDetail = () => {
                     )
                 );
 
+                //console.log("Selected seats:", selectedSeats); //after bought
+                // {id: 15, row: 2, seatNumber: 5}
 
                 if (
                     response.data.ticketData &&
                     response.data.ticketData.ticketId
                 ) {
                     const ticketId = response.data.ticketData.ticketId;
-                    //console.log("ticket id in detail:", ticketId);
+                    console.log("ticket id in detail:", ticketId);
 
-                    setTicketData((prevTicketData) => ({
-                        ...prevTicketData,
-                        purchasedTickets: [
-                            ...(prevTicketData?.purchasedTickets || []),
-                            {
-                                id: ticketId,
-                                title: title,
-                                row: selectedSeats[0].row,
-                                seat: selectedSeats[0].seatNumber,
-                            },
-                        ],
-                    }));
+                    // setTicketData((prevTicketData) => ({
+                    //     ...prevTicketData,
+                    //     purchasedTickets: [
+                    //         ...(prevTicketData?.purchasedTickets || []), // Handle the initial null case
+                    //         {
+                    //             id: ticketId,
+                    //             title: title,
+                    //             row: selectedSeats[0].row,
+                    //             seat: selectedSeats[0].seatNumber,
+                    //         },
+                    //     ],
+                    // }));
 
-                    //setTicketData(ticketData);
-                    toast.success(successMessage);
+                    console.log(
+                        "Setting ticketData:",
+                        response.data.ticketData
+                    );
+                    setTicketData(response.data.ticketData);
 
                     // Send the purchase confirmation email by making a request to the server
+
                     const eventData = {
                         title: title,
                         row: selectedSeats[0].row,
@@ -300,22 +306,26 @@ const EventDetail = () => {
 
                     try {
                         await axios.post("/send-email", {
-                            recipientEmail: "iliukovich1991@gmail.com", 
+                            recipientEmail: "iliukovich1991@gmail.com",
                             eventData: eventData,
                         });
-                        console.log("Email sent successfully");
-                        toast("Email sent successfully");
+                        console.log("Email with details sent successfully");
+                        toast("Email with details sent to you successfully");
                     } catch (error) {
                         console.error("Error sending email:", error);
                     }
-
-
                 } else {
                     console.error("Ticket ID not found in API response");
                 }
+
+                toast.success(successMessage);
             } catch (error) {
-                toast.error("Error purchasing tickets");
-                console.error("Purchase error:", error);
+                if (error.response.status === 400) {
+                    console.error("Not enough tickets available");
+                } else {
+                    toast.error("Error purchasing tickets");
+                    console.error("Purchase error:", error);
+                }
             }
         }
     };
@@ -333,7 +343,7 @@ const EventDetail = () => {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
-                    theme="light"
+                    theme="dark"
                 />
                 <Row>
                     <Col lg={8} md={12} sm={12} className="mb-4">
@@ -482,18 +492,6 @@ const EventDetail = () => {
                                         </p>
                                     </>
                                 )}
-
-                                {ticketData && ticketData.purchasedTickets && (
-                                    <div className="mt-4">
-                                        <h3>Ticket details with QR Codes</h3>
-
-                                        <TicketPDF
-                                            purchasedTickets={
-                                                ticketData.purchasedTickets
-                                            }
-                                        />
-                                    </div>
-                                )}
                             </Card.Body>
                         </Card>
 
@@ -503,7 +501,30 @@ const EventDetail = () => {
                             renderSeats={renderSeats}
                         />
 
-                        {/* {ticketData && <TicketDetails ticket={ticketData} />} */}
+                        {ticketData && <TicketDetails ticket={ticketData} />}
+
+                        {ticketData && ticketData.purchasedTickets && (
+                            <div className="mt-4">
+                                <h3>QR Codes for Purchased Tickets</h3>
+                                {ticketData.purchasedTickets.map((ticket) => (
+                                    <div key={ticket.uuid_id} className="mb-4">
+                                        <h5>{ticket.title}</h5>
+                                        <p>UUID: {ticket.uuid_id}</p>
+
+                                        <p>
+                                            Row: {ticket.row}, Seat:{" "}
+                                            {ticket.seat}
+                                        </p>
+                                        <div style={{ maxWidth: "256px" }}>
+                                            <QRCode
+                                                value={ticket.uuid_id}
+                                                size={256}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </Col>
 
                     {/* right column */}

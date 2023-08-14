@@ -3,7 +3,7 @@ import { Button, Col, Modal, Row } from "react-bootstrap";
 import QRCode from "react-qr-code";
 
 const TicketDetails = ({ ticket }) => {
-    console.log(ticket);
+    //console.log(ticket);
     const [showModal, setShowModal] = useState(true);
 
     const handleClose = () => {

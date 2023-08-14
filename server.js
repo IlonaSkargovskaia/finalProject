@@ -106,6 +106,7 @@ app.post('/send-email', async (req, res) => {
         <p>Row: ${eventData.row}</p>
         <p>Seat: ${eventData.seat}</p>
         <p>Total Amount: ${eventData.total} ILS</p>
+        
       `,
     };
   
