@@ -107,8 +107,10 @@ app.post('/send-email', async (req, res) => {
       html: `
         <p>Thank you for purchasing tickets for the event.</p>
         <p>Event: ${eventData.title}</p>
-        <p>Row: ${eventData.row}</p>
-        <p>Seat: ${eventData.seat}</p>
+        <h4>Selected Seats:</h4>
+        <ul>
+            ${eventData.selectedSeatsAndRows.map(seat => `<li>Row: ${seat.row}, Seat: ${seat.seat}</li>`).join("")}
+        </ul>
         <p>Total Amount: ${eventData.total} ILS</p>
         ${qrCodeImageTags}
       `,

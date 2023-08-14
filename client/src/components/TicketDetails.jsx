@@ -18,7 +18,6 @@ const TicketDetails = ({ ticket, title }) => {
             const qrCodeImages = await Promise.all(
                 ticket.seats.map(async (seat) => {
                     console.log('seat:', seat);
-                    console.log('seat:', seat.uuid_id);
                     const qrCodeDataURL = await QRCode.toDataURL(
                         generateQRCodeValue(seat)
                     );
@@ -44,18 +43,20 @@ const TicketDetails = ({ ticket, title }) => {
     const handleClose = () => {
         setShowModal(false);
     };
-
-    
-    
+   
 
     const handleSendEmail = async () => {
         try {
+            const selectedSeatsAndRows = ticket.seats.map((seat) => ({
+                row: seat.row,
+                seat: seat.seatNumber,
+            }));
+
             const response = await axios.post(`/send-email`, {
                 recipientEmail: "iliukovich1991@gmail.com", 
                 eventData: {
                     title: title,
-                    row: ticket.seats[0].row,
-                    seat: ticket.seats[0].seatNumber,
+                    selectedSeatsAndRows: selectedSeatsAndRows,
                     total: ticket.total_price
                 },
                 qrCodeImages: qrCodeImages,
