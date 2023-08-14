@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
-import QRCode from "qrcode"; // Import qrcode library
+import QRCode from "qrcode"; 
 import axios from "axios";
 
-const TicketDetails = ({ ticket }) => {
+const TicketDetails = ({ ticket, title }) => {
 
     console.log(ticket);
     const [showModal, setShowModal] = useState(true);
@@ -17,8 +17,10 @@ const TicketDetails = ({ ticket }) => {
         if (ticket && ticket.seats) {
             const qrCodeImages = await Promise.all(
                 ticket.seats.map(async (seat) => {
+                    console.log('seat:', seat);
+                    console.log('seat:', seat.uuid_id);
                     const qrCodeDataURL = await QRCode.toDataURL(
-                        seat.uuid_id
+                        generateQRCodeValue(seat)
                     );
                     return qrCodeDataURL;
                 })
@@ -28,31 +30,33 @@ const TicketDetails = ({ ticket }) => {
         }
     };
     
-    
+    const generateQRCodeValue = (seat) => {
+        return JSON.stringify({
+            
+            title: title,
+            row: seat.row,
+            seat: seat.seatNumber,
+            user_id: ticket.user_id,
+            uuid_id: seat.uuid_id,
+        });
+    };
 
     const handleClose = () => {
         setShowModal(false);
     };
 
-    const generateQRCodeValue = (seat) => {
-        return JSON.stringify({
-            title: ticket.title,
-            row: seat.row,
-            seat: seat.seatNumber,
-            ticketId: ticket.ticketId,
-        });
-    };
+    
+    
 
     const handleSendEmail = async () => {
         try {
             const response = await axios.post(`/send-email`, {
                 recipientEmail: "iliukovich1991@gmail.com", 
                 eventData: {
-                    title: ticket.title,
+                    title: title,
                     row: ticket.seats[0].row,
-                    seat: ticket.seats[0].seat,
-                    total: ticket.total_price,
-                    // Add other necessary data here
+                    seat: ticket.seats[0].seatNumber,
+                    total: ticket.total_price
                 },
                 qrCodeImages: qrCodeImages,
             });

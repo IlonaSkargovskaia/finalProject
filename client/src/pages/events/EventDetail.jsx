@@ -482,30 +482,9 @@ const EventDetail = () => {
                             renderSeats={renderSeats}
                         />
 
-                        {ticketData && <TicketDetails ticket={ticketData} />}
+                        {ticketData && <TicketDetails ticket={ticketData} title={title}/>}
 
-                        {ticketData && ticketData.purchasedTickets && (
-                            <div className="mt-4">
-                                <h3>QR Codes for Purchased Tickets</h3>
-                                {ticketData.purchasedTickets.map((ticket) => (
-                                    <div key={ticket.uuid_id} className="mb-4">
-                                        <h5>{ticket.title}</h5>
-                                        <p>UUID: {ticket.uuid_id}</p>
-
-                                        <p>
-                                            Row: {ticket.row}, Seat:{" "}
-                                            {ticket.seat}
-                                        </p>
-                                        <div style={{ maxWidth: "256px" }}>
-                                            <QRCode
-                                                value={ticket.uuid_id}
-                                                size={256}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        
                     </Col>
 
                     {/* right column */}
