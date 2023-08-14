@@ -9,7 +9,6 @@ const ReviewForm = () => {
     const { token } = useContext(AppContext);
     const [reviewData, setReviewData] = useState({
         eventid: "",
-        userid: "",
         rating: "",
         comment: "",
     });
@@ -74,6 +73,8 @@ const ReviewForm = () => {
                 body: JSON.stringify(reviewData),
             });
 
+            console.log(response);
+            console.log(reviewData);
             console.log("New comment: ", response);
             toast.success('Comment added successfully');
         } catch (error) {

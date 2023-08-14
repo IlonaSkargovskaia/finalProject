@@ -21,6 +21,7 @@ import Reviews from "./pages/reviews/Reviews";
 import ScrollButton from "./components/ScrollButton";
 import { toast } from "react-toastify";
 import TicketDetails from "./components/TicketDetails";
+import TicketPDF from "./components/TicketPDF";
 
 
 export const AppContext = createContext();
@@ -136,7 +137,9 @@ const App = () => {
                         <Route path="/events/:id" element={<EventDetail />} />
                         <Route path="/reviews" element={<Reviews />} />
                         <Route path="/create-event" element={<AddNewEvent />} />
-                        <Route path="/ticket/:ticketId" element={<TicketDetails />} />
+
+                        <Route path="/ticket/:ticketId" element={<TicketPDF />} />
+                        
                         <Route
                             path="/search"
                             element={<SearchResults events={events} />}
