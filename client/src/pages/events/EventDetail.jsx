@@ -32,7 +32,6 @@ import {
 import RightCategories from "../../components/RightCategories";
 import InterractiveHall from "./InterractiveHall";
 import TicketPDF from "../../components/TicketPDF";
-import { Link, useNavigate } from "react-router-dom";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
@@ -266,8 +265,6 @@ const EventDetail = () => {
                     )
                 );
 
-                //console.log("Selected seats:", selectedSeats); //after bought
-                // {id: 15, row: 2, seatNumber: 5}
 
                 if (
                     response.data.ticketData &&
@@ -291,6 +288,28 @@ const EventDetail = () => {
 
                     //setTicketData(ticketData);
                     toast.success(successMessage);
+
+                    // Send the purchase confirmation email by making a request to the server
+                    const eventData = {
+                        title: title,
+                        row: selectedSeats[0].row,
+                        seat: selectedSeats[0].seatNumber,
+                        total: total,
+                        // Add other necessary data here
+                    };
+
+                    try {
+                        await axios.post("/send-email", {
+                            recipientEmail: "iliukovich1991@gmail.com", 
+                            eventData: eventData,
+                        });
+                        console.log("Email sent successfully");
+                        toast("Email sent successfully");
+                    } catch (error) {
+                        console.error("Error sending email:", error);
+                    }
+
+
                 } else {
                     console.error("Ticket ID not found in API response");
                 }
@@ -468,7 +487,6 @@ const EventDetail = () => {
                                     <div className="mt-4">
                                         <h3>Ticket details with QR Codes</h3>
 
-                                        
                                         <TicketPDF
                                             purchasedTickets={
                                                 ticketData.purchasedTickets

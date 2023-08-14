@@ -7,6 +7,15 @@ import routes from "./routes/index.js";
 import jwtAuth from "./routes/jwtAuth.js";
 import dashboard from "./routes/dashboard.js";
 import { s3Uploadv2 } from "./s3Service.js";
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'ilona.skars@gmail.com',
+        pass: 'ouegihnzkwvvgqnt',
+    },
+});
 
 const app = express();
 dotenv.config();
@@ -79,6 +88,35 @@ app.use("/auth", jwtAuth);
 
 //dashboard router
 app.use("/dashboard", dashboard);
+
+
+
+//email
+
+app.post('/send-email', async (req, res) => {
+    const { recipientEmail, eventData } = req.body;
+  
+    const mailOptions = {
+      from: 'ilona.skars@gmail.com',
+      to: recipientEmail,
+      subject: 'Ticket Purchase Confirmation',
+      html: `
+        <p>Thank you for purchasing tickets for the event.</p>
+        <p>Event: ${eventData.title}</p>
+        <p>Row: ${eventData.row}</p>
+        <p>Seat: ${eventData.seat}</p>
+        <p>Total Amount: ${eventData.total} ILS</p>
+      `,
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).send('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error);
+      res.status(500).send('Error sending email');
+    }
+});
 
 app.listen(process.env.PORT || 3002, () => {
     console.log(`listen on ${process.env.PORT || 3002}`);
