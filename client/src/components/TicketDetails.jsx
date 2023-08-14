@@ -27,7 +27,6 @@ const TicketDetails = ({ ticket }) => {
                 <h3>Ticket Details</h3>
                 {ticket && (
                     <div key={ticket.ticketId}>
-                        <p>Ticket ID: {ticket.ticketId}</p>
                         <p>Quantity: {ticket.quantity}</p>
                         <p>Amount: {ticket.total_price} ILS</p>
                         <hr />

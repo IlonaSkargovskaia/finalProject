@@ -18,6 +18,7 @@ const CardEvent = ({ event }) => {
         time,
         image,
         price,
+        quantity_available,
         category_id,
         location_id,
         address
@@ -60,7 +61,9 @@ const CardEvent = ({ event }) => {
         <Card className="h-100 mycard" >
             <Card.Text className="card__category"> {categoryName}</Card.Text>
             <Link to={`/events/${id}`} className="card__img-bg">
-                <Card.Img variant="top" src={image} />
+                
+                {quantity_available === 0 ? (<Card.Img variant="top" src={image} className="sold-out"/>) : (<Card.Img variant="top" src={image} />)}
+                
             </Link>
             <Card.Body>
                 <Card.Title as={Link} to={`/events/${id}`}>{title}</Card.Title>
@@ -79,9 +82,15 @@ const CardEvent = ({ event }) => {
                         </Card.Text>
                     </Col>
                     <Col className="card__btn-block">
-                        <Button className="card__button purple" as={Link} to={`/events/${id}`}>
-                            <CiShoppingCart /> Buy ticket
-                        </Button>
+                        {quantity_available === 0 ? (
+                            <Button className="card__button" disabled>
+                                SOLD OUT
+                            </Button>
+                        ) : (
+                            <Button className="card__button purple" as={Link} to={`/events/${id}`}>
+                                <CiShoppingCart /> Buy ticket
+                            </Button>
+                        )}
                     </Col>
                 </Row>
             </Card.Body>

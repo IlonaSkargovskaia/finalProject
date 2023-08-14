@@ -22,13 +22,13 @@ const Navigation = ({
     setIsAuthenticated,
     isAuthenticated,
     username,
-    userRole,
-    isVerify
+    userRole
 }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     
+    const { isVerify } = useContext(AppContext);
 
     const navigate = useNavigate();
 
@@ -177,7 +177,7 @@ const Navigation = ({
                         </Form>
 
                         <Stack direction="horizontal" gap={3}>
-                            {isAuthenticated  ? (
+                            {isAuthenticated ? (
                                 <>
                                     {userRole === "organizer" ? (
                                         <Button

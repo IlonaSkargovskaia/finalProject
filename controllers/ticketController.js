@@ -76,17 +76,18 @@ export const purchaseTickets = async (req, res) => {
 
         const total_price = event.price * quantity;
 
-        const ticketId = uuidv4(); // Generate a unique ticket ID
+          // The id provided by the request parameter should be a valid integer
+          const ticketId = id; 
 
         const ticket = await db("tickets").insert(
             {
-                uuid_id: ticketId, // Assign the generated ticketId
+                id: ticketId,
                 eventid: event.id,
                 userid: userid,
                 quantity,
                 total_price,
             },
-            ["uuid_id"]
+            ["id"]
         );
 
         console.log('Ticket in controller purchase: ', ticket);
@@ -97,10 +98,10 @@ export const purchaseTickets = async (req, res) => {
         // Iterate through selectedSeats and create place entries
         for (const seat of selectedSeats) {
             const placeEntry = {
-                ticket_uuid: ticketId, // The ID of the created ticket
+                ticket_id: ticketId,
                 seat: seat.seatNumber,
                 row: seat.row,
-                qr_code_data: null,
+                qr_code_data: seat.uuid_id,
             };
             placeEntries.push(placeEntry);
         }

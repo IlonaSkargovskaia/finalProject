@@ -15,7 +15,7 @@ export const getTicketById = async (id) => {
         const ticket = await db
             .select("*")
             .from("tickets")
-            .where({ uuid_id: id })
+            .where({ id })
             .first();
 
         if (!ticket) {
@@ -37,14 +37,14 @@ export const createTicket = async (eventid, userid, quantity, total_price, seat,
             userid: userid,
             quantity: quantity,
             total_price: total_price,
-        }).returning("uuid_id");
+        }).returning(["id"]);
 
         const ticketId = newTicket[0];
 
         console.log('New Ticket in create controller', newTicket);
 
         const placeEntry = {
-            ticket_uuid: ticketId, // The UUID of the created ticket
+            ticket_id: ticketId, 
             seat: seatNumber,
             row: row,
             qr_code_data: qrCodeData,
@@ -55,7 +55,7 @@ export const createTicket = async (eventid, userid, quantity, total_price, seat,
         await db("places").insert(placeEntry);
         
         return {
-            uuid_id: ticketId,
+            id: ticketId,
             eventid: eventid,
             userid: userid,
             quantity: quantity,
@@ -95,7 +95,7 @@ export const addNewTicket = async (ticketInfo) => {
 export const updateTicket = async (id, ticketData) => {
     try {
         const updatedTicket = await db("tickets")
-            .where({ uuid_id: id })
+            .where({ id })
             .update(ticketData)
             .returning("*");
         return updatedTicket[0]; //{[...]}
@@ -108,7 +108,7 @@ export const updateTicket = async (id, ticketData) => {
 export const deleteTicket = async (id) => {
     try {
         const deletedTicket = await db("tickets")
-            .where({ uuid_id: id })
+            .where({ id })
             .del()
             .returning("*");
         return deletedTicket[0];

@@ -526,6 +526,10 @@ svg{
     top: 15%;
 }
 
+.card-img-top.sold-out{
+    opacity: 0.4;
+}
+
 /* reviews */
 .add-review{
     padding: 20px ;

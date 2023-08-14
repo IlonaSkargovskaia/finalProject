@@ -24,6 +24,7 @@ const EventsList = () => {
 
     return (
         <div>
+            <h2 className="text-center mb-4">All events on "TicketPRO"</h2>
             <Row xs={1} md={3} lg={4} xl={5} className="g-4">
             
                 {events.map((event, index) => {

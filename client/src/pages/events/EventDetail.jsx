@@ -15,6 +15,7 @@ import { AppContext } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LeafletMap from "../../components/LeafletMap";
+import { v4 as uuidv4 } from "uuid";
 
 import {
     FacebookShareButton,
@@ -226,12 +227,16 @@ const EventDetail = () => {
             toast.error("You must be authorized to purchase tickets");
             return;
         } else {
+            const selectedSeatsWithUUID = selectedSeats.map((seat) => ({
+                ...seat,
+                uuid_id: uuidv4(), // Generate a UUID for qr_code_data
+            }));
             try {
                 const response = await axios.post(
                     `/api/tickets/${params.id}/purchase`,
                     {
                         quantity: selectedQuantity,
-                        selectedSeats: selectedSeats,
+                        selectedSeats: selectedSeatsWithUUID,
                     },
                     {
                         headers: {
@@ -275,7 +280,7 @@ const EventDetail = () => {
                         purchasedTickets: [
                             ...(prevTicketData?.purchasedTickets || []), // Handle the initial null case
                             {
-                                uuid_id: ticketId,
+                                id: ticketId,
                                 title: title,
                                 row: selectedSeats[0].row,
                                 seat: selectedSeats[0].seatNumber,
@@ -283,16 +288,16 @@ const EventDetail = () => {
                         ],
                     }));
 
-                    console.log("Setting ticketData:",
+                    console.log(
+                        "Setting ticketData:",
                         response.data.ticketData
                     );
                     setTicketData(response.data.ticketData);
-
                 } else {
                     console.error("Ticket ID not found in API response");
                 }
 
-                 toast.success(successMessage);
+                toast.success(successMessage);
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
@@ -481,7 +486,7 @@ const EventDetail = () => {
                             <div className="mt-4">
                                 <h3>QR Codes for Purchased Tickets</h3>
                                 {ticketData.purchasedTickets.map((ticket) => (
-                                    <div key={ticket.id} className="mb-4">
+                                    <div key={ticket.uuid_id} className="mb-4">
                                         <h5>{ticket.title}</h5>
                                         <p>UUID: {ticket.uuid_id}</p>
 
@@ -511,7 +516,6 @@ const EventDetail = () => {
 
                             <LeafletMap id={id} />
                         </Card>
-
 
                         <Card className="mt-3">
                             <RightCategories />
