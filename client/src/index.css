@@ -8,6 +8,12 @@ html, body, #root{
     height: 100%;
 }
 
+.modal-content{
+    /* color: #fff !important;
+    background: rgb(123,30,162);
+    background: linear-gradient(90deg, rgba(123,30,162,1) 0%, rgba(224,2,255,1) 100%); */
+}
+
 
 .wrapper{
     min-height: 100%;

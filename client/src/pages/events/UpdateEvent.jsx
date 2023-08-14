@@ -96,47 +96,46 @@ const UpdateEvent = () => {
         setSelectedFile(file);
     };
 
-    // try {
-    //     await axios.put(`/api/events/${eventId}`, eventData);
-    // } catch (error) {
-    //     console.error("Error updating event:", error);
-    // }
 
     const handleUpdateEvent = async (e) => {
         e.preventDefault();
         try {
-            const formData = new FormData();
-            formData.append("file", selectedFile);
-
-            // Upload the image to AWS S3
-            const uploadResponse = await axios.post(`/upload`, formData, {
-                headers: {
-                    Authorization: token || storageToken,
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            const imageUrl = uploadResponse.data.result.url;
-            console.log("Image URL:", imageUrl);
-
-            // Update event data with the image URL
+            let imageUrl = eventData.image; // Default to the existing image URL
+    
+            if (selectedFile) {
+                // If a new file is selected, upload it to AWS S3
+                const formData = new FormData();
+                formData.append("file", selectedFile);
+    
+                const uploadResponse = await axios.post(`/upload`, formData, {
+                    headers: {
+                        Authorization: token || storageToken,
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+    
+                imageUrl = uploadResponse.data.result.url;
+                console.log("New Image URL:", imageUrl);
+            }
+    
+            // Update event data with the new/unchanged image URL
             const updatedEventData = {
                 ...eventData,
                 image: imageUrl,
             };
-            console.log("Updated Event Data:", updatedEventData);
-
-            // Make the PUT request to update the event with the new image URL
+    
+            // Make the PUT request to update the event with the new/unchanged image URL
             const updateResponse = await axios.put(
                 `/api/events/${eventId}`,
                 updatedEventData
             );
             console.log("Update Response:", updateResponse.data);
-            alert('Event updated successfully!')
+            alert('Event updated successfully!');
         } catch (error) {
             console.error("Error updating event:", error);
         }
     };
+    
 
     return (
         <div>
