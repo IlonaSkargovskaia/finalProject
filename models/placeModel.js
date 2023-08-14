@@ -1,8 +1,8 @@
 import db from '../config/db.js';
 
-export const getPlaceByUUID = async (uuid) => {
+export const getPlaceByUUID = async (id) => {
   try {
-      const place = await db.select('*').from('places').where('ticket_uuid', uuid).first();
+      const place = await db.select('*').from('places').where('ticket_id', id).first();
       return place;
   } catch (error) {
       console.error(error);
@@ -12,7 +12,7 @@ export const getPlaceByUUID = async (uuid) => {
 
 export const insertQrCodeData = async (ticketUuid, qrCodeData) => {
   try {
-      await db('places').where('ticket_uuid', ticketUuid).update({
+      await db('places').where('ticket_id', ticketUuid).update({
           qr_code_data: qrCodeData,
       });
   } catch (error) {

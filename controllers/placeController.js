@@ -14,13 +14,13 @@ export const getPlaceByUUIDController = async (req, res) => {
 
 export const insertQrCodeDataController = async (req, res) => {
     try {
-        const { ticket_uuid, qr_code_data } = req.body;
+        const { ticket_id, qr_code_data } = req.body;
 
-        if (!ticket_uuid || !qr_code_data) {
+        if (!ticket_id || !qr_code_data) {
             return res.status(400).json({ error: 'Missing required data' });
         }
 
-        await insertQrCodeData(ticket_uuid, qr_code_data);
+        await insertQrCodeData(ticket_id, qr_code_data);
 
         res.json({ message: 'qr_code_data inserted successfully' });
     } catch (error) {

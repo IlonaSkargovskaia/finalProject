@@ -111,7 +111,7 @@ const UserDashboard = ({ setAuth }) => {
                 console.log("eventData:", eventData);
 
                 const placeDetailsRes = await fetch(
-                    `/api/places/${ticket.uuid_id}`
+                    `/api/places/${ticket.id}`
                 );
 
                 const placeData = await placeDetailsRes.text();
