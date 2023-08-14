@@ -77,20 +77,21 @@ export const purchaseTickets = async (req, res) => {
         const total_price = event.price * quantity;
 
           // The id provided by the request parameter should be a valid integer
-          const ticketId = id; 
+          //const ticketId = id; 
 
-        const ticket = await db("tickets").insert(
+          const insertedIds = await db("tickets").insert(
             {
-                id: ticketId,
                 eventid: event.id,
                 userid: userid,
                 quantity,
                 total_price,
             },
-            ["id"]
+            ["id"] // This will return the inserted id(s)
         );
 
-        console.log('Ticket in controller purchase: ', ticket);
+        const ticketId = insertedIds[0].id;
+
+        console.log('Ticket in controller purchase: ', ticketId);
 
         // Create an array to store place entries
         const placeEntries = [];
