@@ -294,26 +294,7 @@ const EventDetail = () => {
                     );
                     setTicketData(response.data.ticketData);
 
-                    // Send the purchase confirmation email by making a request to the server
-
-                    const eventData = {
-                        title: title,
-                        row: selectedSeats[0].row,
-                        seat: selectedSeats[0].seatNumber,
-                        total: total,
-                        // Add other necessary data here
-                    };
-
-                    try {
-                        await axios.post("/send-email", {
-                            recipientEmail: "iliukovich1991@gmail.com",
-                            eventData: eventData,
-                        });
-                        console.log("Email with details sent successfully");
-                        toast("Email with details sent to you successfully");
-                    } catch (error) {
-                        console.error("Error sending email:", error);
-                    }
+                
                 } else {
                     console.error("Ticket ID not found in API response");
                 }

@@ -94,7 +94,11 @@ app.use("/dashboard", dashboard);
 //email
 
 app.post('/send-email', async (req, res) => {
-    const { recipientEmail, eventData } = req.body;
+    const { recipientEmail, eventData, qrCodeImages } = req.body;
+
+    const qrCodeImageTags = qrCodeImages
+        .map((imageData) => `<img src="${imageData}" alt="QR Code" style="max-width: 256px;" />`)
+        .join('');
   
     const mailOptions = {
       from: 'ilona.skars@gmail.com',
@@ -106,7 +110,7 @@ app.post('/send-email', async (req, res) => {
         <p>Row: ${eventData.row}</p>
         <p>Seat: ${eventData.seat}</p>
         <p>Total Amount: ${eventData.total} ILS</p>
-        
+        ${qrCodeImageTags}
       `,
     };
   
