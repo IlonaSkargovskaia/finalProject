@@ -9,6 +9,7 @@ const ReviewForm = () => {
     const { token } = useContext(AppContext);
     const [reviewData, setReviewData] = useState({
         eventid: "",
+        userid: null,
         rating: "",
         comment: "",
     });
@@ -27,6 +28,10 @@ const ReviewForm = () => {
                 const userData = await response.json();
 
                 setUsername(userData.username); // Set the username in state
+                setReviewData((prevData) => ({
+                    ...prevData,
+                    userid: userData.id, // Set the userid from userData
+                }));
             } catch (error) {
                 console.error("Error fetching user info:", error);
             }
@@ -73,8 +78,7 @@ const ReviewForm = () => {
                 body: JSON.stringify(reviewData),
             });
 
-            console.log(response);
-            console.log(reviewData);
+            
             console.log("New comment: ", response);
             toast.success('Comment added successfully');
         } catch (error) {
