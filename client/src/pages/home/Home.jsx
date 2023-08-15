@@ -8,6 +8,7 @@ import { GoCommentDiscussion } from "react-icons/go";
 import Header from "../../components/Header";
 import LastReviews from "../reviews/LastReviews";
 import axios from "axios";
+import CardEventDate from "../../components/CardEventDate";
 
 const Home = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
@@ -72,29 +73,34 @@ const Home = () => {
                                 onChange={(e) => setEndDate(e.target.value)}
                             />
                         </label>
-                        <button type="submit" className="btn purple">
+                        <button type="submit" className="btn purple" style={{marginBottom: '5px'}}>
                             Find events
                         </button>
                     </form>
                 </Container>
 
-                {/* Display filtered events or a message if no events found */}
+                {/*  filtered events or a message if no events found */}
                 <div className="home__filtered-events">
                     <Container>
                         {/* <h3>Filtered Events</h3> */}
+                        <Row className="justify-content-center" style={{gap: '0.4rem'}}>
                         {filteredEvents.length > 0 ? (
                             filteredEvents.map((event) => (
-                                <div key={event.id}>
-                                    <h4>{event.title}</h4>
-                                    {/* Display other event information */}
-                                </div>
+                               <Col key={event.id} style={{flex: '0 1'}}>
+                               
+                                     {console.log(event)}
+                                    
+                                    <CardEventDate event={event}/>
+                                
+                                </Col>
                             ))
                         ) : (
-                            <p style={{ marginTop: "35px", fontWeight: "100" }}>
+                            <p style={{ marginTop: "15px", fontWeight: "100" }}>
                                 No events found for the selected date, select
                                 another period
                             </p>
                         )}
+                        </Row>
                     </Container>
                 </div>
             </section>

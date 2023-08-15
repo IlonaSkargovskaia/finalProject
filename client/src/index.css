@@ -373,7 +373,6 @@ table.org-table>thead{
     text-align: center;
     margin-bottom: 60px;
     background-color: #ffffff;
-    opacity: 0.8;
     background-image: radial-gradient(#dbb5e2 0.5px, transparent 0.5px), radial-gradient(#e7b1ee 0.5px, #ffffff 0.5px);
     background-size: 20px 20px;
     background-position: 0 0,10px 10px;
@@ -384,6 +383,10 @@ table.org-table>thead{
     margin-bottom: 30px;
 }
 
+.form__date label{
+    margin: 10px 0;
+}
+
 .form__date input{
     margin: 0 15px;
     background-color: #e9e9e9;
@@ -392,6 +395,16 @@ table.org-table>thead{
     padding: 5px 15px;
     font-size: 20px;
     min-width: 200px;
+}
+
+.mycard-date{
+    min-width: 300px !important;
+}
+
+.card__date-price{
+    background: #fff;
+    color: #7b1ea2;
+    border-radius: 5px;
 }
 
 .home__filtered-events{
