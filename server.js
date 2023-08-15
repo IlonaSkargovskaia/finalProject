@@ -103,21 +103,77 @@ app.post('/send-email', async (req, res) => {
     const mailOptions = {
       from: 'ilona.skars@gmail.com',
       to: recipientEmail,
-      subject: 'Ticket Purchase Confirmation on Ticket PRO',
+      subject: 'Ticket purchase confirmation on "TicketPRO"',
       html: `
-      <p>Thank you for purchasing tickets for the event.</p>
-      <h3>Event: ${eventData.title}</h3>
-      <h4>Date: ${eventData.date}</h4>
-      <h4>Selected Seats:</h4>
-      <ul>
-          ${eventData.selectedSeatsAndRows.map(seat => `
-              <li>
-                  <p><b>Row:</b> ${seat.row}, <b>Seat:</b> ${seat.seat}</p>
-                  <img src="${qrCodeImages[eventData.selectedSeatsAndRows.indexOf(seat)]}" alt="QR Code" style="max-width: 256px;" />
-              </li>
-          `).join("")}
-      </ul>
-      <p><b>Total Amount:</b> ${eventData.total} ILS</p>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+            }
+            .ticket {
+              background-color: #f4f4f4;
+              border-radius: 5px;
+              padding: 20px;
+              margin-bottom: 20px;
+            }
+            .ticket-header {
+              background-color: #7b1ea2;
+              color: white;
+              padding: 10px;
+              text-align: center;
+              border-radius: 5px 5px 0 0;
+            }
+            .ticket-header h2{
+                margin-bottom: 0;
+            }
+            .ticket-content {
+              padding: 10px;
+              text-align: center;
+            }
+
+            ul.seats {
+                list-style-type: none;
+                
+            }
+            .seat-info {
+              margin-top: 10px;
+              display: inline-block;
+            }
+            .qr-code {
+              max-width: 256px;
+              display: block;
+              margin: 10px auto;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="ticket">
+            <div class="ticket-header">
+              <h2>Ticket purchase confirmation on "TicketPRO"</h2>
+            </div>
+            <div class="ticket-content">
+              <p>Thank you for purchasing tickets for the event.</p>
+              
+              <h3>Event: "${eventData.title}"</h3>
+              <h4>Date: ${eventData.date}</h4>
+              <p><b>Total Amount:</b> ${eventData.total} ILS</p>
+              <ul class="seats">
+                ${eventData.selectedSeatsAndRows.map(seat => `
+                  <li class="seat-info">
+                    <p><b>Row:</b> ${seat.row}, <b>Seat:</b> ${seat.seat}</p>
+                    <img src="${qrCodeImages[eventData.selectedSeatsAndRows.indexOf(seat)]}" alt="QR Code" class="qr-code" />
+                  </li>
+                `).join("")}
+              </ul>
+              
+              <p style="color: #7b1ea2;">show this QR codes to the security guard <br />at the entrance to the event!</p>
+            </div>
+          </div>
+        </body>
+      </html>
       `,
     };
   
