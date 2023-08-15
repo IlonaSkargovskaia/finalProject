@@ -528,8 +528,23 @@ svg{
     margin-bottom: 3px;
 }
 
+/* MODAL */
 .modal.show .modal-dialog{
-    top: 15%;
+    top: 20%;
+}
+
+.modal-header{
+    background-color: #7b1ea2;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+}
+
+.modal-body .letter{
+    text-transform: uppercase;
+    text-align: center;
+
+    font-weight: bold;
 }
 
 .card-img-top.sold-out{

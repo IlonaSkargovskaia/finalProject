@@ -275,18 +275,7 @@ const EventDetail = () => {
                     const ticketId = response.data.ticketData.ticketId;
                     console.log("ticket id in detail:", ticketId);
 
-                    // setTicketData((prevTicketData) => ({
-                    //     ...prevTicketData,
-                    //     purchasedTickets: [
-                    //         ...(prevTicketData?.purchasedTickets || []), // Handle the initial null case
-                    //         {
-                    //             id: ticketId,
-                    //             title: title,
-                    //             row: selectedSeats[0].row,
-                    //             seat: selectedSeats[0].seatNumber,
-                    //         },
-                    //     ],
-                    // }));
+                    
 
                     console.log(
                         "Setting ticketData:",
@@ -482,7 +471,7 @@ const EventDetail = () => {
                             renderSeats={renderSeats}
                         />
 
-                        {ticketData && <TicketDetails ticket={ticketData} title={title}/>}
+                        {ticketData && <TicketDetails ticket={ticketData} title={title} date={formattedDate}/>}
 
                         
                     </Col>
