@@ -12,7 +12,7 @@ router.post('/api/events', authorization, addEventController);
 router.get('/api/events/user/:user_id', authorization, getEventsByUserIdController);
 
 router.get('/api/events/:id', getEventByIDController);
-router.get('/api/events-by-date', getEventsByDateController)
+router.get('/api/events-by-date', getEventsByDateController);
 
 router.get('/api/events/category/:categoryId', getEventsByCategoryController);
 router.get('/api/events/location/:locationId', getEventsByLocationController);

@@ -14,7 +14,7 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState(""); // State for selected date
     const [filteredEvents, setFilteredEvents] = useState([]); // State for filtered events
 
-     // Function to fetch filtered events by date
+    // Function to fetch filtered events by date
     const fetchFilteredEvents = async () => {
         try {
             const response = await axios.get(`/api/events-by-date`, {
@@ -24,7 +24,7 @@ const Home = () => {
             });
             setFilteredEvents(response.data);
         } catch (error) {
-            console.error('Error fetching filtered events:', error);
+            console.error("Error fetching filtered events:", error);
         }
     };
 
@@ -39,17 +39,26 @@ const Home = () => {
         <div className="home__page">
             <Header />
 
-{/* Add a form to choose the date */}
-<section className="home__filter-form">
+            {/* Add a form to choose the date */}
+            <section className="home__filter-form">
                 <Container>
-                    <form onSubmit={(e) => { e.preventDefault(); fetchFilteredEvents(); }}>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            fetchFilteredEvents();
+                        }}
+                    >
                         <label>
                             Choose Date:
                             <input
                                 type="date"
-                                value={selectedDate}
-                                onChange={(e) => setSelectedDate(e.target.value)}
-                                defaultValue={new Date().toISOString().split('T')[0]} // Set default to today
+                                //value={selectedDate}
+                                onChange={(e) =>
+                                    setSelectedDate(e.target.value)
+                                }
+                                defaultValue={
+                                    new Date().toISOString().split("T")[0]
+                                } // Set default to today
                             />
                         </label>
                         <button type="submit">Filter</button>
@@ -60,7 +69,7 @@ const Home = () => {
             {/* Display filtered events or a message if no events found */}
             <section className="home__filtered-events">
                 <Container>
-                    <h3>Filtered Events</h3>
+                    {/* <h3>Filtered Events</h3> */}
                     {filteredEvents.length > 0 ? (
                         filteredEvents.map((event) => (
                             <div key={event.id}>
@@ -118,7 +127,6 @@ const Home = () => {
                     </div>
                 </Container>
             </section>
-
 
             <EventsNewest />
 
