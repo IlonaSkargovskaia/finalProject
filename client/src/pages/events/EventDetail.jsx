@@ -275,15 +275,11 @@ const EventDetail = () => {
                     const ticketId = response.data.ticketData.ticketId;
                     console.log("ticket id in detail:", ticketId);
 
-                    
-
                     console.log(
                         "Setting ticketData:",
                         response.data.ticketData
                     );
                     setTicketData(response.data.ticketData);
-
-                
                 } else {
                     console.error("Ticket ID not found in API response");
                 }
@@ -381,35 +377,23 @@ const EventDetail = () => {
                                                             Quantity:
                                                         </Form.Label>
                                                     </Col>
+                                                   
                                                     <Col>
-                                                        <Form.Select
+                                                        <input
+                                                            type="number"
+                                                            className="quantity-input"
                                                             value={
                                                                 selectedQuantity
                                                             }
                                                             onChange={
                                                                 handleQuantityChange
                                                             }
-                                                        >
-                                                            {Array.from(
-                                                                {
-                                                                    length: quantity_available,
-                                                                },
-                                                                (_, index) => (
-                                                                    <option
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        value={
-                                                                            index +
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        {index +
-                                                                            1}
-                                                                    </option>
-                                                                )
-                                                            )}
-                                                        </Form.Select>
+                                                            min="1"
+                                                            max={
+                                                                quantity_available
+                                                            }
+                                                            readOnly
+                                                        />
                                                     </Col>
 
                                                     <Col>
@@ -471,9 +455,13 @@ const EventDetail = () => {
                             renderSeats={renderSeats}
                         />
 
-                        {ticketData && <TicketDetails ticket={ticketData} title={title} date={formattedDate}/>}
-
-                        
+                        {ticketData && (
+                            <TicketDetails
+                                ticket={ticketData}
+                                title={title}
+                                date={formattedDate}
+                            />
+                        )}
                     </Col>
 
                     {/* right column */}

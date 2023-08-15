@@ -528,9 +528,18 @@ svg{
     margin-bottom: 3px;
 }
 
+.quantity-input{
+    background: white;
+    border: none;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 20px;
+}
+
 /* MODAL */
 .modal.show .modal-dialog{
-    top: 20%;
+    top: 10%;
 }
 
 .modal-header{
