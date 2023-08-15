@@ -3,6 +3,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { FaRegComments } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import { CiStar } from "react-icons/ci";
+import {VscCommentDiscussion} from 'react-icons/vsc'
 import axios from "axios";
 import { slice } from "lodash";
 
@@ -45,7 +46,10 @@ const LastReviews = () => {
     }, []);
     return (
         <div>
-            <h3>Last reviews: </h3>
+            <h3>
+                <VscCommentDiscussion style={{marginRight: '10px'}}/>
+                Last reviews:
+            </h3>
             <Row>
                 {initialPosts.map((review, index) => {
                     //find user by his ID and save it to user var
@@ -59,7 +63,10 @@ const LastReviews = () => {
                         <Col key={index} md={6}>
                             <Card className="review my-3">
                                 <Row>
-                                    <Col lg={3} className="me-3 review__image-block">
+                                    <Col
+                                        lg={3}
+                                        className="me-3 review__image-block"
+                                    >
                                         {event && (
                                             <img
                                                 src={event.image}
@@ -137,7 +144,6 @@ const LastReviews = () => {
                         )}
                     </div>
                 </Col>
-                
             </Row>
         </div>
     );

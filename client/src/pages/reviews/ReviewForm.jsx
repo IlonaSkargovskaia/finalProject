@@ -87,7 +87,7 @@ const ReviewForm = () => {
     };
 
     return (
-        <div className="card mt-5 add-review">
+        <div className="card add-review">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}

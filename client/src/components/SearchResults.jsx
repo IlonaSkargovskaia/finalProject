@@ -17,7 +17,7 @@ const SearchResults = ({ events }) => {
             <Container>
                 <h2>Search Results for: {searchQuery}</h2>
                 <Row>
-                    <Col md={8} sm={12}>
+                    
                         {filteredEvents && filteredEvents.length > 0 ? (
                             filteredEvents.map((event, index) => (
                                 <Col key={index}>
@@ -27,10 +27,8 @@ const SearchResults = ({ events }) => {
                         ) : (
                             <p>No events found.</p>
                         )}
-                    </Col>
-                    <Col md={4} sm={12}>
-                            right
-                    </Col>
+                   
+                    
                 </Row>
             </Container>
         </div>

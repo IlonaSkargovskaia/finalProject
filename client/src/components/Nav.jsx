@@ -1,5 +1,5 @@
-import React, { useState,useContext } from "react";
-import { CiSearch, CiUser } from "react-icons/ci";
+import React, { useState, useContext } from "react";
+// import { CiSearch, CiUser } from "react-icons/ci";
 import { BsPersonCheck, BsPersonCircle, BsPersonPlus } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
@@ -23,12 +23,12 @@ const Navigation = ({
     setIsAuthenticated,
     isAuthenticated,
     username,
-    userRole
+    userRole,
 }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    
+
     const { isVerify } = useContext(AppContext);
 
     const navigate = useNavigate();
@@ -41,15 +41,15 @@ const Navigation = ({
         setSelectedLocation(event.target.value);
     };
 
-    const handleSearchInput = (event) => {
-        setSearchQuery(event.target.value);
-    };
+    // const handleSearchInput = (event) => {
+    //     setSearchQuery(event.target.value);
+    // };
 
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
+    // const handleSearchSubmit = (e) => {
+    //     e.preventDefault();
 
-        navigate(`/search?q=${searchQuery}`);
-    };
+    //     navigate(`/search?q=${searchQuery}`);
+    // };
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -61,8 +61,8 @@ const Navigation = ({
 
     return (
         <>
-            <Navbar expand="lg" className="nav__menu">
-                <Container>
+            <Navbar expand="lg" className="nav__menu p-4">
+                {/* <Container> */}
                     <Navbar.Brand as={Link} to="/">
                         <img src={logo} className="logo" alt="ticketpro" />
                     </Navbar.Brand>
@@ -73,7 +73,12 @@ const Navigation = ({
                     />
 
                     <Navbar.Collapse id="navbarScroll">
-                        <Nav.Link href="/events" style={{marginRight: '15px'}}>All events </Nav.Link>
+                        <Nav.Link
+                            href="/events"
+                            style={{ marginRight: "15px" }}
+                        >
+                            All events{" "}
+                        </Nav.Link>
                         <Nav className="me-auto my-2 my-lg-0" navbarScroll>
                             <NavDropdown
                                 title="Categories"
@@ -158,25 +163,11 @@ const Navigation = ({
                                     Center
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/reviews" >Reviews </Nav.Link>
+                            <Nav.Link href="/reviews">Reviews </Nav.Link>
                         </Nav>
-                        
-                        <GoogleTranslate />
 
-                        <Form className="d-flex" onSubmit={handleSearchSubmit}>
-                            <InputGroup className="search__top">
-                                <InputGroup.Text className="bg-white">
-                                    <CiSearch />
-                                </InputGroup.Text>
-                                <FormControl
-                                    type="search"
-                                    className="me-2"
-                                    placeholder="Search events.."
-                                    value={searchQuery}
-                                    onChange={handleSearchInput}
-                                />
-                            </InputGroup>
-                        </Form>
+
+                        <GoogleTranslate />
 
                         <Stack direction="horizontal" gap={3}>
                             {isAuthenticated ? (
@@ -187,7 +178,8 @@ const Navigation = ({
                                             as={Link}
                                             to="/organizerdashboard"
                                         >
-                                            <BsPersonCircle className="login-icon"/> Profile
+                                            <BsPersonCircle className="login-icon" />{" "}
+                                            Profile
                                         </Button>
                                     ) : (
                                         <Button
@@ -195,12 +187,13 @@ const Navigation = ({
                                             as={Link}
                                             to="/userdashboard"
                                         >
-                                            <BsPersonCircle className="login-icon"/> Profile
+                                            <BsPersonCircle className="login-icon" />{" "}
+                                            Profile
                                         </Button>
                                     )}
 
                                     <div className="vr" />
-                                    
+
                                     <Button
                                         variant="outline-light"
                                         onClick={handleLogout}
@@ -215,7 +208,8 @@ const Navigation = ({
                                         as={Link}
                                         to="/login"
                                     >
-                                        <BsPersonCheck className="login-icon"/>Login
+                                        <BsPersonCheck className="login-icon" />
+                                        Login
                                     </Button>
                                     <div className="vr" />
                                     <Button
@@ -223,13 +217,14 @@ const Navigation = ({
                                         as={Link}
                                         to="/register"
                                     >
-                                        <BsPersonPlus className="register-icon"/> Sign up
+                                        <BsPersonPlus className="register-icon" />{" "}
+                                        Sign up
                                     </Button>
                                 </>
                             )}
                         </Stack>
                     </Navbar.Collapse>
-                </Container>
+                {/* </Container> */}
             </Navbar>
 
             <Container>
