@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const TicketDetails = ({ ticket, title, date }) => {
-    console.log(title);
+    //console.log(title);
     const [showModal, setShowModal] = useState(true);
     const [qrCodeImages, setQRCodeImages] = useState([]);
 
@@ -38,6 +38,7 @@ const TicketDetails = ({ ticket, title, date }) => {
                     recipientEmail: "iliukovich1991@gmail.com",
                     eventData: {
                         title: title,
+                        date: date,
                         selectedSeatsAndRows: selectedSeatsAndRows,
                         total: ticket.total_price,
                     },

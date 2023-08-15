@@ -103,16 +103,21 @@ app.post('/send-email', async (req, res) => {
     const mailOptions = {
       from: 'ilona.skars@gmail.com',
       to: recipientEmail,
-      subject: 'Ticket Purchase Confirmation',
+      subject: 'Ticket Purchase Confirmation on Ticket PRO',
       html: `
-        <p>Thank you for purchasing tickets for the event.</p>
-        <p>Event: ${eventData.title}</p>
-        <h4>Selected Seats:</h4>
-        <ul>
-            ${eventData.selectedSeatsAndRows.map(seat => `<li>Row: ${seat.row}, Seat: ${seat.seat}</li>`).join("")}
-        </ul>
-        <p>Total Amount: ${eventData.total} ILS</p>
-        ${qrCodeImageTags}
+      <p>Thank you for purchasing tickets for the event.</p>
+      <h3>Event: ${eventData.title}</h3>
+      <h4>Date: ${eventData.date}</h4>
+      <h4>Selected Seats:</h4>
+      <ul>
+          ${eventData.selectedSeatsAndRows.map(seat => `
+              <li>
+                  <p><b>Row:</b> ${seat.row}, <b>Seat:</b> ${seat.seat}</p>
+                  <img src="${qrCodeImages[eventData.selectedSeatsAndRows.indexOf(seat)]}" alt="QR Code" style="max-width: 256px;" />
+              </li>
+          `).join("")}
+      </ul>
+      <p><b>Total Amount:</b> ${eventData.total} ILS</p>
       `,
     };
   

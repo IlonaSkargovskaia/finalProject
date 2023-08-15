@@ -288,7 +288,7 @@ const EventDetail = () => {
                     console.error("Ticket ID not found in API response");
                 }
 
-                toast.success(successMessage);
+                //toast.success(successMessage);
             } catch (error) {
                 if (error.response.status === 400) {
                     console.error("Not enough tickets available");
