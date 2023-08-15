@@ -364,8 +364,38 @@ table.org-table>thead{
     min-height: 300px;
     background-size: cover;
     margin-top: -26px;
-    margin-bottom: 60px;
     padding-bottom: 20px;
+}
+
+.home__filter-date{
+    background: #fff;
+    padding: 60px 0;
+    text-align: center;
+    margin-bottom: 60px;
+    background-color: #ffffff;
+    opacity: 0.8;
+    background-image: radial-gradient(#dbb5e2 0.5px, transparent 0.5px), radial-gradient(#e7b1ee 0.5px, #ffffff 0.5px);
+    background-size: 20px 20px;
+    background-position: 0 0,10px 10px;
+}
+
+.filter-date__title{
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.form__date input{
+    margin: 0 15px;
+    background-color: #e9e9e9;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 15px;
+    font-size: 20px;
+    min-width: 200px;
+}
+
+.home__filtered-events{
+    margin-top: 35px;
 }
 
 .bg__black{

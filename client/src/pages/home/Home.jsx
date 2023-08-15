@@ -11,8 +11,12 @@ import axios from "axios";
 
 const Home = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
-    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
-    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
+    const [startDate, setStartDate] = useState(
+        new Date().toISOString().split("T")[0]
+    ); // Default to today's date
+    const [endDate, setEndDate] = useState(
+        new Date().toISOString().split("T")[0]
+    ); // Default to today's date
 
     const [filteredEvents, setFilteredEvents] = useState([]); // State for filtered events
 
@@ -44,14 +48,16 @@ const Home = () => {
 
             <section className="home__filter-date">
                 <Container>
+                    <h2 className="filter-date__title">When do you want to go?</h2>
                     <form
+                        className="form__date"
                         onSubmit={(e) => {
                             e.preventDefault();
                             fetchFilteredEvents();
                         }}
                     >
                         <label>
-                            Choose Start Date:
+                            From:
                             <input
                                 type="date"
                                 value={startDate}
@@ -59,7 +65,7 @@ const Home = () => {
                             />
                         </label>
                         <label>
-                            Choose End Date:
+                            To:
                             <input
                                 type="date"
                                 value={endDate}
@@ -71,23 +77,26 @@ const Home = () => {
                         </button>
                     </form>
                 </Container>
-            </section>
 
-            {/* Display filtered events or a message if no events found */}
-            <section className="home__filtered-events">
-                <Container>
-                    {/* <h3>Filtered Events</h3> */}
-                    {filteredEvents.length > 0 ? (
-                        filteredEvents.map((event) => (
-                            <div key={event.id}>
-                                <h4>{event.title}</h4>
-                                {/* Display other event information */}
-                            </div>
-                        ))
-                    ) : (
-                        <p>No events found for the selected date.</p>
-                    )}
-                </Container>
+                {/* Display filtered events or a message if no events found */}
+                <div className="home__filtered-events">
+                    <Container>
+                        {/* <h3>Filtered Events</h3> */}
+                        {filteredEvents.length > 0 ? (
+                            filteredEvents.map((event) => (
+                                <div key={event.id}>
+                                    <h4>{event.title}</h4>
+                                    {/* Display other event information */}
+                                </div>
+                            ))
+                        ) : (
+                            <p style={{ marginTop: "35px", fontWeight: "100" }}>
+                                No events found for the selected date, select
+                                another period
+                            </p>
+                        )}
+                    </Container>
+                </div>
             </section>
 
             <EventsByDate />
@@ -98,8 +107,7 @@ const Home = () => {
                         <Row className="location-links">
                             <Col>
                                 <h3>
-                                    {" "}
-                                    <CiLocationOn /> Choose location:{" "}
+                                    <CiLocationOn /> Choose location:
                                 </h3>
                             </Col>
 
