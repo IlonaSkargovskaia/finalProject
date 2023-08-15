@@ -59,7 +59,7 @@ const LastReviews = () => {
                         <Col key={index} md={6}>
                             <Card className="review my-3">
                                 <Row>
-                                    <Col sm={3} className="me-3">
+                                    <Col lg={3} className="me-3 review__image-block">
                                         {event && (
                                             <img
                                                 src={event.image}

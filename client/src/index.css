@@ -606,6 +606,7 @@ svg{
     max-width: 100%;
     height: -webkit-fill-available;
     object-fit: cover;
+    border-radius: 5px;
 }
 
 .review-comment{
@@ -638,6 +639,12 @@ svg{
 }
 
 /* media */
+@media only screen and (max-width: 1200px) {
+    .navbar>.container{
+        flex-wrap: wrap !important;
+    }
+}
+
 
 @media only screen and (max-width: 990px) {
     .event__detail.card{
@@ -654,6 +661,21 @@ svg{
 
     .org__block{
         max-width: 100%;
+    }
+
+    .review-image {
+        height: 100px;
+        border-radius: 50%;
+        width: 100px;
+        margin-bottom: 20px;
+    }
+
+    .review__image-block{
+        text-align: center;
+    }
+
+    .review h4 {
+        text-align: center;
     }
 
    
