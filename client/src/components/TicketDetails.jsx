@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import QRCode from "qrcode";
-import axios from "axios";
+import axios from "axios"; 
+import {CiWarning} from 'react-icons/ci';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,7 +14,6 @@ const TicketDetails = ({ ticket, title, date }) => {
     useEffect(() => {
         generateQRCodeImagesAndSendEmail();
     }, []);
-
 
     const generateQRCodeImagesAndSendEmail = async () => {
         if (ticket && ticket.seats) {
@@ -50,7 +50,6 @@ const TicketDetails = ({ ticket, title, date }) => {
                 console.error("Error sending email:", error);
             }
         }
-        
     };
 
     const generateQRCodeValue = (seat) => {
@@ -70,17 +69,17 @@ const TicketDetails = ({ ticket, title, date }) => {
     return (
         <>
             <ToastContainer
-                    position="top-center"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="dark"
-                />
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
@@ -89,36 +88,39 @@ const TicketDetails = ({ ticket, title, date }) => {
                 </Modal.Header>
                 <Modal.Body>
                     <Row className="text-center">
-                       
-
                         {ticket && (
                             <div key={ticket.ticketId}>
                                 <h3>"{title}"</h3>
-                                <h4 style={{color: '#b0b0b0'}}>{date}</h4>
+                                <h4 style={{ color: "#b0b0b0" }}>{date}</h4>
                             </div>
                         )}
-<hr />
+                        
+                        <div className='details'>
                         {ticket.seats.map((seat, index) => (
-                            <div key={seat.id} >
-                                
-                                    <h5>Row: {seat.row}, Seat: {seat.seatNumber}</h5>
-                                
+                            <div key={seat.id}>
+                                <h5>
+                                    Row: {seat.row}, Seat: {seat.seatNumber}
+                                </h5>
                             </div>
                         ))}
 
                         {ticket && (
                             <div>
-                                
-                                <h5><b>Total amount:</b> {ticket.total_price} ILS</h5>
+                                <h5>
+                                    <b>Total amount:</b> {ticket.total_price}{" "}
+                                    ILS
+                                </h5>
                             </div>
                         )}
-                        <hr />
+                        </div>
+                        
+                        
                         <p className="letter">
-                            We sent a letter to your mail <br />
+                            <CiWarning style={{fontSize: '40px'}}/><br/> We sent a letter to your mail <br />
                             with QR-codes for each ticket!
                         </p>
                         <p style={{ color: "#7b1ea2" }}>
-                            Show them to the security guard at the entrance to
+                            Show them to the security guard <br />at the entrance to
                             the event!
                         </p>
                     </Row>

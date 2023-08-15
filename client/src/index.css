@@ -540,6 +540,12 @@ svg{
     color: #fff;
 }
 
+.modal-body .details{
+    margin: 20px 0;
+    background-color: #e3e3e3;
+    padding: 20px 0 10px 0
+}
+
 .modal-body .letter{
     text-transform: uppercase;
     text-align: center;
