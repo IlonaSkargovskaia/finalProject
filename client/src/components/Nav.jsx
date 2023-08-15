@@ -17,6 +17,7 @@ import {
 import logo from "../assets/logo.png";
 import "./navbar.css";
 import Breadcrumbs from "./Breadcrumbs";
+import GoogleTranslate from "./GoogleTranslate";
 
 const Navigation = ({
     setIsAuthenticated,
@@ -160,6 +161,7 @@ const Navigation = ({
                             <Nav.Link href="/reviews" >Reviews </Nav.Link>
                         </Nav>
                         
+                        <GoogleTranslate />
 
                         <Form className="d-flex" onSubmit={handleSearchSubmit}>
                             <InputGroup className="search__top">

@@ -64,7 +64,7 @@ const CardEventDate = ({ event }) => {
                     <Card.Img variant="top" src={image} />
                 )}
             </Link> */}
-            <Card.Body style={{ background: '#f0f0f2'}}>
+            <Card.Body style={{ background: "#f0f0f2" }}>
                 <Card.Title as={Link} to={`/events/${id}`}>
                     {title}
                 </Card.Title>
@@ -73,14 +73,16 @@ const CardEventDate = ({ event }) => {
                     <IoCalendarOutline /> {newDateFormat} | {formattedTime}
                 </Card.Text>
                 <Card.Text className="card__date-price">
-                    <TbPigMoney /> from {price} ILS
+                    {quantity_available === 0
+                        ? `no tickets`
+                        : `from ${price} ILS `}
                 </Card.Text>
                 <Card.Text>
                     <CiLocationOn /> {locationName}
                 </Card.Text>
                 <hr />
                 <Row className="align-items-center">
-                    <Col >
+                    <Col>
                         {quantity_available === 0 ? (
                             <Button className="card__button" disabled>
                                 SOLD OUT
