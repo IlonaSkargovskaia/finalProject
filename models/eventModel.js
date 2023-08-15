@@ -64,14 +64,14 @@ export const getEventsByLocation = async (locationId) => {
     }
 };
 
-export const getEventsByDate = async (date) => {
+export const getEventsByDate = async (start_date, end_date) => {
     try {
-        const events = await db.select('*').from('events').where({ date });
+        const events = await db.select('*').from('events').whereBetween('date', [start_date, end_date]);
         return events;
-      } catch (error) {
+    } catch (error) {
         throw new Error('Error fetching events by date from the database');
-      }
-}
+    }
+};
 
 export const getEventsByUserId = async (userId) => {
     try {

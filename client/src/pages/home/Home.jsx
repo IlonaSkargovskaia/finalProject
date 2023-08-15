@@ -11,15 +11,18 @@ import axios from "axios";
 
 const Home = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
-    const [selectedDate, setSelectedDate] = useState(""); // State for selected date
+    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
+    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]); // Default to today's date
+
     const [filteredEvents, setFilteredEvents] = useState([]); // State for filtered events
 
-    // Function to fetch filtered events by date
+    // Function to fetch filtered events by date range
     const fetchFilteredEvents = async () => {
         try {
             const response = await axios.get(`/api/events-by-date`, {
                 params: {
-                    date: selectedDate,
+                    start_date: startDate,
+                    end_date: endDate,
                 },
             });
             setFilteredEvents(response.data);
@@ -28,19 +31,18 @@ const Home = () => {
         }
     };
 
-    // Fetch filtered events whenever selectedDate changes
+    // Fetch filtered events whenever startDate or endDate changes
     useEffect(() => {
-        if (selectedDate) {
+        if (startDate && endDate) {
             fetchFilteredEvents();
         }
-    }, [selectedDate]);
+    }, [startDate, endDate]);
 
     return (
         <div className="home__page">
             <Header />
 
-            {/* Add a form to choose the date */}
-            <section className="home__filter-form">
+            <section className="home__filter-date">
                 <Container>
                     <form
                         onSubmit={(e) => {
@@ -49,19 +51,24 @@ const Home = () => {
                         }}
                     >
                         <label>
-                            Choose Date:
+                            Choose Start Date:
                             <input
                                 type="date"
-                                //value={selectedDate}
-                                onChange={(e) =>
-                                    setSelectedDate(e.target.value)
-                                }
-                                defaultValue={
-                                    new Date().toISOString().split("T")[0]
-                                } // Set default to today
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
                             />
                         </label>
-                        <button type="submit">Filter</button>
+                        <label>
+                            Choose End Date:
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+                        </label>
+                        <button type="submit" className="btn purple">
+                            Find events
+                        </button>
                     </form>
                 </Container>
             </section>

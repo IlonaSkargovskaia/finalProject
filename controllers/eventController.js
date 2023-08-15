@@ -53,23 +53,24 @@ export const getAddressController = async (req, res) => {
 
 
 export const getEventsByDateController = async (req, res) => {
-    const { date } = req.query;
+    const { start_date, end_date } = req.query;
   
-    if (!date) {
-      return res.status(400).json({ message: 'Date parameter is required' });
+    // Check if both start_date and end_date are present
+    if (!start_date || !end_date) {
+        return res.status(400).json({ message: 'Both start_date and end_date parameters are required' });
     }
   
     try {
-      const events = await getEventsByDate(date);
+        // Call your getEventsByDate function passing the start_date and end_date
+        const events = await getEventsByDate(start_date, end_date);
 
-      // Sort events by date from earlier to later
-      const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
-      
-      
-      res.status(200).json(sortedEvents);
+        // Sort events by date from earlier to later
+        const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        res.status(200).json(sortedEvents);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
     }
   };
 
