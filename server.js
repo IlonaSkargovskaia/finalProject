@@ -8,7 +8,15 @@ import jwtAuth from "./routes/jwtAuth.js";
 import dashboard from "./routes/dashboard.js";
 import { s3Uploadv2 } from "./s3Service.js";
 import nodemailer from 'nodemailer';
-import path from 'path';
+//-----DEPLOY
+import {dirname} from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+//-----DEPLOY
+
+
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
