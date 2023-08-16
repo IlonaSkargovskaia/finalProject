@@ -43,6 +43,7 @@ const EventDetail = () => {
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
     const [ticketData, setTicketData] = useState(null);
     const [purchasedSeats, setPurchasedSeats] = useState([]);
+    
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -147,18 +148,23 @@ const EventDetail = () => {
         const isAvailable = availableSeats.some(
             (availableSeat) => availableSeat.id === seat.id
         );
-
+    
         if (isAvailable) {
             // Toggle seat selection
-            setSelectedSeats((prevSelectedSeats) =>
-                prevSelectedSeats.includes(seat)
-                    ? prevSelectedSeats.filter((s) => s.id !== seat.id)
-                    : [...prevSelectedSeats, seat]
-            );
+            setSelectedSeats((prevSelectedSeats) => {
+                if (prevSelectedSeats.some((selectedSeat) => selectedSeat.id === seat.id)) {
+                    // Seat is already selected, remove it
+                    return prevSelectedSeats.filter((s) => s.id !== seat.id);
+                } else {
+                    // Seat is not selected, add it
+                    return [...prevSelectedSeats, seat];
+                }
+            });
         }
-
+    
         console.log("Is Available after toggle:", isAvailable);
     };
+    
 
     const renderSeats = () => {
         const rows = Math.ceil(total_places / 10);
