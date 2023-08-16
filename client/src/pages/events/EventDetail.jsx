@@ -162,7 +162,6 @@ const EventDetail = () => {
             });
         }
     
-        console.log("Is Available after toggle:", isAvailable);
     };
     
 

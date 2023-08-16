@@ -27,7 +27,6 @@ const Navigation = ({
 }) => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
 
     const { isVerify } = useContext(AppContext);
 
@@ -41,15 +40,7 @@ const Navigation = ({
         setSelectedLocation(event.target.value);
     };
 
-    // const handleSearchInput = (event) => {
-    //     setSearchQuery(event.target.value);
-    // };
-
-    // const handleSearchSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     navigate(`/search?q=${searchQuery}`);
-    // };
+    
 
     const handleLogout = () => {
         localStorage.removeItem("token");
