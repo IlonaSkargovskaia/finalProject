@@ -20,3 +20,19 @@ export const insertQrCodeData = async (ticketUuid, qrCodeData) => {
       throw new Error('Error inserting qr_code_data into the database');
   }
 };
+
+export const getPurchasedSeatsByEventID = async (eventId) => {
+    try {
+      const purchasedSeats = await db
+        .select('row', 'seat')
+        .from('places')
+        .whereIn(
+          'ticket_id',
+          db.select('id').from('tickets').where('eventid', eventId)
+        );
+      return purchasedSeats;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching purchased seats for the event');
+    }
+  };

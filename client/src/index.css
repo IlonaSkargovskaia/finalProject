@@ -262,6 +262,10 @@ p.card__date{
     align-items: center;
 }
 
+.available {
+    font-size: 11px;
+}
+
 .card__interactive-total p{
     margin-bottom: 0;
     font-size: 20px;

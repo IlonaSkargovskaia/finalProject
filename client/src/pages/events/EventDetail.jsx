@@ -41,7 +41,7 @@ const EventDetail = () => {
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
     const [ticketData, setTicketData] = useState(null);
-
+    const [purchasedSeats, setPurchasedSeats] = useState([]);
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -86,6 +86,21 @@ const EventDetail = () => {
         : "Loading...";
 
     const formattedTime = hasDateTime ? time.slice(0, 5) : "";
+
+    const fetchPurchasedSeats = async () => {
+        try {
+            const response = await axios.get(
+                `/purchased-seats/event/${params.id}`
+            );
+            setPurchasedSeats(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPurchasedSeats();
+    }, [params.id]);
 
     const handleQuantityChange = (event) => {
         const { value } = event.target;
@@ -141,17 +156,16 @@ const EventDetail = () => {
             );
         }
 
-        console.log("Is Available seat:", isAvailable);
+        console.log("Is Available after toggle:", isAvailable);
     };
 
     const renderSeats = () => {
-        const rows = Math.ceil(total_places / 10); //  10 seats per row
+        const rows = Math.ceil(total_places / 10);
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
                     const seatIndexWithinTotalPlaces =
                         rowIndex * 10 + seatIndex;
-
                     const seat = {
                         id: seatIndexWithinTotalPlaces + 1,
                         row: rowIndex + 1,
@@ -162,17 +176,21 @@ const EventDetail = () => {
                         (selectedSeat) => selectedSeat.id === seat.id
                     );
 
+                    const isPurchased = purchasedSeats.some(
+                        (purchasedSeat) =>
+                            purchasedSeat.row === seat.row &&
+                            purchasedSeat.seat === seat.seatNumber
+                    );
+
                     const isAvailable = availableSeats.some(
                         (availableSeat) => availableSeat.id === seat.id
                     );
 
-                    const isPurchased = !isAvailable || isSelected;
-
                     const seatClassName = `seat ${
                         isPurchased
-                            ? isSelected
-                                ? "selected"
-                                : "purchased"
+                            ? "purchased"
+                            : isSelected
+                            ? "selected"
                             : "available"
                     } col`;
 
@@ -185,7 +203,6 @@ const EventDetail = () => {
                             {isPurchased ? (
                                 <div className="seat-indicator">
                                     {isSelected ? (
-                                        // `You selected: Row ${seat.row}, Seat ${seat.seatNumber}`
                                         <span>
                                             <CiMapPin
                                                 style={{ fontSize: "25px" }}
@@ -208,7 +225,11 @@ const EventDetail = () => {
                                     )}
                                 </div>
                             ) : (
-                                seat.seatNumber
+                                <div>
+                                <span>Row: {seat.row}</span>
+                                <br />
+                                <span>Seat: {seat.seatNumber}</span>
+                            </div>
                             )}
                         </div>
                     );
@@ -264,6 +285,10 @@ const EventDetail = () => {
                             )
                     )
                 );
+
+                if (response.data.success) {
+                    fetchPurchasedSeats(); // Fetch updated purchased seats
+                }
 
                 //console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
@@ -377,7 +402,7 @@ const EventDetail = () => {
                                                             Quantity:
                                                         </Form.Label>
                                                     </Col>
-                                                   
+
                                                     <Col>
                                                         <input
                                                             type="number"
