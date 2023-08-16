@@ -10,6 +10,7 @@ import {
     CiWallet,
     CiCircleRemove,
     CiMapPin,
+    CiCircleCheck,
 } from "react-icons/ci";
 import { AppContext } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
@@ -226,10 +227,16 @@ const EventDetail = () => {
                                 </div>
                             ) : (
                                 <div>
-                                <span>Row: {seat.row}</span>
-                                <br />
-                                <span>Seat: {seat.seatNumber}</span>
-                            </div>
+                                    <span>
+                                        <CiCircleCheck
+                                            style={{ fontSize: "25px" }}
+                                        />
+                                        <br />
+                                        Row: {seat.row}
+                                        <br />
+                                        Seat: {seat.seatNumber}
+                                    </span>
+                                </div>
                             )}
                         </div>
                     );
