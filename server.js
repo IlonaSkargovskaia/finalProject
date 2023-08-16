@@ -9,7 +9,7 @@ import dashboard from "./routes/dashboard.js";
 import { s3Uploadv2 } from "./s3Service.js";
 import nodemailer from 'nodemailer';
 //-----DEPLOY
-import {path, dirname} from 'path';
+import path, {dirname} from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
