@@ -21,6 +21,21 @@ export const getLastEvents = async () => {
     }
 }
 
+export const getPastEvents = async () => {
+    try {
+        
+        const currentDate = new Date();
+        
+        const pastEvents = await db.select('*').from('events').where('date', '<', currentDate.toISOString());
+        
+        return pastEvents;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error fetching past events from the database');
+    }
+}
+
+
 export const getAllAddresses = async () => {
     try {
         const addresses = await db.select('address').from('events');
@@ -115,5 +130,30 @@ export const deleteEvent = async (id) => {
     } catch (error) {
       console.log('error: ', error);
       throw new Error('Error deleting event from the database');
+    }
+}
+
+export const addFavorite = async (userId, eventId) => {
+    try {
+        const favorite = await db('favorites')
+            .insert({ user_id: userId, event_id: eventId })
+            .returning('*');
+        return favorite[0];
+    } catch (error) {
+        console.log('Error adding favorite:', error);
+        throw new Error('Error adding favorite to the database');
+    }
+}
+
+export const removeFavorite = async (userId, eventId) => {
+    try {
+        const deletedFavorite = await db('favorites')
+            .where({ user_id: userId, event_id: eventId })
+            .del()
+            .returning('*');
+        return deletedFavorite[0];
+    } catch (error) {
+        console.log('Error removing favorite:', error);
+        throw new Error('Error removing favorite from the database');
     }
 }

@@ -14,6 +14,7 @@ import logo from "../assets/logo.png";
 import "./navbar.css";
 import Breadcrumbs from "./Breadcrumbs";
 import GoogleTranslate from "./GoogleTranslate";
+import PastEvents from "../pages/events/PastEvents";
 
 const Navigation = ({
     setIsAuthenticated,
@@ -153,6 +154,7 @@ const Navigation = ({
                             </NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link href="/reviews">Reviews </Nav.Link>
+                        <Nav.Link href="/past-events">Past events </Nav.Link>
                     </Nav>
 
                     

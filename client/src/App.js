@@ -22,6 +22,7 @@ import ScrollButton from "./components/ScrollButton";
 import { toast } from "react-toastify";
 import TicketDetails from "./components/TicketDetails";
 import TicketPDF from "./components/TicketPDF";
+import PastEvents from "./pages/events/PastEvents";
 
 // Create a context for sharing state between components
 export const AppContext = createContext();
@@ -144,7 +145,7 @@ const App = () => {
                         <Route path="/events/:id" element={<EventDetail />} />
                         <Route path="/reviews" element={<Reviews />} />
                         <Route path="/create-event" element={<AddNewEvent />} />
-
+                        <Route path="/past-events" element={<PastEvents />} />
                         <Route path="/ticket/:ticketId" element={<TicketPDF />} />
                         
                         <Route

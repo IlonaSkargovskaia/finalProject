@@ -8,7 +8,7 @@ import { Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 
-const CardEvent = ({ event }) => {
+const CardEvent = ({ event, isFavorite, checkFavoriteStatus }) => {
     // Destructuring properties from the event object
     const {
         id,
@@ -31,7 +31,24 @@ const CardEvent = ({ event }) => {
     const [categoryName, setCategoryName] = useState("");
     const [locationName, setLocationName] = useState("");
 
-    const [isFavorite, setIsFavorite] = useState(false);
+    
+
+    // const toggleFavorite = async () => {
+    //     try {
+    //         if (isFavorite) {
+    //             // If already a favorite, remove from favorites
+    //             await axios.delete(`/api/favorites/${id}`);
+    //         } else {
+    //             // If not a favorite, add to favorites
+    //             await axios.post(`/api/favorites/${id}`);
+    //         }
+    //         // Update favorite status locally and in UserDashboard
+    //         checkFavoriteStatus(id);
+    //     } catch (error) {
+    //         console.error("Error toggling favorite:", error);
+    //     }
+    // };
+
 
     // Fetch category and location names
     useEffect(() => {
@@ -61,10 +78,6 @@ const CardEvent = ({ event }) => {
         fetchLocationName();
     }, [category_id, location_id]);
 
-    const toggleFavorite = () => {
-        setIsFavorite((prevState) => !prevState);
-    };
-
     return (
         <Card className="h-100 mycard">
             <Card.Text className="card__category"> {categoryName}</Card.Text>
@@ -83,21 +96,19 @@ const CardEvent = ({ event }) => {
                 <Card.Text className="card__date">
                     <IoCalendarOutline /> {newDateFormat} | {formattedTime}
                 </Card.Text>
-                <div className="d-flex justify-content-between align-items-center">
-                <Card.Text style={{marginBottom: '0'}}>
-                    <CiLocationOn /> {locationName}
-                </Card.Text>
-                <Card.Text>
-                    <div
-                        className={`favorite-icon ${
-                            isFavorite ? "favorited" : ""
-                        }`}
-                        onClick={toggleFavorite}
-                    >
-                        {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                    </div>
-                </Card.Text>
-                </div>
+
+                {/* Favorites */}
+                {/* <div className="d-flex justify-content-between align-items-center">
+                    <Card.Text style={{ marginBottom: "0" }}>
+                        <CiLocationOn /> {locationName}
+                    </Card.Text>
+                   
+                        <div className="favorite-icon" onClick={toggleFavorite}>
+                            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                        </div>
+                    
+                </div> */}
+                
                 <hr />
                 <Row className="align-items-center">
                     <Col>

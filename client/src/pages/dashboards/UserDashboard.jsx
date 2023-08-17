@@ -7,6 +7,8 @@ import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import CardEvent from "../../components/CardEvent";
 
 const UserDashboard = ({ setAuth }) => {
     // State to hold user-related data
@@ -14,9 +16,22 @@ const UserDashboard = ({ setAuth }) => {
     const [role, setRole] = useState("");
     const [purchasedTickets, setPurchasedTickets] = useState([]);
     const [userReviews, setUserReviews] = useState([]);
+    // const [events, setEvents] = useState([]); // State to hold events data
+    // const [eventFavorites, setEventFavorites] = useState({});
 
     // Access 'token' from AppContext
     const { token } = useContext(AppContext);
+
+    // Fetch events data
+    // const getEvents = async () => {
+    //     try {
+    //         const response = await axios.get("/api/events"); 
+    //         setEvents(response.data);
+            
+    //     } catch (error) {
+    //         console.error("Error fetching events:", error);
+    //     }
+    // };
 
     const getUserReviews = async () => {
         const storageToken = localStorage.getItem("token");
@@ -89,7 +104,7 @@ const UserDashboard = ({ setAuth }) => {
             const decodedToken = jwt.decode(token || storageToken);
             //console.log("Decoded token in UserDash:", decodedToken);
 
-             // Fetch the user's purchased tickets using the API
+            // Fetch the user's purchased tickets using the API
             const res = await fetch(`/api/tickets/user/${decodedToken.user}`, {
                 method: "GET",
                 headers: {
@@ -146,12 +161,42 @@ const UserDashboard = ({ setAuth }) => {
         }
     };
 
+    // Fetch favorite status for all events and update eventFavorites state
+    // const fetchEventFavorites = async () => {
+    //     try {
+    //         const response = await axios.get("/api/favorites");
+    //         const favoritesMap = {};
+    //         response.data.forEach((favorite) => {
+    //             favoritesMap[favorite.event_id] = favorite.isFavorite;
+    //         });
+    //         setEventFavorites(favoritesMap);
+    //         console.log('Favorites Map', favoritesMap);
+    //     } catch (error) {
+    //         console.error("Error fetching event favorites:", error);
+    //     }
+    // };
+
     //hook to fetch user data on component mount
     useEffect(() => {
         getName();
         getPurchasedTickets();
         getUserReviews();
+        //fetchEventFavorites();
+        //getEvents(); 
     }, []);
+
+    // Fetch favorite status for a specific event and update eventFavorites state
+    // const checkFavoriteStatus = async (eventId) => {
+    //     try {
+    //         const response = await axios.get(`/api/favorites/${eventId}`);
+    //         const updatedEventFavorites = { ...eventFavorites };
+    //         updatedEventFavorites[eventId] = response.data.isFavorite;
+    //         setEventFavorites(updatedEventFavorites);
+    //         console.log('updatedEvents:', updatedEventFavorites);
+    //     } catch (error) {
+    //         console.error("Error checking favorite status:", error);
+    //     }
+    // };
 
     const logout = (e) => {
         e.preventDefault();
@@ -269,6 +314,20 @@ const UserDashboard = ({ setAuth }) => {
                             </Table>
                         )}
                     </div>
+
+
+                    {/* Map through events and render each CardEvent */}
+                    {/* <Row>
+                            {events.map((event) => (
+                                <Col key={event.id} md={4} sm={6}>
+                                    <CardEvent
+                                        event={event}
+                                        isFavorite={eventFavorites[event.id]}
+                                        checkFavoriteStatus={checkFavoriteStatus}
+                                    />
+                                </Col>
+                            ))}
+                    </Row> */}
                 </Col>
             </Row>
         </Container>

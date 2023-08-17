@@ -1,4 +1,4 @@
-import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId, getLastEvents, getAllAddresses } from "../models/eventModel.js";
+import { getAllEvents, addEvent, getEventByID, updateEvent, deleteEvent, getEventsByCategory, getEventsByLocation, getEventsByDate, getEventsByUserId, getLastEvents, getAllAddresses, addFavorite, removeFavorite, getPastEvents } from "../models/eventModel.js";
 
 export const getAllEventsController = async (req, res) => {
     try {
@@ -115,7 +115,7 @@ export const addEventController = async (req, res) => {
     const user_id = req.user;
     console.log('UserId controller: ', req.user);
 
-    console.log('Req.body: ', req.body);
+    // console.log('Req.body: ', req.body);
     const {title, description, date, time, location_id, image, category_id, price, address, quantity_available, max_price, total_places} = req.body;
 
 
@@ -159,6 +159,16 @@ export const updateEventController = async (req, res) => {
     }
 }
 
+export const getPastEventsController = async (req, res) => {
+    try {
+        // console.log('controller');
+        const pastEvents = await getPastEvents();
+        res.status(200).json(pastEvents);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
 export const deleteEventController = async (req, res) => {
     const { id } = req.params;
@@ -174,4 +184,46 @@ export const deleteEventController = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const getFavoriteStatus = async (req, res) => {
+    const user_id = req.user;
+    const { id } = req.params;
+
+    try {
+        const favorite = await db('favorites')
+            .where({ user_id: user_id, event_id: id })
+            .first();
+        
+        res.status(200).json({ isFavorite: !!favorite }); // Convert to boolean
+    } catch (error) {
+        console.error('Error getting favorite status:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const addFavoriteController = async (req, res) => {
+    const user_id = req.user;
+    const { id } = req.params;
+
+    try {
+        const favorite = await addFavorite(user_id, id);
+        res.status(201).json(favorite);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export const removeFavoriteController = async (req, res) => {
+    const user_id = req.user;
+    const { id } = req.params;
+
+    try {
+        const deletedFavorite = await removeFavorite(user_id, id);
+        res.status(200).json(deletedFavorite);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
   
