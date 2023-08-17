@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { CiStar } from "react-icons/ci";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,13 +7,15 @@ import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import QRCode from "react-qr-code";
 
 const UserDashboard = ({ setAuth }) => {
+    // State to hold user-related data
     const [username, setUsername] = useState("");
     const [role, setRole] = useState("");
     const [purchasedTickets, setPurchasedTickets] = useState([]);
     const [userReviews, setUserReviews] = useState([]);
+
+    // Access 'token' from AppContext
     const { token } = useContext(AppContext);
 
     const getUserReviews = async () => {
@@ -47,7 +49,7 @@ const UserDashboard = ({ setAuth }) => {
                 })
             );
 
-            console.log("Reviews in userDash: ", reviewsWithEventTitles);
+            // console.log("Reviews in userDash: ", reviewsWithEventTitles);
             setUserReviews(reviewsWithEventTitles); // Store the user's reviews
         } catch (error) {
             console.log(error);
@@ -87,6 +89,7 @@ const UserDashboard = ({ setAuth }) => {
             const decodedToken = jwt.decode(token || storageToken);
             //console.log("Decoded token in UserDash:", decodedToken);
 
+             // Fetch the user's purchased tickets using the API
             const res = await fetch(`/api/tickets/user/${decodedToken.user}`, {
                 method: "GET",
                 headers: {
@@ -99,27 +102,29 @@ const UserDashboard = ({ setAuth }) => {
             }
 
             const data = await res.json();
-            console.log("Data in userDash: ", data);
+            // console.log("Data in userDash: ", data);
 
+            // array to store updated ticket data
             const updatedTickets = [];
 
             for (const ticket of data) {
-                console.log("Ticket:", ticket);
+                // console.log("Ticket:", ticket);
                 const eventDetailsRes = await fetch(
                     `/api/events/${ticket.eventid}`
                 );
                 const eventData = await eventDetailsRes.json();
-                console.log("eventData:", eventData);
+                // console.log("eventData:", eventData);
 
                 const placeDetailsRes = await fetch(`/api/places/${ticket.id}`);
-
                 const placeData = await placeDetailsRes.text();
-                console.log("Place Data:", placeData);
+                // console.log("Place Data:", placeData);
 
                 if (placeData) {
+                    // Parse the place data as JSON
                     const parsedPlaceData = JSON.parse(placeData);
-                    console.log("Parsed Place Data:", parsedPlaceData);
+                    // console.log("Parsed Place Data:", parsedPlaceData);
 
+                    // Create an updated ticket object with additional information
                     const updatedTicket = {
                         ...ticket,
                         eventTitle: eventData.title,
@@ -134,13 +139,14 @@ const UserDashboard = ({ setAuth }) => {
                     );
                 }
             }
-            console.log("Updated Tickets:", updatedTickets);
+            // console.log("Updated Tickets:", updatedTickets);
             setPurchasedTickets(updatedTickets);
         } catch (error) {
             console.log(error);
         }
     };
 
+    //hook to fetch user data on component mount
     useEffect(() => {
         getName();
         getPurchasedTickets();
@@ -232,13 +238,12 @@ const UserDashboard = ({ setAuth }) => {
                                         <th>Quantity</th>
                                         <th>Row</th>
                                         <th>Seat</th>
-                                         <th>Total price</th>
+                                        <th>Total price</th>
                                         {/*<th>QRCodes</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {purchasedTickets.map((ticket) => (
-                                        
                                         <tr key={ticket.id}>
                                             <td>{ticket.eventTitle}</td>
                                             <td>

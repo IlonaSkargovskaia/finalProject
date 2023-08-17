@@ -8,6 +8,8 @@ html, body, #root{
     height: 100%;
 }
 
+
+
 .goog-te-gadget-icon{
     display: none;
 }
@@ -131,8 +133,15 @@ a.card-title{
 
 .card__img-bg{
     background-color: #000;
+   
 }
 
+.favorite-icon {
+    
+    font-size: 20px;
+    color: #840e99;
+}
+rgb(255, 255, 255)
 .card{
     border: 0px solid #e0e4e8 !important;
 }

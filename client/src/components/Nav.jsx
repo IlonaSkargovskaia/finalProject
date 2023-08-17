@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-// import { CiSearch, CiUser } from "react-icons/ci";
 import { BsPersonCheck, BsPersonCircle, BsPersonPlus } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
@@ -8,11 +7,8 @@ import {
     NavDropdown,
     Nav,
     Stack,
-    Form,
     Container,
     Button,
-    InputGroup,
-    FormControl,
 } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import "./navbar.css";
@@ -28,8 +24,10 @@ const Navigation = ({
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
 
+     // Access context for user verification
     const { isVerify } = useContext(AppContext);
 
+     // Navigate function for routing
     const navigate = useNavigate();
 
     const handleCategoryChange = (event) => {
@@ -41,8 +39,10 @@ const Navigation = ({
     };
 
     const handleLogout = () => {
+        // Remove token from local storage
         localStorage.removeItem("token");
 
+        // Set authentication status to false
         setIsAuthenticated(false);
         // Redirect to the login page
         navigate("/login");

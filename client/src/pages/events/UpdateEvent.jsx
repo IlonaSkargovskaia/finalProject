@@ -5,9 +5,13 @@ import { Link, useParams } from "react-router-dom";
 import { AppContext } from "../../App";
 
 const UpdateEvent = () => {
+    // Get the eventId from the URL parameter
     const { eventId } = useParams();
     //console.log("EventID from UpdEv: ", eventId);
+
+    // Get the token and isAuth function from the AppContext
     const { token, isAuth } = useContext(AppContext); 
+    // Get the token from localStorage
     const storageToken = localStorage.getItem("token"); 
 
     const [eventData, setEventData] = useState({
@@ -38,12 +42,15 @@ const UpdateEvent = () => {
         time,
     } = eventData;
 
-    const [locations, setLocations] = useState([]); // State to store locations
-    const [selectedLocation, setSelectedLocation] = useState(""); // State for selected location
+    const [locations, setLocations] = useState([]); 
+    const [selectedLocation, setSelectedLocation] = useState(""); 
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
-    const [selectedFile, setSelectedFile] = useState(null); // State for selected image file
 
+    // State to store the selected image file
+    const [selectedFile, setSelectedFile] = useState(null); 
+
+    // Check authentication status on component mount
     useEffect(() => {
         isAuth()
     },[])

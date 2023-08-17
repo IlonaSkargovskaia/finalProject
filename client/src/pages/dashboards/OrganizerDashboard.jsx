@@ -23,13 +23,17 @@ const OrganizerDashboard = ({ setAuth }) => {
     },[])
 
     const getName = async () => {
+
+        // Retrieve token from local storage
         const storageToken = localStorage.getItem("token");
 
         try {
+            // Decode the token to get user information
             const decodedToken = jwt.decode(token || storageToken); 
-            console.log("Decoded token in OrgDash:", decodedToken);
+            // console.log("Decoded token in OrgDash:", decodedToken);
 
             if (decodedToken) {
+                // Fetch user's information
                 const res = await fetch(`/dashboard/`, {
                     method: "GET",
                     headers: {
@@ -74,6 +78,7 @@ const OrganizerDashboard = ({ setAuth }) => {
         }
     };
 
+    // Fetch user's information and events when the component mounts or the token changes
     useEffect(() => {
         const storageToken = localStorage.getItem("token");
         const decodedToken = jwt.decode(token || storageToken);
@@ -110,6 +115,7 @@ const OrganizerDashboard = ({ setAuth }) => {
         const isConfirmed = window.confirm(
             "Are you sure you want to delete this event?"
         );
+        //block code if false
         if (!isConfirmed) {
             return;
         }

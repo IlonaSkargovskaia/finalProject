@@ -23,9 +23,10 @@ const Register = ({ setAuth }) => {
         e.preventDefault();
 
         try {
-            //from the state
+            // Create a request body with user's username, email, and password from the state
             const body = { username, email, password };
 
+            // Send a POST request to the server for registration
             const res = await fetch(`/auth/register`, {
                 method: "POST",
                 headers: {
@@ -38,6 +39,7 @@ const Register = ({ setAuth }) => {
             //if all okay  - we get token
             //console.log(data); //data = {token: "kedjrgejrbgselhb"}
 
+            
             if (data.token) {
                 //now we need to save token to localstorage
                 localStorage.setItem("token", data.token);

@@ -23,14 +23,17 @@ import { toast } from "react-toastify";
 import TicketDetails from "./components/TicketDetails";
 import TicketPDF from "./components/TicketPDF";
 
-
+// Create a context for sharing state between components
 export const AppContext = createContext();
 
 
 
 const App = () => {
+    // State for loading spinner 
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
+
+    // State for username, token, user role, and verification status
     const [username, setUsername] = useState("");
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [userRole, setUserRole] = useState(""); 
@@ -38,6 +41,7 @@ const App = () => {
 
     const navigate = useNavigate(); 
 
+    // update authentication status
     const setAuth = (boolean) => {
         setToken(boolean ? localStorage.getItem("token") : ""); // Clear token on logout
     };
@@ -59,7 +63,9 @@ const App = () => {
 
                 // Decode the token to get user information
                 const decodedToken = jwt.decode(storageToken);
-                console.log('decoded token', decodedToken);
+                // console.log('decoded token', decodedToken);
+
+
                 if (decodedToken) {
                     const { role } = decodedToken;
     
@@ -78,11 +84,12 @@ const App = () => {
         }
     };
     
-
+ // Check authentication status when the component mounts
     useEffect(() => {
         isAuth();
     }, []);
 
+    
     useEffect(() => {
         const fetchEvents = async () => {
             try {

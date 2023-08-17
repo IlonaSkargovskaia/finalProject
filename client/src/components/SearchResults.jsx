@@ -5,10 +5,13 @@ import CardEvent from "./CardEvent";
 import RightCategories from "./RightCategories";
 
 const SearchResults = ({ events }) => {
+    // Get the current location object from react-router-dom
     const location = useLocation();
+
+    // Extract the search query parameter from the URL
     const searchQuery = new URLSearchParams(location.search).get("q");
 
-    // Use the search query from the URL param to filter events
+    // Filter events based on the search query
     const filteredEvents = events.filter((event) =>
         event.title.toLowerCase().includes(searchQuery.toLowerCase())
     );

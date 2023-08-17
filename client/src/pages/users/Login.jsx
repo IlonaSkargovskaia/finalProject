@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 
 
 const Login = ({ setAuth }) => {
+    // store user's email and password
     const [inputs, setInputs] = useState({
         email: "",
         password: "",
@@ -15,20 +16,25 @@ const Login = ({ setAuth }) => {
 
     const { email, password } = inputs;
 
+    //get from appContext from App info
     const { setToken,setUserRole, setIsVerify } = useContext(AppContext);
     const navigate = useNavigate(); 
 
 
+    //handle input changes
     const onChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
     };
 
+    // what will happens after submit
     const onSubmitForm = async (e) => {
         e.preventDefault();
 
+        // Create a request body with user's email and password
         const body = { email, password };
 
         try {
+             // Send a POST request to the server for authentication
             const res = await fetch(`/auth/login`, {
                 method: "POST",
                 headers: {
@@ -41,6 +47,7 @@ const Login = ({ setAuth }) => {
            
             //console.log('Data in Login:', data);
 
+             // Check if a token is present in the response
             if (data.token) {
                 localStorage.setItem("token", data.token);
     
@@ -52,6 +59,7 @@ const Login = ({ setAuth }) => {
                 if (decodedToken) {
                     const { role } = decodedToken;
     
+                    // Update context state with token, user role, and verification status
                     setToken(data.token);
                     setAuth(true);
                     setUserRole(role.trim());

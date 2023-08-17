@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const NewEventForm = (props) => {
     const { locations, categories } = props;
-    const { token ,isAuth} = useContext(AppContext);
+    const { token, isAuth } = useContext(AppContext);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -21,26 +21,32 @@ const NewEventForm = (props) => {
     const [totalPlaces, setTotalPlaces] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
 
+    // Check authentication status on component mount
     useEffect(() => {
-        isAuth()
-    },[])
+        isAuth();
+    }, []);
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Fetch token from local storage
         const storageToken = localStorage.getItem("token");
 
+        // Create a new FormData instance to handle file uploads
         const formData = new FormData();
         formData.append("file", selectedFile);
 
         try {
+            // Upload the selected file
             const uploadResponse = await axios.post(`/upload`, formData, {
                 headers: {
                     Authorization: token || storageToken,
                     "Content-Type": "multipart/form-data",
                 },
             });
-    
+
+            // Get the uploaded image URL from the response
             const imageUrl = uploadResponse.data.result.url;
 
             const newEvent = {
@@ -55,25 +61,23 @@ const NewEventForm = (props) => {
                 quantity_available: quantityAvailable,
                 max_price: maxPrice,
                 total_places: totalPlaces,
-                image: imageUrl, // Add the image URL to the newEvent object
+                image: imageUrl,
             };
 
-        
             const decodedToken = jwt.decode(token || storageToken);
             //console.log(decodedToken);
 
             if (decodedToken) {
                 const userId = decodedToken.user;
                 newEvent.user_id = userId;
-                
 
+                // Add the new event to the database
                 const res = await axios.post(`/api/events`, newEvent, {
                     headers: {
                         Authorization: token || storageToken,
                     },
                 });
 
-        
                 console.log("Token:", token);
                 console.log("Local token", storageToken);
                 alert("New event added successfully", res.data);
@@ -97,6 +101,7 @@ const NewEventForm = (props) => {
         }
     };
 
+     // Handle file input change
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setSelectedFile(selectedFile);

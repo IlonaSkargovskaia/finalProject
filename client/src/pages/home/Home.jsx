@@ -12,14 +12,17 @@ import CardEventDate from "../../components/CardEventDate";
 
 const Home = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
+
+    // Default to today's date start
     const [startDate, setStartDate] = useState(
         new Date().toISOString().split("T")[0]
-    ); // Default to today's date
+    ); 
+    // Default to today's date end
     const [endDate, setEndDate] = useState(
         new Date().toISOString().split("T")[0]
-    ); // Default to today's date
+    ); 
 
-    const [filteredEvents, setFilteredEvents] = useState([]); // State for filtered events
+    const [filteredEvents, setFilteredEvents] = useState([]); 
 
     // Function to fetch filtered events by date range
     const fetchFilteredEvents = async () => {

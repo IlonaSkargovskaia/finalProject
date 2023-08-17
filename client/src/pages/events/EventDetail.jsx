@@ -39,11 +39,14 @@ const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [total, setTotal] = useState(0);
+    // Selected by user seats 
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
+    // Available seats from database
+    const [availableSeats, setAvailableSeats] = useState([]); 
     const [ticketData, setTicketData] = useState(null);
     const [purchasedSeats, setPurchasedSeats] = useState([]);
 
+     // Extract URL parameters
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -63,6 +66,7 @@ const EventDetail = () => {
         total_places,
     } = event;
 
+    // Fetch event data by ID and calculate total price on selected quantity change
     useEffect(() => {
         const getEventById = async () => {
             try {
@@ -89,6 +93,7 @@ const EventDetail = () => {
 
     const formattedTime = hasDateTime ? time.slice(0, 5) : "";
 
+
     const fetchPurchasedSeats = async () => {
         try {
             const response = await axios.get(
@@ -104,6 +109,7 @@ const EventDetail = () => {
         fetchPurchasedSeats();
     }, [params.id]);
 
+
     const handleQuantityChange = (event) => {
         const { value } = event.target;
         setSelectedQuantity(parseInt(value));
@@ -112,14 +118,18 @@ const EventDetail = () => {
     };
 
     useEffect(() => {
-        // For this example, let's assume availableSeats is an array of seat objects
+        
         const generateSeats = () => {
-            const rows = Math.ceil(quantity_available / 10); // Assuming 10 seats per row
+            // 10 seats per row
+            const rows = Math.ceil(quantity_available / 10); 
+
+            // Array to store the generated seats
             const seats = [];
             let seatId = 1;
 
             for (let row = 1; row <= rows; row++) {
                 for (let seatNumber = 1; seatNumber <= 10; seatNumber++) {
+                    // Check if seatId <= available - generate
                     if (seatId <= quantity_available) {
                         seats.push({
                             id: seatId,
@@ -139,6 +149,7 @@ const EventDetail = () => {
         setAvailableSeats(generateSeats());
     }, [quantity_available]);
 
+    // Update selected quantity when seats are selected
     useEffect(() => {
         setSelectedQuantity(selectedSeats.length);
     }, [selectedSeats]);
@@ -168,18 +179,25 @@ const EventDetail = () => {
     };
 
     const renderSeats = () => {
+        // Calculate the number of rows needed based on total_places and 10 seats per row
         const rows = Math.ceil(total_places / 10);
+        // Create an array with a length of 'rows', using rowIndex as the index
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
+             // For each row, create a <div> with a unique key and CSS class
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
+                    // Calculate the seat's index within the total number of places
                     const seatIndexWithinTotalPlaces =
                         rowIndex * 10 + seatIndex;
+
+                    // Create an object representing the current seat
                     const seat = {
                         id: seatIndexWithinTotalPlaces + 1,
                         row: rowIndex + 1,
                         seatNumber: seatIndex + 1,
                     };
 
+                    // Check if the seat is selected, purchased, or available
                     const isSelected = selectedSeats.some(
                         (selectedSeat) => selectedSeat.id === seat.id
                     );
@@ -194,6 +212,7 @@ const EventDetail = () => {
                         (availableSeat) => availableSeat.id === seat.id
                     );
 
+                    //set css class depends on condition
                     const seatClassName = `seat ${
                         isPurchased
                             ? "purchased"
@@ -203,6 +222,7 @@ const EventDetail = () => {
                     } col`;
 
                     return (
+                        // Return a <div> element representing the seat
                         <div
                             key={`seat-${seat.id}`}
                             className={seatClassName}
@@ -257,16 +277,19 @@ const EventDetail = () => {
     const handlePurchase = async () => {
         const storageToken = localStorage.getItem("token");
 
+        // Check if the user is authorized (has a valid token)
         if (!token && !storageToken) {
             // if User is not authorized
             toast.error("You must be authorized to purchase tickets");
             return;
         } else {
+            // Map selectedSeats to include a UUID for each seat
             const selectedSeatsWithUUID = selectedSeats.map((seat) => ({
                 ...seat,
                 uuid_id: uuidv4(), // Generate a UUID for qr_code_data
             }));
             try {
+                // Make a POST request to purchase tickets
                 const response = await axios.post(
                     `/api/tickets/${params.id}/purchase`,
                     {
@@ -291,6 +314,7 @@ const EventDetail = () => {
                     }))
                 );
 
+                // Update available seats by filtering  selected seats
                 setAvailableSeats((prevAvailableSeats) =>
                     prevAvailableSeats.filter(
                         (seat) =>
@@ -307,17 +331,19 @@ const EventDetail = () => {
                 //console.log("Selected seats:", selectedSeats); //after bought
                 // {id: 15, row: 2, seatNumber: 5}
 
+                // If ticketData and ticketId are present in the response
                 if (
                     response.data.ticketData &&
                     response.data.ticketData.ticketId
                 ) {
+                    // Get the ticketId from the response
                     const ticketId = response.data.ticketData.ticketId;
-                    console.log("ticket id in detail:", ticketId);
+                    //console.log("ticket id in detail:", ticketId);
 
-                    console.log(
-                        "Setting ticketData:",
-                        response.data.ticketData
-                    );
+                    // console.log(
+                    //     "Setting ticketData:",
+                    //     response.data.ticketData
+                    // );
                     setTicketData(response.data.ticketData);
                 } else {
                     console.error("Ticket ID not found in API response");

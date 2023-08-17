@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn, CiShoppingCart } from "react-icons/ci";
-import { TbPigMoney } from "react-icons/tb";
 import { IoCalendarOutline } from "react-icons/io5";
 import { Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 
 const CardEventDate = ({ event }) => {
+    // Destructuring properties from the event object from props
     const {
         id,
         title,
@@ -21,7 +21,7 @@ const CardEventDate = ({ event }) => {
         location_id,
         address,
     } = event;
-    // console.log(id);
+    // Parse and format the date and time
     const parsedDate = parseISO(date); //  date -> Date object
     const newDateFormat = format(parsedDate, "d MMMM yyyy");
     const formattedTime = time.substring(0, 5);

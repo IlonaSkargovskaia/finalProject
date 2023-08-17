@@ -17,6 +17,8 @@ const TicketDetails = ({ ticket, title, date }) => {
 
     const generateQRCodeImagesAndSendEmail = async () => {
         if (ticket && ticket.seats) {
+            
+            // Generate QR code images for each seat
             const qrCodeImages = await Promise.all(
                 ticket.seats.map(async (seat) => {
                     const qrCodeDataURL = await QRCode.toDataURL(
@@ -29,11 +31,13 @@ const TicketDetails = ({ ticket, title, date }) => {
             setQRCodeImages(qrCodeImages);
 
             try {
+                // Prepare selected seats and rows for email content
                 const selectedSeatsAndRows = ticket.seats.map((seat) => ({
                     row: seat.row,
                     seat: seat.seatNumber,
                 }));
 
+                 // Send email with event and QR code details
                 const response = await axios.post(`/send-email`, {
                     recipientEmail: "iliukovich1991@gmail.com",
                     eventData: {
