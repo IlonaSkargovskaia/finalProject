@@ -190,7 +190,7 @@ const Home = () => {
                 </Container>
             </section>
 
-            <Container style={{ padding: "50px 0 30px 0" }}>
+            <Container >
                 <LastReviews />
                 <div style={{ textAlign: "center" }}>
                     <Link

@@ -46,7 +46,7 @@ const LastReviews = () => {
     }, []);
     return (
         <div>
-            <h3>
+            <h3 style={{marginTop: '40px'}}>
                 <VscCommentDiscussion style={{marginRight: '10px'}}/>
                 Last reviews:
             </h3>

@@ -83,3 +83,9 @@ input.search-top::placeholder{
     background-color: #e9d4ec !important;
 }
 
+@media screen and (max-width: 992px){
+    .hstack{
+        justify-content: center;
+    }
+}
+

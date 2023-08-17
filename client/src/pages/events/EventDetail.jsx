@@ -43,7 +43,7 @@ const EventDetail = () => {
     const [availableSeats, setAvailableSeats] = useState([]); // Available seats from database
     const [ticketData, setTicketData] = useState(null);
     const [purchasedSeats, setPurchasedSeats] = useState([]);
-    
+
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -148,11 +148,15 @@ const EventDetail = () => {
         const isAvailable = availableSeats.some(
             (availableSeat) => availableSeat.id === seat.id
         );
-    
+
         if (isAvailable) {
             // Toggle seat selection
             setSelectedSeats((prevSelectedSeats) => {
-                if (prevSelectedSeats.some((selectedSeat) => selectedSeat.id === seat.id)) {
+                if (
+                    prevSelectedSeats.some(
+                        (selectedSeat) => selectedSeat.id === seat.id
+                    )
+                ) {
                     // Seat is already selected, remove it
                     return prevSelectedSeats.filter((s) => s.id !== seat.id);
                 } else {
@@ -161,9 +165,7 @@ const EventDetail = () => {
                 }
             });
         }
-    
     };
-    
 
     const renderSeats = () => {
         const rows = Math.ceil(total_places / 10);
@@ -486,11 +488,14 @@ const EventDetail = () => {
                             </Card.Body>
                         </Card>
 
-                        {/* Hall */}
-                        <InterractiveHall
-                            totalPlaces={total_places}
-                            renderSeats={renderSeats}
-                        />
+                        {quantity_available === 0 ? (
+                            <></>
+                        ) : (
+                            <InterractiveHall
+                                totalPlaces={total_places}
+                                renderSeats={renderSeats}
+                            />
+                        )}
 
                         {ticketData && (
                             <TicketDetails

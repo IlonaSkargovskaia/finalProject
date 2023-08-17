@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NewEventForm from "../../components/NewEventForm";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
+import RightCategories from "../../components/RightCategories";
 
 
 const AddNewEvent = () => {
@@ -39,7 +40,7 @@ const AddNewEvent = () => {
                         )}
                     </Col>
                     <Col sm={4}>
-                      Right column (think about it later)
+                      <RightCategories />
                     </Col>
                 </Row>
             </Container>

@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import CardEvent from "./CardEvent";
+import RightCategories from "./RightCategories";
 
 const SearchResults = ({ events }) => {
     const location = useLocation();
@@ -15,9 +16,9 @@ const SearchResults = ({ events }) => {
     return (
         <div>
             <Container>
-                <h2>Search Results for: {searchQuery}</h2>
+                <h2>Search results for: {searchQuery}</h2>
                 <Row>
-                    
+                    <Col>
                         {filteredEvents && filteredEvents.length > 0 ? (
                             filteredEvents.map((event, index) => (
                                 <Col key={index}>
@@ -27,7 +28,10 @@ const SearchResults = ({ events }) => {
                         ) : (
                             <p>No events found.</p>
                         )}
-                   
+                   </Col>
+                   <Col md={4}>
+                        <RightCategories />
+                   </Col>
                     
                 </Row>
             </Container>
