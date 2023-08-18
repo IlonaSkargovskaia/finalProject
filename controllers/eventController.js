@@ -161,7 +161,7 @@ export const updateEventController = async (req, res) => {
 
 export const getPastEventsController = async (req, res) => {
     try {
-        // console.log('controller');
+        
         const pastEvents = await getPastEvents();
         res.status(200).json(pastEvents);
     } catch (error) {

@@ -14,8 +14,10 @@ const ReviewForm = () => {
         comment: "",
     });
 
+    
     const [eventList, setEventList] = useState([]);
     const [username, setUsername] = useState("");
+    
 
     useEffect(() => {
          // Decode the token to get the user information
