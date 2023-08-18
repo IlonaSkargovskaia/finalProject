@@ -7,6 +7,7 @@ import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 import axios from "axios";
 import CardEvent from "../../components/CardEvent";
 
@@ -25,9 +26,9 @@ const UserDashboard = ({ setAuth }) => {
     // Fetch events data
     // const getEvents = async () => {
     //     try {
-    //         const response = await axios.get("/api/events"); 
+    //         const response = await axios.get("/api/events");
     //         setEvents(response.data);
-            
+
     //     } catch (error) {
     //         console.error("Error fetching events:", error);
     //     }
@@ -182,7 +183,7 @@ const UserDashboard = ({ setAuth }) => {
         getPurchasedTickets();
         getUserReviews();
         //fetchEventFavorites();
-        //getEvents(); 
+        //getEvents();
     }, []);
 
     // Fetch favorite status for a specific event and update eventFavorites state
@@ -278,8 +279,8 @@ const UserDashboard = ({ setAuth }) => {
                             <Table striped bordered hover>
                                 <thead>
                                     <tr>
-                                        <th>Event</th>
                                         <th>Date</th>
+                                        <th>Event</th>
                                         <th>Quantity</th>
                                         <th>Row</th>
                                         <th>Seat</th>
@@ -288,17 +289,32 @@ const UserDashboard = ({ setAuth }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {purchasedTickets.map((ticket) => (
-                                        <tr key={ticket.id}>
-                                            <td>{ticket.eventTitle}</td>
-                                            <td>
-                                                {ticket.createdat.slice(0, 10)}
-                                            </td>
-                                            <td>{ticket.quantity}</td>
-                                            <td>{ticket.row}</td>
-                                            <td>{ticket.seat}</td>
-                                            <td>{ticket.total_price} ILS</td>
-                                            {/*<td>
+                                    {/* change order from newest orders to latest */}
+                                    {purchasedTickets
+                                        .slice()
+                                        .sort(
+                                            (a, b) =>
+                                                new Date(b.createdat) -
+                                                new Date(a.createdat)
+                                        )
+                                        .map((ticket) => (
+                                            <tr key={ticket.id}>
+                                                <td>
+                                                    {format(
+                                                        new Date(
+                                                            ticket.createdat
+                                                        ),
+                                                        "d MMMM yyyy"
+                                                    )}
+                                                </td>
+                                                <td>{ticket.eventTitle}</td>
+                                                <td>{ticket.quantity}</td>
+                                                <td>{ticket.row}</td>
+                                                <td>{ticket.seat}</td>
+                                                <td>
+                                                    {ticket.total_price} ILS
+                                                </td>
+                                                {/*<td>
                                                  <div
                                                     style={{ maxWidth: "50px" }}
                                                 >
@@ -308,13 +324,12 @@ const UserDashboard = ({ setAuth }) => {
                                                     />
                                                 </div> 
                                             </td>*/}
-                                        </tr>
-                                    ))}
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </Table>
                         )}
                     </div>
-
 
                     {/* Map through events and render each CardEvent */}
                     {/* <Row>
