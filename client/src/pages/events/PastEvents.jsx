@@ -3,6 +3,7 @@ import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import { format } from "date-fns";
 import RightCategories from "../../components/RightCategories";
 import ReviewForm from "../reviews/ReviewForm";
+import ReviewFormPast from "../reviews/ReviewFormPast";
 
 const PastEvents = () => {
     const [pastEvents, setPastEvents] = useState([]);
@@ -75,7 +76,7 @@ const PastEvents = () => {
                                 </div>
                             </Card>
                             {selectedEvent && (
-                                <ReviewForm
+                                <ReviewFormPast
                                     selectedEvent={selectedEvent}
                                     setSelectedEvent={setSelectedEvent}
                                 />
