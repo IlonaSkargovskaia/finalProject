@@ -7,6 +7,8 @@ import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { GoPencil } from "react-icons/go";
+import { CiMedal } from "react-icons/ci";
+import { PiTicketLight } from "react-icons/pi";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { BsPlusCircle } from "react-icons/bs";
@@ -45,7 +47,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 });
 
                 const data = await res.json();
-                console.log("data from OrganizerDash: ", data);
+                //console.log("data from OrganizerDash: ", data);
 
                 const { username, role, description } = data;
                 setUsername(username);
@@ -209,16 +211,34 @@ const OrganizerDashboard = ({ setAuth }) => {
             <Row className="org__block">
                 <Col>
                     <p>
-                        Purchased Tickets: <br /> {totalPurchasedTickets}
+                        Purchased Tickets
+                        <p style={{ fontSize: "45px" }}>
+                            <CiMedal
+                                style={{
+                                    fontSize: "50px",
+                                    marginBottom: "8px",
+                                }}
+                            />
+                            <span>{totalPurchasedTickets}</span>
+                        </p>
                     </p>
                 </Col>
                 <Col>
-                    <p> Tickets Left: <br /> {ticketsLeftCount}</p>
+                    <p>
+                        Tickets Left
+                        <p style={{ fontSize: "45px" }}>
+                            <PiTicketLight
+                                style={{
+                                    fontSize: "50px",
+                                    marginBottom: "8px",
+                                }}
+                            />
+                            <span>{ticketsLeftCount}</span>
+                        </p>
+                    </p>
                 </Col>
-                <Col lg={6}>
-                    
-                        <p>"{desc}"</p>
-                   
+                <Col lg={7}>
+                    <p style={{fontSize: '14px'}}>"{desc}"</p>
                 </Col>
             </Row>
 
@@ -255,7 +275,6 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </thead>
                 <tbody>
                     {userEvents.map((event) => {
-                        console.log(event);
                         if (
                             event.title
                                 .toLowerCase()
@@ -263,7 +282,6 @@ const OrganizerDashboard = ({ setAuth }) => {
                         ) {
                             return (
                                 <tr key={event.id}>
-                                    {console.log(ticketCounts[event.id])}
                                     <td
                                         className={
                                             ticketCounts[event.id] === "0"
