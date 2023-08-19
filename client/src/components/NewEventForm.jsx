@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import { AppContext } from "../App";
 import jwt from "jsonwebtoken";
 
@@ -20,6 +20,7 @@ const NewEventForm = (props) => {
     const [maxPrice, setMaxPrice] = useState("");
     const [totalPlaces, setTotalPlaces] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false);
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -38,6 +39,7 @@ const NewEventForm = (props) => {
         formData.append("file", selectedFile);
 
         try {
+            setImageLoading(true); 
             // Upload the selected file
             const uploadResponse = await axios.post(`/upload`, formData, {
                 headers: {
@@ -96,8 +98,11 @@ const NewEventForm = (props) => {
                 setTotalPlaces("");
                 setSelectedFile(null);
             }
+
+            setImageLoading(false); 
         } catch (error) {
             console.error("Error adding event:", error);
+            setImageLoading(false); 
         }
     };
 
@@ -294,7 +299,22 @@ const NewEventForm = (props) => {
                     </Col>
                 </Form.Group>
 
-                <Button type="submit">Add Event</Button>
+                <Button type="submit" disabled={imageLoading}>
+                {imageLoading ? (
+                    <>
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                        Uploading...
+                    </>
+                ) : (
+                    "Add Event"
+                )}
+            </Button>
             </Form>
         </>
     );
