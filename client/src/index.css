@@ -12,6 +12,18 @@ img{
     max-width: 100%;
 }
 
+.card{
+    border: none !important;
+}
+
+.td-red{
+    background-color: #ecb7bc !important;
+}
+
+.td-green{
+    background-color: #cae8d5 !important;
+}
+
 .past-img img{
     max-height: 300px;
     object-fit: cover;
@@ -409,7 +421,7 @@ table.org-table>thead{
 }
 
 .header__categories{
-    background: url(./assets/bg_header.jpeg) no-repeat 50% 75%;
+    background: url(./assets/bg_header.jpeg) no-repeat 50% 90%;
     min-height: 300px;
     background-size: cover;
     margin-top: -26px;

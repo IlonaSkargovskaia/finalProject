@@ -103,7 +103,7 @@ const UserDashboard = ({ setAuth }) => {
         const storageToken = localStorage.getItem("token");
         try {
             const decodedToken = jwt.decode(token || storageToken);
-            //console.log("Decoded token in UserDash:", decodedToken);
+            console.log("Decoded token in UserDash:", decodedToken);
 
             // Fetch the user's purchased tickets using the API
             const res = await fetch(`/api/tickets/user/${decodedToken.user}`, {

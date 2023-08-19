@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../App";
 import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
-import {AiOutlineDelete} from 'react-icons/ai';
-import {GoPencil} from 'react-icons/go';
+import { AiOutlineDelete } from "react-icons/ai";
+import { GoPencil } from "react-icons/go";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { BsPlusCircle } from "react-icons/bs";
@@ -17,19 +17,19 @@ const OrganizerDashboard = ({ setAuth }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
     const { token, isAuth } = useContext(AppContext);
+    const [ticketCounts, setTicketCounts] = useState({});
 
     useEffect(() => {
-        isAuth()
-    },[])
+        isAuth();
+    }, []);
 
     const getName = async () => {
-
         // Retrieve token from local storage
         const storageToken = localStorage.getItem("token");
 
         try {
             // Decode the token to get user information
-            const decodedToken = jwt.decode(token || storageToken); 
+            const decodedToken = jwt.decode(token || storageToken);
             // console.log("Decoded token in OrgDash:", decodedToken);
 
             if (decodedToken) {
@@ -84,7 +84,7 @@ const OrganizerDashboard = ({ setAuth }) => {
         const decodedToken = jwt.decode(token || storageToken);
 
         if (decodedToken) {
-            getName(); 
+            getName();
 
             // Fetch events with search query
             const fetchUserEvents = async () => {
@@ -102,6 +102,28 @@ const OrganizerDashboard = ({ setAuth }) => {
                     const userEventsData = await userEventsResponse.json();
 
                     setUserEvents(userEventsData);
+
+                    const ticketCountsMap = {};
+                    for (const event of userEventsData) {
+                        try {
+                            const ticketCountResponse = await fetch(
+                                `/api/places/purchased-ticket-counts/event/${event.id}`,
+                                {
+                                    method: "GET",
+                                    headers: {
+                                        Authorization: token || storageToken,
+                                    },
+                                }
+                            );
+
+                            const ticketCountData =
+                                await ticketCountResponse.json();
+                            ticketCountsMap[event.id] = ticketCountData.count;
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    setTicketCounts(ticketCountsMap);
                 } catch (error) {
                     console.log(error);
                 }
@@ -167,15 +189,14 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </Col>
                 <Col>
                     <Link to="#">
-                        <div className="card bg-light">
-                            Update profile
-                        </div>
+                        <div className="card bg-light">Update profile</div>
                     </Link>
                 </Col>
                 <Col>
                     <Link to="/create-event">
                         <div className="btn btn-success">
-                        <BsPlusCircle />Add new event
+                            <BsPlusCircle />
+                            Add new event
                         </div>
                     </Link>
                 </Col>
@@ -195,18 +216,22 @@ const OrganizerDashboard = ({ setAuth }) => {
             <Table striped bordered hover className="org-table">
                 <thead>
                     <tr>
+                        <th >
+                            Tickets sold
+                        </th>
                         <th>Title</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Prices (ILS)</th>
                         <th>Address</th>
-                        <th>Tickets</th>
+                        <th>Tickets left</th>
                         <th>Update</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {userEvents.map((event) => {
+                        console.log(event);
                         if (
                             event.title
                                 .toLowerCase()
@@ -214,6 +239,15 @@ const OrganizerDashboard = ({ setAuth }) => {
                         ) {
                             return (
                                 <tr key={event.id}>
+                                    {console.log(ticketCounts[event.id])}
+                                    <td className={
+                                            ticketCounts[event.id] === '0'
+                                                ? 'td-red'
+                                                : 'td-green'
+                                        }>
+                                        {ticketCounts[event.id] || 0} /
+                                        {event.total_places}
+                                    </td>
                                     <td>{event.title}</td>
                                     <td>{event.date.slice(0, 10)}</td>
                                     <td>{event.time.slice(0, 5)}</td>
@@ -224,20 +258,20 @@ const OrganizerDashboard = ({ setAuth }) => {
                                     <td>{event.quantity_available}</td>
                                     <td>
                                         <Link to={`/update-event/${event.id}`}>
-                                            <div className="btn btn-warning">
-                                                <GoPencil /> Update event
+                                            <div className="btn btn-warning" style={{    fontSize: '13px'}}>
+                                                <GoPencil /> Update 
                                             </div>
                                         </Link>
                                     </td>
-                                    <td style={{textAlign: 'center'}}>
+                                    <td style={{ textAlign: "center" }}>
                                         <Button
                                             className=" btn btn-danger "
                                             onClick={() =>
                                                 deleteEvent(event.id)
                                             }
-                                            
+                                            style={{    fontSize: '13px'}}
                                         >
-                                            <AiOutlineDelete /> Delete event
+                                            <AiOutlineDelete /> Delete 
                                         </Button>
                                     </td>
                                 </tr>
@@ -252,7 +286,6 @@ const OrganizerDashboard = ({ setAuth }) => {
                 <button className="btn purple" onClick={(e) => logout(e)}>
                     Logout
                 </button>
-                
             </div>
         </Container>
     );

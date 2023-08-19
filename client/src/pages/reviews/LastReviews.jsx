@@ -3,7 +3,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { FaRegComments } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import { CiStar } from "react-icons/ci";
-import {VscCommentDiscussion} from 'react-icons/vsc'
+import { VscCommentDiscussion } from "react-icons/vsc";
 import axios from "axios";
 import { slice } from "lodash";
 
@@ -46,8 +46,8 @@ const LastReviews = () => {
     }, []);
     return (
         <div>
-            <h3 style={{marginTop: '40px'}}>
-                <VscCommentDiscussion style={{marginRight: '10px'}}/>
+            <h3 style={{ marginTop: "40px" }}>
+                <VscCommentDiscussion style={{ marginRight: "10px" }} />
                 Last reviews:
             </h3>
             <Row>
@@ -61,11 +61,14 @@ const LastReviews = () => {
                     );
                     return (
                         <Col key={index} md={6}>
-                            <Card className="review my-3">
+                            <Card
+                                className="review my-3"
+                                style={{ minHeight: "285px" }}
+                            >
                                 <Row>
                                     <Col
-                                        lg={3}
-                                        className="me-3 review__image-block"
+                                        lg={4}
+                                        className=" review__image-block"
                                     >
                                         {event && (
                                             <img
