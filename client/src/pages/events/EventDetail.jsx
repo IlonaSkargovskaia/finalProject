@@ -34,19 +34,20 @@ import RightCategories from "../../components/RightCategories";
 import QRCode from "react-qr-code";
 import InterractiveHall from "./InterractiveHall";
 import TicketDetails from "../../components/TicketDetails";
+import EventsByDate from "./EventsByDate";
 
 const EventDetail = () => {
     const [event, setEvent] = useState({});
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [total, setTotal] = useState(0);
-    // Selected by user seats 
+    // Selected by user seats
     const [selectedSeats, setSelectedSeats] = useState([]);
     // Available seats from database
-    const [availableSeats, setAvailableSeats] = useState([]); 
+    const [availableSeats, setAvailableSeats] = useState([]);
     const [ticketData, setTicketData] = useState(null);
     const [purchasedSeats, setPurchasedSeats] = useState([]);
 
-     // Extract URL parameters
+    // Extract URL parameters
     const params = useParams();
     const { token } = useContext(AppContext);
 
@@ -93,7 +94,6 @@ const EventDetail = () => {
 
     const formattedTime = hasDateTime ? time.slice(0, 5) : "";
 
-
     const fetchPurchasedSeats = async () => {
         try {
             const response = await axios.get(
@@ -109,7 +109,6 @@ const EventDetail = () => {
         fetchPurchasedSeats();
     }, [params.id]);
 
-
     const handleQuantityChange = (event) => {
         const { value } = event.target;
         setSelectedQuantity(parseInt(value));
@@ -118,10 +117,9 @@ const EventDetail = () => {
     };
 
     useEffect(() => {
-        
         const generateSeats = () => {
             // 10 seats per row
-            const rows = Math.ceil(quantity_available / 10); 
+            const rows = Math.ceil(quantity_available / 10);
 
             // Array to store the generated seats
             const seats = [];
@@ -183,7 +181,7 @@ const EventDetail = () => {
         const rows = Math.ceil(total_places / 10);
         // Create an array with a length of 'rows', using rowIndex as the index
         const seatsArray = Array.from({ length: rows }, (_, rowIndex) => (
-             // For each row, create a <div> with a unique key and CSS class
+            // For each row, create a <div> with a unique key and CSS class
             <div key={rowIndex} className="row seat-row">
                 {Array.from({ length: 10 }, (_, seatIndex) => {
                     // Calculate the seat's index within the total number of places
@@ -546,9 +544,21 @@ const EventDetail = () => {
                         <Card className="mt-3">
                             <RightCategories />
                         </Card>
+
+                        <Card className="mt-3 p-3">
+                            <h3>Last news:</h3>
+                        </Card>
+
+                        <Card className="mt-3 p-3">
+                            <h3>About organizer:</h3>
+                        </Card>
                     </Col>
                 </Row>
             </Container>
+
+            <div style={{ marginBottom: "-50px" }}>
+                <EventsByDate />
+            </div>
         </div>
     );
 };
