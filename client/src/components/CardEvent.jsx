@@ -97,17 +97,17 @@ const CardEvent = ({ event, isFavorite, checkFavoriteStatus }) => {
                     <IoCalendarOutline /> {newDateFormat} | {formattedTime}
                 </Card.Text>
 
-                {/* Favorites */}
-                {/* <div className="d-flex justify-content-between align-items-center">
+               
+                <div className="d-flex justify-content-between align-items-center">
                     <Card.Text style={{ marginBottom: "0" }}>
                         <CiLocationOn /> {locationName}
                     </Card.Text>
                    
-                        <div className="favorite-icon" onClick={toggleFavorite}>
+                        {/* <div className="favorite-icon" onClick={toggleFavorite}>
                             {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                        </div>
+                        </div> */}
                     
-                </div> */}
+                </div> 
                 
                 <hr />
                 <Row className="align-items-center">
@@ -118,7 +118,7 @@ const CardEvent = ({ event, isFavorite, checkFavoriteStatus }) => {
                     </Col>
                     <Col className="card__btn-block">
                         {quantity_available === 0 ? (
-                            <Button className="card__button" disabled>
+                            <Button className="card__button" disabled style={{fontSize: '13px'}}>
                                 SOLD OUT
                             </Button>
                         ) : (
@@ -127,6 +127,7 @@ const CardEvent = ({ event, isFavorite, checkFavoriteStatus }) => {
                                     className="card__button purple"
                                     as={Link}
                                     to={`/events/${id}`}
+                                    
                                 >
                                     <CiShoppingCart /> Buy ticket
                                 </Button>
