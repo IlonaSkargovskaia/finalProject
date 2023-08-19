@@ -217,9 +217,9 @@ const OrganizerDashboard = ({ setAuth }) => {
             />
             <h1 className="org-title"> Organizer Dashboard </h1>
             <Row>
-                <Col>
+                <Col lg={6}>
                     <Row className="org-details">
-                        <Col lg={6} >
+                        <Col >
                             <p>
                                 <b>Welcome, "{username}"</b>
                             </p>
@@ -241,7 +241,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 </Col>
                 <Col>
                     <Row className="org__block" style={{    textAlign: 'center'}}>
-                        <Col lg={6} style={{borderRight: '1px solid black'}}>
+                        <Col md={6} style={{borderRight: '1px solid black'}}>
                             Purchased Tickets
                             <p style={{ fontSize: "45px" }}>
                                 <CiMedal
@@ -253,7 +253,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                                 <span>{totalPurchasedTickets}</span>
                             </p>
                         </Col>
-                        <Col lg={6}>
+                        <Col md={6}>
                             Tickets Left
                             <p style={{ fontSize: "45px" }}>
                                 <PiTicketLight
@@ -267,7 +267,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                         </Col>
                     </Row>
                     <Row className="org__block" style={{    textAlign: 'center'}}>
-                        <Col lg={6} style={{borderRight: '1px solid black'}}>
+                        <Col md={6} style={{borderRight: '1px solid black'}}>
                         Total Events 
                             <p style={{ fontSize: "45px" }}>
                                 <CiCalendarDate
@@ -279,7 +279,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                                 <span>{eventCounter}</span>
                             </p>
                         </Col>
-                        <Col lg={6}>
+                        <Col md={6}>
                             Rating
                             <p style={{ fontSize: "45px" }}>
                                 <CiStar
