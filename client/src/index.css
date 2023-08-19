@@ -759,10 +759,11 @@ svg{
 }
 
 .review-image{
-    max-width: 100%;
+    width: 100%;
     height: -webkit-fill-available;
     object-fit: cover;
     border-radius: 5px;
+    max-height: 230px;
 }
 
 .review-comment{

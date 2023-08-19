@@ -64,8 +64,8 @@ const LastReviews = () => {
                             <Card className="review my-3">
                                 <Row>
                                     <Col
-                                        lg={3}
-                                        className="me-3 review__image-block"
+                                        lg={4}
+                                        className=" review__image-block"
                                     >
                                         {event && (
                                             <img
