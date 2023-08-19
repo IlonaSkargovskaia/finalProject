@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import RightCategories from "../../components/RightCategories";
 import ReviewForm from "../reviews/ReviewForm";
 import ReviewFormPast from "../reviews/ReviewFormPast";
+import { AiOutlineComment } from "react-icons/ai";
 
 const PastEvents = () => {
     const [pastEvents, setPastEvents] = useState([]);
@@ -36,58 +37,62 @@ const PastEvents = () => {
     return (
         <Container>
             <h2>Past Events</h2>
-            <div>
-                {pastEvents.map((event) => (
-                    <Row key={event.id}>
-                        <Col>
-                            <Card style={{marginBottom: '20px'}}>
-                                <div className="row no-gutters">
-                                    <div className="col-lg-5 past-img">
-                                        <img
-                                            src={event.image}
-                                            alt={event.title}
-                                        />
-                                    </div>
-                                    <div className="col-lg-7">
-                                        <div className="card-body">
-                                            <h3>{event.title}</h3>
-                                            <p>
-                                                Date:{" "}
-                                                {format(
-                                                    event.date,
-                                                    "yyyy-MM-dd"
-                                                )}
-                                            </p>
-                                            <hr/>
-                                            <p>{event.description}</p>
-                                            
+            <Row>
+                <Col>
+                    {pastEvents.map((event) => (
+                        <Row key={event.id}>
+                            <Col>
+                                <Card style={{ marginBottom: "20px" }}>
+                                    <div className="row no-gutters">
+                                        <div className="col-lg-5 past-img">
+                                            <img
+                                                src={event.image}
+                                                alt={event.title}
+                                            />
                                         </div>
-                                        <Button
-                                            variant="primary purple"
-                                            onClick={() =>
-                                                handleAddComment(event)
-                                            }
-                                            style={{margin: '0 0 20px 15px'}}
-                                        >
-                                            Add comment
-                                        </Button>
+                                        <div className="col-lg-7">
+                                            <div className="card-body">
+                                                <h3>{event.title}</h3>
+                                                <p>
+                                                    Date:{" "}
+                                                    {format(
+                                                        event.date,
+                                                        "yyyy-MM-dd"
+                                                    )}
+                                                </p>
+                                                <hr />
+                                                <p>{event.description}</p>
+                                            </div>
+                                            <Button
+                                                variant="primary purple"
+                                                onClick={() =>
+                                                    handleAddComment(event)
+                                                }
+                                                style={{
+                                                    margin: "0 0 20px 15px",
+                                                }}
+                                            >
+                                                <AiOutlineComment />
+                                                Add comment
+                                            </Button>
+                                        </div>
                                     </div>
-                                    
-                                </div>
-                            </Card>
-                            {selectedEvent && (
-                                <ReviewFormPast
-                                    selectedEvent={selectedEvent}
-                                    setSelectedEvent={setSelectedEvent}
-                                />
-                            )}
-                        </Col>
-                        <Col lg={4}>
-                            <RightCategories />
-                        </Col>
-                    </Row>
-                ))}
-            </div>
+                                </Card>
+                                {selectedEvent && (
+                                    <ReviewFormPast
+                                        selectedEvent={selectedEvent}
+                                        setSelectedEvent={setSelectedEvent}
+                                    />
+                                )}
+                            </Col>
+                        </Row>
+                    ))}
+                </Col>
+
+                <Col lg={4}>
+                    <RightCategories />
+                </Col>
+            </Row>
         </Container>
     );
 };

@@ -293,7 +293,12 @@ const OrganizerDashboard = ({ setAuth }) => {
                                     </td>
                                     <td>{event.title}</td>
                                     <td>
-                                    {format(utcToZonedTime(new Date(event.date), "UTC"), "d MMMM yyyy", { timeZone: "your-time-zone" })}
+                                    {format(
+                                                        new Date(
+                                                            event.date
+                                                        ),
+                                                        "d MMMM yyyy"
+                                                    )}
                                     </td>
 
                                     <td>{event.time.slice(0, 5)}</td>

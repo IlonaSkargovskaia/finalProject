@@ -15,6 +15,7 @@ import "./navbar.css";
 import Breadcrumbs from "./Breadcrumbs";
 import GoogleTranslate from "./GoogleTranslate";
 import PastEvents from "../pages/events/PastEvents";
+import { CiSettings } from "react-icons/ci";
 
 const Navigation = ({
     setIsAuthenticated,
@@ -52,7 +53,7 @@ const Navigation = ({
     return (
         <>
             <Navbar expand="lg" className="nav__menu p-4">
-                {/* <Container> */}
+               
                 <Navbar.Brand as={Link} to="/">
                     <img src={logo} className="logo" alt="ticketpro" />
                 </Navbar.Brand>
@@ -169,8 +170,8 @@ const Navigation = ({
                                         as={Link}
                                         to="/organizerdashboard"
                                     >
-                                        <BsPersonCircle className="login-icon" />{" "}
-                                        Profile
+                                        <CiSettings className="login-icon" />{" "}
+                                        Org Dash
                                     </Button>
                                 ) : (
                                     <Button
@@ -179,7 +180,7 @@ const Navigation = ({
                                         to="/userdashboard"
                                     >
                                         <BsPersonCircle className="login-icon" />{" "}
-                                        Profile
+                                        My profile
                                     </Button>
                                 )}
 
@@ -211,7 +212,6 @@ const Navigation = ({
                         )}
                     </Stack>
                 </Navbar.Collapse>
-                {/* </Container> */}
             </Navbar>
 
             <Container>
