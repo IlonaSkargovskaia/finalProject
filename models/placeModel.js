@@ -10,6 +10,22 @@ export const getPlaceByUUID = async (id) => {
   }
 };
 
+export const getPurchasedTicketCountsByEventID = async (eventId) => {
+  try {
+      const purchasedTicketCounts = await db
+          .count('id as count')
+          .from('places')
+          .whereIn(
+              'ticket_id',
+              db.select('id').from('tickets').where('eventid', eventId)
+          );
+      return purchasedTicketCounts[0].count;
+  } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching purchased ticket counts for the event');
+  }
+};
+
 export const insertQrCodeData = async (ticketUuid, qrCodeData) => {
   try {
       await db('places').where('ticket_id', ticketUuid).update({

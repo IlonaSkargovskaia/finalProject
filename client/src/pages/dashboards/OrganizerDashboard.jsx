@@ -7,9 +7,9 @@ import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { GoPencil } from "react-icons/go";
+import Table from "react-bootstrap/Table";
 import { CiMedal } from "react-icons/ci";
 import { PiTicketLight } from "react-icons/pi";
-import Table from "react-bootstrap/Table";
 import axios from "axios";
 import { BsPlusCircle } from "react-icons/bs";
 
@@ -18,11 +18,11 @@ const OrganizerDashboard = ({ setAuth }) => {
     const [userEvents, setUserEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
-    const [ticketsLeftCount, setTicketLeftCount] = useState(0);
-    const [desc, setDesc] = useState("");
     const { token, isAuth } = useContext(AppContext);
     const [ticketCounts, setTicketCounts] = useState({});
     const [totalPurchasedTickets, setTotalPurchasedTickets] = useState(0);
+    const [ticketsLeftCount, setTicketLeftCount] = useState(0);
+    const [desc, setDesc] = useState("");
 
     useEffect(() => {
         isAuth();
@@ -47,7 +47,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                 });
 
                 const data = await res.json();
-                //console.log("data from OrganizerDash: ", data);
+                console.log("data from OrganizerDash: ", data);
 
                 const { username, role, description } = data;
                 setUsername(username);
@@ -111,6 +111,7 @@ const OrganizerDashboard = ({ setAuth }) => {
 
                     setUserEvents(userEventsData);
 
+                    // Fetch purchased ticket counts for each event
                     const ticketCountsMap = {};
                     for (const event of userEventsData) {
                         try {
@@ -140,14 +141,14 @@ const OrganizerDashboard = ({ setAuth }) => {
                         }
                     }
                     setTicketCounts(ticketCountsMap);
-                    setTotalPurchasedTickets(totalTickets); // Set the total count
+                    setTotalPurchasedTickets(totalTickets);
                     setTicketLeftCount(totalTicketsLeft);
                 } catch (error) {
                     console.log(error);
                 }
             };
 
-            fetchUserEvents();
+            fetchUserEvents(); // Call the function
         }
     }, [token]);
 
@@ -210,7 +211,7 @@ const OrganizerDashboard = ({ setAuth }) => {
 
             <Row className="org__block">
                 <Col>
-                    <p>
+                   
                         Purchased Tickets
                         <p style={{ fontSize: "45px" }}>
                             <CiMedal
@@ -221,10 +222,10 @@ const OrganizerDashboard = ({ setAuth }) => {
                             />
                             <span>{totalPurchasedTickets}</span>
                         </p>
-                    </p>
+                    
                 </Col>
                 <Col>
-                    <p>
+                   
                         Tickets Left
                         <p style={{ fontSize: "45px" }}>
                             <PiTicketLight
@@ -235,7 +236,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                             />
                             <span>{ticketsLeftCount}</span>
                         </p>
-                    </p>
+                    
                 </Col>
                 <Col lg={7}>
                     <p style={{fontSize: '14px'}}>"{desc}"</p>

@@ -1,4 +1,4 @@
-import { getPlaceByUUID, insertQrCodeData,  getPurchasedSeatsByEventID} from '../models/placeModel.js';
+import { getPlaceByUUID, insertQrCodeData,  getPurchasedSeatsByEventID, getPurchasedTicketCountsByEventID} from '../models/placeModel.js';
 
 export const getPlaceByUUIDController = async (req, res) => {
     try {
@@ -9,6 +9,17 @@ export const getPlaceByUUIDController = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to fetch place information' });
+    }
+};
+
+export const getPurchasedTicketCountsByEventIDController = async (req, res) => {
+    try {
+        const { event_id } = req.params;
+        const ticketCount = await getPurchasedTicketCountsByEventID(event_id);
+        res.json({ count: ticketCount });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch purchased ticket counts for the event' });
     }
 };
 
