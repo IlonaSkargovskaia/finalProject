@@ -11,6 +11,8 @@ import Table from "react-bootstrap/Table";
 import { CiMedal } from "react-icons/ci";
 import { PiTicketLight } from "react-icons/pi";
 import axios from "axios";
+import { format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 import { BsPlusCircle } from "react-icons/bs";
 
 const OrganizerDashboard = ({ setAuth }) => {
@@ -211,39 +213,35 @@ const OrganizerDashboard = ({ setAuth }) => {
 
             <Row className="org__block">
                 <Col>
-                   
-                        Purchased Tickets
-                        <p style={{ fontSize: "45px" }}>
-                            <CiMedal
-                                style={{
-                                    fontSize: "50px",
-                                    marginBottom: "8px",
-                                }}
-                            />
-                            <span>{totalPurchasedTickets}</span>
-                        </p>
-                    
+                    Purchased Tickets
+                    <p style={{ fontSize: "45px" }}>
+                        <CiMedal
+                            style={{
+                                fontSize: "50px",
+                                marginBottom: "8px",
+                            }}
+                        />
+                        <span>{totalPurchasedTickets}</span>
+                    </p>
                 </Col>
                 <Col>
-                   
-                        Tickets Left
-                        <p style={{ fontSize: "45px" }}>
-                            <PiTicketLight
-                                style={{
-                                    fontSize: "50px",
-                                    marginBottom: "8px",
-                                }}
-                            />
-                            <span>{ticketsLeftCount}</span>
-                        </p>
-                    
+                    Tickets Left
+                    <p style={{ fontSize: "45px" }}>
+                        <PiTicketLight
+                            style={{
+                                fontSize: "50px",
+                                marginBottom: "8px",
+                            }}
+                        />
+                        <span>{ticketsLeftCount}</span>
+                    </p>
                 </Col>
                 <Col lg={7}>
-                    <p style={{fontSize: '14px'}}>"{desc}"</p>
+                    <p style={{ fontSize: "14px" }}>"{desc}"</p>
                 </Col>
             </Row>
 
-            <h3 style={{ textAlign: "center" }}>Your published events</h3>
+            <h3 className="org-titleh3">Your published events</h3>
             <div className="org-events__search">
                 <input
                     type="text"
@@ -294,7 +292,10 @@ const OrganizerDashboard = ({ setAuth }) => {
                                         {event.total_places}
                                     </td>
                                     <td>{event.title}</td>
-                                    <td>{event.date.slice(0, 10)}</td>
+                                    <td>
+                                    {format(utcToZonedTime(new Date(event.date), "UTC"), "d MMMM yyyy", { timeZone: "your-time-zone" })}
+                                    </td>
+
                                     <td>{event.time.slice(0, 5)}</td>
                                     <td>
                                         {event.price} - {event.max_price}
