@@ -16,8 +16,11 @@ const OrganizerDashboard = ({ setAuth }) => {
     const [userEvents, setUserEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
+    const [ticketsLeftCount, setTicketLeftCount] = useState(0);
+    const [desc, setDesc] = useState("");
     const { token, isAuth } = useContext(AppContext);
     const [ticketCounts, setTicketCounts] = useState({});
+    const [totalPurchasedTickets, setTotalPurchasedTickets] = useState(0);
 
     useEffect(() => {
         isAuth();
@@ -44,9 +47,10 @@ const OrganizerDashboard = ({ setAuth }) => {
                 const data = await res.json();
                 console.log("data from OrganizerDash: ", data);
 
-                const { username, role } = data;
+                const { username, role, description } = data;
                 setUsername(username);
                 setRole(role);
+                setDesc(description);
 
                 // Check if the toast has been shown before
                 const toastShown = localStorage.getItem("toastShown");
@@ -88,6 +92,8 @@ const OrganizerDashboard = ({ setAuth }) => {
 
             // Fetch events with search query
             const fetchUserEvents = async () => {
+                let totalTickets = 0;
+                let totalTicketsLeft = 0;
                 try {
                     const userEventsResponse = await fetch(
                         `/api/events/user/${decodedToken.user}`,
@@ -119,17 +125,27 @@ const OrganizerDashboard = ({ setAuth }) => {
                             const ticketCountData =
                                 await ticketCountResponse.json();
                             ticketCountsMap[event.id] = ticketCountData.count;
+
+                            // Update the total count of purchased tickets
+                            totalTickets += parseInt(ticketCountData.count);
+
+                            // Update the total count of tickets left
+                            totalTicketsLeft += parseInt(
+                                event.quantity_available
+                            );
                         } catch (error) {
                             console.log(error);
                         }
                     }
                     setTicketCounts(ticketCountsMap);
+                    setTotalPurchasedTickets(totalTickets); // Set the total count
+                    setTicketLeftCount(totalTicketsLeft);
                 } catch (error) {
                     console.log(error);
                 }
             };
 
-            fetchUserEvents(); // Call the function
+            fetchUserEvents();
         }
     }, [token]);
 
@@ -180,30 +196,34 @@ const OrganizerDashboard = ({ setAuth }) => {
                 pauseOnHover
                 theme="dark"
             />
-            <h1 className="org-title">Organizer Dashboard</h1>
-
-            <Row className="org__block">
-                <Col>
-                    <h3>Hello, {username}</h3>
-                    <p>"{role}"</p>
-                </Col>
-                <Col>
+            <h1 className="org-title">Organizer Dashboard for "{username}" </h1>
+            <Row>
+                <Col></Col>
+                <Col style={{ textAlign: "right" }}>
                     <Link to="#">
-                        <div className="card bg-light">Update profile</div>
-                    </Link>
-                </Col>
-                <Col>
-                    <Link to="/create-event">
-                        <div className="btn btn-success">
-                            <BsPlusCircle />
-                            Add new event
-                        </div>
+                        <div className="btn bg-light">Update profile</div>
                     </Link>
                 </Col>
             </Row>
 
+            <Row className="org__block">
+                <Col>
+                    <p>
+                        Purchased Tickets: <br /> {totalPurchasedTickets}
+                    </p>
+                </Col>
+                <Col>
+                    <p> Tickets Left: <br /> {ticketsLeftCount}</p>
+                </Col>
+                <Col lg={6}>
+                    
+                        <p>"{desc}"</p>
+                   
+                </Col>
+            </Row>
+
+            <h3 style={{ textAlign: "center" }}>Your published events</h3>
             <div className="org-events__search">
-                <h3>Your events:</h3>
                 <input
                     type="text"
                     placeholder="Search events by title..."
@@ -211,14 +231,18 @@ const OrganizerDashboard = ({ setAuth }) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="me-2 form-control"
                 />
+                <Link to="/create-event">
+                    <div className="btn btn-success">
+                        <BsPlusCircle />
+                        Add new event
+                    </div>
+                </Link>
             </div>
 
             <Table striped bordered hover className="org-table">
                 <thead>
                     <tr>
-                        <th >
-                            Tickets sold
-                        </th>
+                        <th>Tickets sold</th>
                         <th>Title</th>
                         <th>Date</th>
                         <th>Time</th>
@@ -240,11 +264,13 @@ const OrganizerDashboard = ({ setAuth }) => {
                             return (
                                 <tr key={event.id}>
                                     {console.log(ticketCounts[event.id])}
-                                    <td className={
-                                            ticketCounts[event.id] === '0'
-                                                ? 'td-red'
-                                                : 'td-green'
-                                        }>
+                                    <td
+                                        className={
+                                            ticketCounts[event.id] === "0"
+                                                ? "td-red"
+                                                : "td-green"
+                                        }
+                                    >
                                         {ticketCounts[event.id] || 0} /
                                         {event.total_places}
                                     </td>
@@ -258,8 +284,11 @@ const OrganizerDashboard = ({ setAuth }) => {
                                     <td>{event.quantity_available}</td>
                                     <td>
                                         <Link to={`/update-event/${event.id}`}>
-                                            <div className="btn btn-warning" style={{    fontSize: '13px'}}>
-                                                <GoPencil /> Update 
+                                            <div
+                                                className="btn btn-warning"
+                                                style={{ fontSize: "13px" }}
+                                            >
+                                                <GoPencil /> Update
                                             </div>
                                         </Link>
                                     </td>
@@ -269,9 +298,9 @@ const OrganizerDashboard = ({ setAuth }) => {
                                             onClick={() =>
                                                 deleteEvent(event.id)
                                             }
-                                            style={{    fontSize: '13px'}}
+                                            style={{ fontSize: "13px" }}
                                         >
-                                            <AiOutlineDelete /> Delete 
+                                            <AiOutlineDelete /> Delete
                                         </Button>
                                     </td>
                                 </tr>

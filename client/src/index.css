@@ -14,14 +14,17 @@ img{
 
 .card{
     border: none !important;
+    
 }
 
 .td-red{
     background-color: #ecb7bc !important;
+    text-align: center;
 }
 
 .td-green{
     background-color: #cae8d5 !important;
+    text-align: center;
 }
 
 .past-img img{
@@ -359,7 +362,7 @@ p.card__date{
     border-radius: 5px;
     margin: 35px auto !important;
     align-items: center;
-    max-width: 55%;
+    /* max-width: 55%; */
 }
 
 .org__block p{
