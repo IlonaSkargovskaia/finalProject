@@ -91,6 +91,14 @@ const PastEvents = () => {
 
                 <Col lg={4}>
                     <RightCategories />
+
+                    <Card className="mt-3 p-3">
+                        <h3>Last news:</h3>
+                    </Card>
+
+                    <Card className="mt-3 p-3">
+                        <h3>About organizer:</h3>
+                    </Card>
                 </Col>
             </Row>
         </Container>

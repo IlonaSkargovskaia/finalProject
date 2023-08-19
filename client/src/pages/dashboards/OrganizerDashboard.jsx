@@ -8,23 +8,26 @@ import { Link } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { GoPencil } from "react-icons/go";
 import Table from "react-bootstrap/Table";
-import { CiMedal } from "react-icons/ci";
+import { CiCalendarDate, CiMedal, CiStar } from "react-icons/ci";
 import { PiTicketLight } from "react-icons/pi";
 import axios from "axios";
 import { format } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
 import { BsPlusCircle } from "react-icons/bs";
+import { MdEventAvailable } from "react-icons/md";
 
 const OrganizerDashboard = ({ setAuth }) => {
     const [username, setUsername] = useState("");
     const [userEvents, setUserEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [role, setRole] = useState("");
+    const [mail, setMail] = useState("");
     const { token, isAuth } = useContext(AppContext);
     const [ticketCounts, setTicketCounts] = useState({});
     const [totalPurchasedTickets, setTotalPurchasedTickets] = useState(0);
     const [ticketsLeftCount, setTicketLeftCount] = useState(0);
     const [desc, setDesc] = useState("");
+    const [totalEventCount, setTotalEventCount] = useState(0); 
+    const [eventCounter, setEventCounter] = useState(0);
 
     useEffect(() => {
         isAuth();
@@ -37,7 +40,7 @@ const OrganizerDashboard = ({ setAuth }) => {
         try {
             // Decode the token to get user information
             const decodedToken = jwt.decode(token || storageToken);
-            // console.log("Decoded token in OrgDash:", decodedToken);
+            //console.log("Decoded token in OrgDash:", decodedToken);
 
             if (decodedToken) {
                 // Fetch user's information
@@ -49,12 +52,13 @@ const OrganizerDashboard = ({ setAuth }) => {
                 });
 
                 const data = await res.json();
-                console.log("data from OrganizerDash: ", data);
+                //console.log("data from OrganizerDash: ", data);
 
-                const { username, role, description } = data;
+                const { username, role, description, email } = data;
                 setUsername(username);
                 setRole(role);
                 setDesc(description);
+                setMail(email);
 
                 // Check if the toast has been shown before
                 const toastShown = localStorage.getItem("toastShown");
@@ -63,6 +67,7 @@ const OrganizerDashboard = ({ setAuth }) => {
                     localStorage.setItem("toastShown", "true"); // Mark as shown
                 }
 
+                
                 // Fetch events created by the user
                 try {
                     const userEventsResponse = await fetch(
@@ -77,9 +82,16 @@ const OrganizerDashboard = ({ setAuth }) => {
 
                     const userEventsData = await userEventsResponse.json();
                     setUserEvents(userEventsData);
+
+                     // Update the total event count based on the length of userEventsData
+                     setTotalEventCount(userEventsData.length);
+                     setEventCounter(userEventsData.length); // Update the counter
                 } catch (error) {
                     console.log(error);
                 }
+
+                setTotalEventCount(userEvents.length);
+
             }
         } catch (error) {
             console.log(error);
@@ -154,6 +166,8 @@ const OrganizerDashboard = ({ setAuth }) => {
         }
     }, [token]);
 
+    
+
     const deleteEvent = async (eventId) => {
         const isConfirmed = window.confirm(
             "Are you sure you want to delete this event?"
@@ -201,47 +215,99 @@ const OrganizerDashboard = ({ setAuth }) => {
                 pauseOnHover
                 theme="dark"
             />
-            <h1 className="org-title">Organizer Dashboard for "{username}" </h1>
+            <h1 className="org-title"> Organizer Dashboard </h1>
             <Row>
-                <Col></Col>
-                <Col style={{ textAlign: "right" }}>
-                    <Link to="#">
-                        <div className="btn bg-light">Update profile</div>
-                    </Link>
+                <Col>
+                    <Row className="org-details">
+                        <Col lg={6} >
+                            <p>
+                                <b>Welcome, "{username}"</b>
+                            </p>
+                            <p>Email: {mail}</p>
+                            <p>Role: {role}</p>
+                        </Col>
+                        <Col style={{ textAlign: "right" }}>
+                            <Link to="#">
+                                <div className="btn bg-light">
+                                    Update profile
+                                </div>
+                            </Link>
+                        </Col>
+                    </Row>
+                    <Row className="org-details">
+                        <h4>About organizer: </h4>
+                        <p style={{ fontSize: "11px" }}>"{desc}"</p>
+                    </Row>
+                </Col>
+                <Col>
+                    <Row className="org__block" style={{    textAlign: 'center'}}>
+                        <Col lg={6} style={{borderRight: '1px solid black'}}>
+                            Purchased Tickets
+                            <p style={{ fontSize: "45px" }}>
+                                <CiMedal
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                <span>{totalPurchasedTickets}</span>
+                            </p>
+                        </Col>
+                        <Col lg={6}>
+                            Tickets Left
+                            <p style={{ fontSize: "45px" }}>
+                                <PiTicketLight
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                <span>{ticketsLeftCount}</span>
+                            </p>
+                        </Col>
+                    </Row>
+                    <Row className="org__block" style={{    textAlign: 'center'}}>
+                        <Col lg={6} style={{borderRight: '1px solid black'}}>
+                        Total Events 
+                            <p style={{ fontSize: "45px" }}>
+                                <CiCalendarDate
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                <span>{eventCounter}</span>
+                            </p>
+                        </Col>
+                        <Col lg={6}>
+                            Rating
+                            <p style={{ fontSize: "45px" }}>
+                                <CiStar
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                <CiStar
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                <CiStar
+                                    style={{
+                                        fontSize: "50px",
+                                        marginBottom: "8px",
+                                    }}
+                                />
+                                
+                            </p>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
 
-            <Row className="org__block">
-                <Col>
-                    Purchased Tickets
-                    <p style={{ fontSize: "45px" }}>
-                        <CiMedal
-                            style={{
-                                fontSize: "50px",
-                                marginBottom: "8px",
-                            }}
-                        />
-                        <span>{totalPurchasedTickets}</span>
-                    </p>
-                </Col>
-                <Col>
-                    Tickets Left
-                    <p style={{ fontSize: "45px" }}>
-                        <PiTicketLight
-                            style={{
-                                fontSize: "50px",
-                                marginBottom: "8px",
-                            }}
-                        />
-                        <span>{ticketsLeftCount}</span>
-                    </p>
-                </Col>
-                <Col lg={7}>
-                    <p style={{ fontSize: "14px" }}>"{desc}"</p>
-                </Col>
-            </Row>
-
-            <h3 className="org-titleh3">Your published events</h3>
+            {/* <h3 className="org-titleh3">Your published events</h3> */}
             <div className="org-events__search">
                 <input
                     type="text"
@@ -250,8 +316,14 @@ const OrganizerDashboard = ({ setAuth }) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="me-2 form-control"
                 />
+
+                <h3>Your published events</h3>
+
                 <Link to="/create-event">
-                    <div className="btn btn-success">
+                    <div
+                        className="btn btn-success"
+                        style={{ backgroundColor: "#c0dcca", color: "#0c5d37" }}
+                    >
                         <BsPlusCircle />
                         Add new event
                     </div>
@@ -293,12 +365,10 @@ const OrganizerDashboard = ({ setAuth }) => {
                                     </td>
                                     <td>{event.title}</td>
                                     <td>
-                                    {format(
-                                                        new Date(
-                                                            event.date
-                                                        ),
-                                                        "d MMMM yyyy"
-                                                    )}
+                                        {format(
+                                            new Date(event.date),
+                                            "d MMMM yyyy"
+                                        )}
                                     </td>
 
                                     <td>{event.time.slice(0, 5)}</td>
@@ -311,7 +381,11 @@ const OrganizerDashboard = ({ setAuth }) => {
                                         <Link to={`/update-event/${event.id}`}>
                                             <div
                                                 className="btn btn-warning"
-                                                style={{ fontSize: "13px" }}
+                                                style={{
+                                                    fontSize: "13px",
+                                                    backgroundColor:
+                                                        "antiquewhite",
+                                                }}
                                             >
                                                 <GoPencil /> Update
                                             </div>
